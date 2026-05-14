@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>コツコツサクサク | 10分コツコツ。気づけばサクサク。</title>
+<meta name="description" content="10分単位で学習を記録し、ストーリー・星・バッジで楽しく続ける学習記録アプリ。">
+<style>
+:root{
+  --ink:#172033;
+  --soft:#647084;
+  --green:#35b95b;
+  --pink:#f06a9d;
+  --sky:#60c8ff;
+  --yellow:#ffd94f;
+  --cream:#fff9e8;
+  --mint:#e5ffe8;
+  --rose:#ffe6f0;
+  --blue:#e4f6ff;
+  --line:#e7edf5;
+  --shadow:0 22px 48px rgba(73,91,125,.12);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 8% 8%,#fff0a8 0 10%,transparent 25%),
+    radial-gradient(circle at 92% 18%,#ffd7e8 0 12%,transparent 28%),
+    radial-gradient(circle at 16% 82%,#d6fff0 0 14%,transparent 30%),
+    linear-gradient(135deg,#fffdf6 0%,#f2fbff 44%,#fff4f8 100%);
+  letter-spacing:0;
+}
+.nav{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(255,255,255,.78);
+  border-bottom:1px solid rgba(220,228,240,.78);
+  backdrop-filter:blur(18px);
+}
+.nav-inner{
+  width:min(1180px,100%);
+  margin:auto;
+  padding:13px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.brand{
+  font-size:clamp(18px,3vw,27px);
+  font-weight:1000;
+  white-space:nowrap;
+}
+.brand .green{color:var(--green)}
+.brand .pink{color:var(--pink)}
+.nav-links{display:flex;align-items:center;gap:8px}
+.nav-links a{
+  color:#394255;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:950;
+  padding:8px 11px;
+  border-radius:999px;
+}
+.nav-links .primary{
+  color:#fff;
+  background:#172033;
+}
+.wrap{width:min(1180px,100%);margin:auto;padding:0 20px}
+.hero{
+  position:relative;
+  padding:46px 0 58px;
+  overflow:hidden;
+}
+.hero:before{
+  content:"10";
+  position:absolute;
+  right:4vw;
+  top:64px;
+  font-size:220px;
+  line-height:1;
+  font-weight:1000;
+  color:rgba(96,200,255,.16);
+  pointer-events:none;
+}
+.hero-top{
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:28px;
+  align-items:center;
+  position:relative;
+  z-index:1;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 12px 28px rgba(73,91,125,.08);
+  border-radius:999px;
+  padding:8px 14px;
+  color:#25984b;
+  font-size:13px;
+  font-weight:1000;
+  margin-bottom:18px;
+}
+h1{
+  margin:0;
+  font-size:clamp(46px,8vw,96px);
+  line-height:.95;
+  font-weight:1000;
+  letter-spacing:0;
+}
+h1 .g{color:var(--green)}
+h1 .p{color:var(--pink)}
+.lead{
+  margin:22px 0 0;
+  font-size:clamp(18px,2.3vw,28px);
+  line-height:1.55;
+  font-weight:950;
+}
+.sub{
+  margin:14px 0 0;
+  max-width:590px;
+  color:var(--soft);
+  font-size:15px;
+  line-height:1.85;
+}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:52px;
+  border-radius:999px;
+  padding:0 22px;
+  text-decoration:none;
+  color:#fff;
+  background:#172033;
+  font-weight:1000;
+  box-shadow:0 15px 30px rgba(23,32,51,.17);
+}
+.btn.light{
+  color:#172033;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 12px 24px rgba(73,91,125,.08);
+}
+.stage{
+  position:relative;
+  min-height:500px;
+  border-radius:46px;
+  background:
+    radial-gradient(circle at 24% 20%,rgba(255,255,255,.9) 0 11%,transparent 20%),
+    linear-gradient(135deg,#ecfff0 0%,#e8f8ff 38%,#ffeaf3 72%,#fff8d7 100%);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.stage:before{
+  content:"";
+  position:absolute;
+  left:8%;
+  right:8%;
+  bottom:28px;
+  height:34px;
+  border-radius:50%;
+  background:rgba(74,91,126,.10);
+  filter:blur(1px);
+}
+.real-team{
+  position:absolute;
+  inset:auto 4% 34px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  align-items:end;
+}
+.real-buddy{
+  position:relative;
+  min-height:340px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+  transform:translateY(var(--jump,0));
+}
+.real-buddy:nth-child(1){--jump:-18px}
+.real-buddy:nth-child(2){--jump:8px}
+.real-buddy:nth-child(3){--jump:0}
+.real-buddy:nth-child(4){--jump:-10px}
+.real-buddy:before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:40px;
+  width:min(170px,22vw);
+  height:min(170px,22vw);
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:rgba(255,255,255,.72);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.86),0 14px 30px rgba(73,91,125,.10);
+}
+.real-buddy img{
+  position:relative;
+  z-index:1;
+  display:block;
+  width:min(190px,23vw);
+  height:min(290px,35vw);
+  object-fit:contain;
+  object-position:center;
+  border-radius:0;
+  border:0;
+  background:transparent;
+  filter:drop-shadow(0 18px 18px rgba(23,32,51,.16));
+}
+.real-buddy .label{
+  position:relative;
+  z-index:2;
+  margin-top:12px;
+}
+.spark{
+  position:absolute;
+  font-weight:1000;
+  color:#fff;
+  text-shadow:0 2px 0 rgba(23,32,51,.12);
+}
+.s1{left:8%;top:10%;font-size:34px;color:#ffcc40}
+.s2{right:12%;top:12%;font-size:30px;color:#60c8ff}
+.s3{left:16%;bottom:14%;font-size:30px;color:#f06a9d}
+.s4{right:9%;bottom:17%;font-size:36px;color:#35b95b}
+.team{
+  position:absolute;
+  inset:auto 5% 38px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  align-items:end;
+}
+.team{display:none}
+.buddy{
+  position:relative;
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+  transform:translateY(var(--jump,0));
+}
+.buddy:nth-child(1){--jump:-14px}
+.buddy:nth-child(2){--jump:10px}
+.buddy:nth-child(3){--jump:0}
+.buddy:nth-child(4){--jump:-8px}
+.body{
+  width:min(132px,21vw);
+  height:min(172px,27vw);
+  max-width:132px;
+  max-height:172px;
+  border-radius:42% 42% 32% 32%;
+  background:linear-gradient(180deg,#fff,#e8fff0);
+  border:5px solid #172033;
+  box-shadow:0 16px 0 rgba(23,32,51,.10);
+}
+.buddy.gori .body{background:linear-gradient(180deg,#fff,#eeeeff)}
+.head-char{
+  position:absolute;
+  top:18px;
+  width:min(146px,23vw);
+  height:min(146px,23vw);
+  max-width:146px;
+  max-height:146px;
+  display:grid;
+  place-items:center;
+  border-radius:42% 42% 47% 47%;
+  background:#7bdc52;
+  border:5px solid #172033;
+  box-shadow:0 12px 0 rgba(23,32,51,.10);
+  font-size:52px;
+}
+.buddy.gori .head-char{
+  background:#6f7080;
+  color:#fff;
+}
+.head-char:after{
+  content:attr(data-face);
+  position:absolute;
+  bottom:17px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:25px;
+}
+.pose{
+  position:absolute;
+  top:118px;
+  width:38px;
+  height:84px;
+  border-radius:999px;
+  background:#172033;
+}
+.pose.left{left:16px;transform:rotate(-28deg)}
+.pose.right{right:16px;transform:rotate(28deg)}
+.label{
+  margin-top:14px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:36px;
+  padding:0 12px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid var(--line);
+  font-size:12px;
+  font-weight:1000;
+  box-shadow:0 10px 20px rgba(73,91,125,.08);
+  white-space:nowrap;
+}
+.section{padding:58px 0}
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:24px;
+  margin-bottom:24px;
+}
+h2{
+  margin:0;
+  font-size:clamp(32px,5vw,60px);
+  line-height:1.05;
+  font-weight:1000;
+}
+.section-head p{
+  margin:0;
+  max-width:480px;
+  color:var(--soft);
+  line-height:1.8;
+}
+.storyboard{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.scene{
+  position:relative;
+  min-height:246px;
+  padding:22px;
+  border-radius:34px;
+  background:#fff;
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.scene:nth-child(1){background:linear-gradient(180deg,#fff,#fff4cc)}
+.scene:nth-child(2){background:linear-gradient(180deg,#fff,#e7f8ff)}
+.scene:nth-child(3){background:linear-gradient(180deg,#fff,#ffe8f2)}
+.scene:nth-child(4){background:linear-gradient(180deg,#fff,#eaffec)}
+.scene:before{
+  content:attr(data-step);
+  position:absolute;
+  right:18px;
+  top:14px;
+  color:rgba(23,32,51,.08);
+  font-size:64px;
+  font-weight:1000;
+  line-height:1;
+}
+.scene .mini-face{
+  position:absolute;
+  right:18px;
+  bottom:-12px;
+}
+.scene h3{
+  position:relative;
+  z-index:1;
+  margin:88px 0 0;
+  font-size:25px;
+  line-height:1.22;
+}
+.scene p{
+  position:relative;
+  z-index:1;
+  margin:12px 0 0;
+  color:var(--soft);
+  line-height:1.68;
+  font-size:14px;
+}
+.story-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:13px;
+}
+.story{
+  position:relative;
+  min-height:180px;
+  padding:20px;
+  border-radius:30px;
+  border:1px solid rgba(255,255,255,.9);
+  background:#fff;
+  box-shadow:0 18px 38px rgba(73,91,125,.09);
+  overflow:hidden;
+}
+.story:nth-child(1){background:linear-gradient(180deg,#fff,#f0ffe8)}
+.story:nth-child(2){background:linear-gradient(180deg,#fff,#fff3d0)}
+.story:nth-child(3){background:linear-gradient(180deg,#fff,#e7f7ff)}
+.story:nth-child(4){background:linear-gradient(180deg,#fff,#ecffe9)}
+.story:nth-child(5){background:linear-gradient(180deg,#fff,#ffe9f2)}
+.story .mini-face{
+  position:absolute;
+  right:-10px;
+  top:-14px;
+}
+.story b{
+  display:block;
+  position:relative;
+  z-index:1;
+  font-size:17px;
+  line-height:1.36;
+  margin-top:54px;
+}
+.story span{
+  display:block;
+  position:relative;
+  z-index:1;
+  margin-top:10px;
+  color:var(--soft);
+  font-size:13px;
+  line-height:1.55;
+}
+.mini-face{
+  width:82px;
+  height:82px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:4px solid #172033;
+  background:#7bdc52;
+  box-shadow:0 10px 0 rgba(23,32,51,.08);
+  font-size:28px;
+}
+.mini-photo{
+  width:86px;
+  height:86px;
+  border-radius:50%;
+  border:4px solid #fff;
+  background:linear-gradient(135deg,#f7fff3,#fff1f7);
+  box-shadow:0 10px 0 rgba(23,32,51,.08),0 12px 24px rgba(23,32,51,.12);
+  object-fit:contain;
+  padding:3px;
+}
+.scene .mini-photo{
+  position:absolute;
+  right:18px;
+  bottom:-12px;
+}
+.story .mini-photo{
+  position:absolute;
+  right:-10px;
+  top:-14px;
+}
+.feature .mini-photo,
+.license .mini-photo{
+  position:absolute;
+  right:18px;
+  bottom:-18px;
+  z-index:1;
+}
+.license .mini-photo{
+  right:26px;
+  top:-18px;
+  bottom:auto;
+}
+.mini-face.gori{background:#6f7080;color:#fff}
+.mini-face.pink{background:#ffd6e7}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.feature{
+  position:relative;
+  min-height:250px;
+  padding:28px;
+  border-radius:36px;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.feature:after{
+  content:"";
+  position:absolute;
+  right:-44px;
+  bottom:-44px;
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  background:var(--blue);
+  opacity:.8;
+}
+.feature:nth-child(2):after{background:var(--rose)}
+.feature:nth-child(3):after{background:var(--mint)}
+.feature .peek{
+  position:absolute;
+  right:18px;
+  bottom:-18px;
+  z-index:1;
+}
+.feature h3{
+  margin:0;
+  max-width:240px;
+  font-size:29px;
+  line-height:1.2;
+}
+.feature p{
+  position:relative;
+  z-index:2;
+  margin:14px 0 0;
+  max-width:280px;
+  color:var(--soft);
+  line-height:1.75;
+  font-size:14px;
+}
+.license{
+  position:relative;
+  padding:36px;
+  border-radius:40px;
+  background:
+    linear-gradient(135deg,#ffffff 0%,#fff8db 46%,#e7f8ff 100%);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.license .peek{
+  position:absolute;
+  right:26px;
+  top:-18px;
+}
+.chips{
+  position:relative;
+  z-index:1;
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:20px;
+  max-width:860px;
+}
+.chip{
+  padding:9px 13px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid var(--line);
+  color:#344054;
+  font-size:13px;
+  font-weight:950;
+}
+.bloom{
+  position:relative;
+  padding:38px;
+  border-radius:44px;
+  background:
+    radial-gradient(circle at 18% 20%,rgba(255,217,79,.34) 0 10%,transparent 24%),
+    radial-gradient(circle at 84% 18%,rgba(240,106,157,.24) 0 12%,transparent 28%),
+    linear-gradient(135deg,#ffffff 0%,#efffed 36%,#fff2f7 68%,#e8f8ff 100%);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.bloom:before{
+  content:"";
+  position:absolute;
+  right:-44px;
+  bottom:-70px;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:conic-gradient(from 12deg,#35b95b,#ffd94f,#f06a9d,#60c8ff,#35b95b);
+  opacity:.22;
+}
+.bloom-grid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  align-items:center;
+}
+.bloom h2{
+  font-size:clamp(36px,6vw,74px);
+}
+.bloom p{
+  margin:18px 0 0;
+  color:var(--soft);
+  line-height:1.85;
+}
+.bloom-steps{
+  display:grid;
+  gap:10px;
+}
+.bloom-step{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:15px 16px;
+  border-radius:22px;
+  background:rgba(255,255,255,.76);
+  border:1px solid rgba(255,255,255,.9);
+  font-weight:1000;
+}
+.bloom-step span{
+  color:var(--soft);
+  font-size:13px;
+  font-weight:900;
+}
+.cta{
+  padding:70px 20px 96px;
+  text-align:center;
+}
+.cta-panel{
+  position:relative;
+  width:min(900px,100%);
+  margin:auto;
+  padding:52px 24px;
+  border-radius:46px;
+  background:#172033;
+  color:#fff;
+  overflow:hidden;
+  box-shadow:0 24px 56px rgba(23,32,51,.18);
+}
+.cta-panel:before{
+  content:"";
+  position:absolute;
+  inset:auto -80px -120px auto;
+  width:270px;
+  height:270px;
+  border-radius:50%;
+  background:#35b95b;
+}
+.cta-panel:after{
+  content:"";
+  position:absolute;
+  left:-80px;
+  top:-120px;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:#f06a9d;
+}
+.cta h2{
+  position:relative;
+  z-index:1;
+  font-size:clamp(36px,6vw,72px);
+}
+.cta p{
+  position:relative;
+  z-index:1;
+  margin:18px auto 28px;
+  max-width:620px;
+  line-height:1.8;
+  color:#dfe7f2;
+}
+.cta .btn{
+  position:relative;
+  z-index:1;
+  background:#fff;
+  color:#172033;
+}
+@media(max-width:960px){
+  .nav-links a:not(.primary){display:none}
+  .hero{padding-top:28px}
+  .hero-top{grid-template-columns:1fr}
+  .stage{min-height:430px;order:-1}
+  .team{grid-template-columns:repeat(4,1fr);gap:4px;inset:auto 3% 30px}
+  .real-team{grid-template-columns:repeat(4,1fr);gap:4px;inset:auto 3% 30px}
+  .buddy{min-height:250px}
+  .real-buddy{min-height:290px}
+  .real-buddy img{height:min(250px,34vw)}
+  .pose{display:none}
+  .label{font-size:10px;padding:0 8px}
+  .section-head{display:block}
+  .section-head p{margin-top:12px}
+  .storyboard{grid-template-columns:repeat(2,1fr)}
+  .story-grid{display:flex;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory}
+  .story{min-width:200px;scroll-snap-align:start}
+  .cards{grid-template-columns:1fr}
+  .bloom-grid{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .hero:before{display:none}
+  .stage{min-height:530px;border-radius:34px}
+  .team{
+    grid-template-columns:repeat(2,1fr);
+    inset:auto 6% 26px;
+    gap:12px 8px;
+  }
+  .real-team{
+    grid-template-columns:repeat(2,1fr);
+    inset:auto 6% 24px;
+    gap:12px 8px;
+  }
+  .buddy{min-height:205px}
+  .real-buddy{min-height:225px}
+  .real-buddy img{width:min(150px,38vw);height:min(190px,48vw)}
+  .head-char{top:8px}
+  .body{height:118px}
+  .story-grid{margin-right:-20px}
+  .storyboard{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand"><span class="green">コツコツ</span> <span class="pink">サクサク</span></div>
+    <div class="nav-links">
+      <a href="#story">物語</a>
+      <a href="#board">世界観</a>
+      <a href="#features">できること</a>
+      <a href="#license">資格の道</a>
+      <a class="primary" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">アプリを開く</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-top">
+      <div>
+        <div class="eyebrow">コツコツ・軌跡から、サクサク・開花へ</div>
+        <h1><span class="g">コツコツ軌跡。</span><br>今日の冒険を、<br>1マスずつ。</h1>
+        <p class="lead">ニヤブロも、ウホゴリも。<br>今日の10分、コツサク中。</p>
+        <p class="sub">この4人もアプリを開いて、10分を記録して、星を集めて、少しずつ育っていく仲間です。小さな1マスが、未来の景色につながっていきます。</p>
+        <div class="actions">
+          <a class="btn" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">アプリを開く</a>
+          <a class="btn light" href="#board">軌跡の流れを見る</a>
+        </div>
+      </div>
+      <div class="stage" aria-label="4人がコツサクを使っている配置">
+        <div class="spark s1">★</div>
+        <div class="spark s2">10分</div>
+        <div class="spark s3">♪</div>
+        <div class="spark s4">✓</div>
+        <div class="real-team">
+          <div class="real-buddy">
+            <img src="./assets/characters-transparent-v2/niyaburo-boy.png" alt="ニヤブロくん">
+            <div class="label">ニヤブロくん</div>
+          </div>
+          <div class="real-buddy">
+            <img src="./assets/characters-transparent-v2/niyaburo-girl.png" alt="ニヤブロちゃん">
+            <div class="label">ニヤブロちゃん</div>
+          </div>
+          <div class="real-buddy">
+            <img src="./assets/characters-transparent-v2/uhogori-boy.png" alt="ウホゴリくん">
+            <div class="label">ウホゴリくん</div>
+          </div>
+          <div class="real-buddy">
+            <img src="./assets/characters-transparent-v2/uhogori-girl.png" alt="ウホゴリちゃん">
+            <div class="label">ウホゴリちゃん</div>
+          </div>
+        </div>
+        <div class="team">
+          <div class="buddy">
+            <div class="head-char" data-face="^_^">🥦</div>
+            <div class="pose left"></div>
+            <div class="body"></div>
+            <div class="label">ニヤブロくん</div>
+          </div>
+          <div class="buddy">
+            <div class="head-char" data-face="^o^">🥦</div>
+            <div class="pose right"></div>
+            <div class="body"></div>
+            <div class="label">ニヤブロちゃん</div>
+          </div>
+          <div class="buddy gori">
+            <div class="head-char" data-face="^^">🦍</div>
+            <div class="pose left"></div>
+            <div class="body"></div>
+            <div class="label">ウホゴリくん</div>
+          </div>
+          <div class="buddy gori">
+            <div class="head-char" data-face="^▽^">🦍</div>
+            <div class="pose right"></div>
+            <div class="body"></div>
+            <div class="label">ウホゴリちゃん</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="board">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>まずは、<br>コツコツ軌跡。</h2>
+        <p>同じアプリを使っている仲間として、今日の10分を記録しながら、それぞれの物語を育てています。残した1マスが、今日の足あとになります。</p>
+      </div>
+      <div class="storyboard">
+        <div class="scene" data-step="01">
+          <img class="mini-photo" src="./assets/characters-transparent-v2/niyaburo-boy.png" alt="ニヤブロくん">
+          <h3>朝、アプリを開く</h3>
+          <p>ニヤブロくんも眠そうに起きて、まずは今日の冒険をセット。</p>
+        </div>
+        <div class="scene" data-step="02">
+          <img class="mini-photo" src="./assets/characters-transparent-v2/niyaburo-girl.png" alt="ニヤブロちゃん">
+          <h3>10分だけ進める</h3>
+          <p>ニヤブロちゃんは小さく1マス。完璧じゃなくても、軌跡が残る。</p>
+        </div>
+        <div class="scene" data-step="03">
+          <img class="mini-photo" src="./assets/characters-transparent-v2/uhogori-boy.png" alt="ウホゴリくん">
+          <h3>星が増える</h3>
+          <p>ウホゴリくんは星を見てニヤリ。30分でひとつ、進んだ景色が見える。</p>
+        </div>
+        <div class="scene" data-step="04">
+          <img class="mini-photo" src="./assets/characters-transparent-v2/uhogori-girl.png" alt="ウホゴリちゃん">
+          <h3>明日もちょっと進む</h3>
+          <p>ウホゴリちゃんはバッジを眺めて、明日の冒険を楽しみにする。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="story">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>選んだ道に、<br>足あとが残る。</h2>
+        <p>選んだストーリーに合わせてレベルや表示が変わります。気分で選べるから、今日の10分が少しだけ冒険になります。</p>
+      </div>
+      <div class="story-grid">
+        <div class="story">
+          <img class="mini-photo" src="./assets/characters-transparent-v2/uhogori-boy.png" alt="ウホゴリくん">
+          <b>ゴリラ成長記</b>
+          <span>コツコツするほど、伝説ゴリに近づく。</span>
+        </div>
+        <div class="story">
+          <div class="mini-face pink">⚔️</div>
+          <b>受験剣士の道</b>
+          <span>今日の1問が、明日の刃になる。</span>
+        </div>
+        <div class="story">
+          <div class="mini-face">🚀</div>
+          <b>宇宙探検家の旅</b>
+          <span>知識の宇宙をサクサク進む。</span>
+        </div>
+        <div class="story">
+          <img class="mini-photo" src="./assets/characters-transparent-v2/niyaburo-boy.png" alt="ニヤブロくん">
+          <b>正体不明育成記</b>
+          <span>なんだこれ、から始まるニヤニヤ。</span>
+        </div>
+        <div class="story">
+          <div class="mini-face pink">🔥</div>
+          <b>鬼教官の特訓</b>
+          <span>言い訳を置いて、10分いく。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>今日の10分を、<br>軌跡にする。</h2>
+        <p>毎日の記録、My Crazy、早朝自習室。キャラたちも同じ仕組みで星を集め、物語を進めています。</p>
+      </div>
+      <div class="cards">
+        <div class="feature">
+          <h3>10分をタップで残す</h3>
+          <p>時間表のマスを押すだけ。4人も同じように、今日のコツコツを残しています。</p>
+          <img class="mini-photo" src="./assets/characters-transparent-v2/niyaburo-girl.png" alt="ニヤブロちゃん">
+        </div>
+        <div class="feature">
+          <h3>星とバッジでサクサク感</h3>
+          <p>30分ごとに星が増え、達成した日はトロフィーも。キャラたちの成長にもつながります。</p>
+          <div class="mini-face peek pink">★</div>
+        </div>
+        <div class="feature">
+          <h3>My Crazyをつくれる</h3>
+          <p>自分で決められる特訓枠。イベント名や時間をセットして、今日だけの軌跡を残せます。</p>
+          <img class="mini-photo" src="./assets/characters-transparent-v2/uhogori-girl.png" alt="ウホゴリちゃん">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="license">
+    <div class="wrap">
+      <div class="license">
+        <img class="mini-photo" src="./assets/characters-transparent-v2/niyaburo-boy.png" alt="ニヤブロくん">
+        <h2>資格の道も、<br>もちろん選べる。</h2>
+        <p class="sub">フィクションで楽しく。資格の道で本気に。目的に合わせて、今日の10分をコツサクできます。</p>
+        <div class="chips">
+          <span class="chip">簿記3級</span>
+          <span class="chip">簿記2級</span>
+          <span class="chip">宅建</span>
+          <span class="chip">FP2級</span>
+          <span class="chip">社労士</span>
+          <span class="chip">税理士</span>
+          <span class="chip">公務員</span>
+          <span class="chip">中小企業診断士</span>
+          <span class="chip">公認会計士</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="bloom">
+        <div class="bloom-grid">
+          <div>
+            <h2><span class="pink">サクサク開花。</span><br>未来の景色が、<br>少しずつひらく。</h2>
+            <p>1マスずつ残した軌跡は、星になって、バッジになって、物語になります。今日の小さな冒険が、未来の見え方を変えていきます。</p>
+          </div>
+          <div class="bloom-steps" aria-label="コツコツからサクサク開花までの流れ">
+            <div class="bloom-step">1マス残す <span>今日の軌跡</span></div>
+            <div class="bloom-step">星が増える <span>見える進み具合</span></div>
+            <div class="bloom-step">物語が育つ <span>キャラも一緒に成長</span></div>
+            <div class="bloom-step">未来がひらく <span>サクサク開花</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-panel">
+      <h2>今日の冒険を、<br>1マスずつ。</h2>
+      <p>4人もあなたも、ニヤニヤしながらコツコツ軌跡を残して、気づいたらサクサク開花している。そんな入口です。</p>
+      <a class="btn" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">アプリを開く</a>
+    </div>
+  </section>
+</main>
+</body>
+</html>
