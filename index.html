@@ -718,7 +718,7 @@ h2{
 .sakura-field{line-height:1.7;letter-spacing:1px;word-break:break-all;font-size:1rem;}
 .sakura-overflow{font-size:.72rem;color:var(--soft);margin-top:6px;}
 /* ── stats section ── */
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px}
 .stat-card{background:#fff;border-radius:16px;padding:20px 16px;text-align:center;box-shadow:var(--shadow);border:1.5px solid var(--line);}
 .stat-icon{font-size:1.8rem;margin-bottom:6px;}
 .stat-value{font-size:1.9rem;font-weight:900;color:var(--green);line-height:1.1;margin-bottom:2px;}
@@ -748,7 +748,7 @@ h2{
 }
 /* ── dashboard link ── */
 .dashboard-link-wrap{text-align:center;padding:12px 0 4px;}
-.dashboard-link-btn{font-size:.65rem;color:var(--soft);background:transparent;border:none;cursor:pointer;padding:4px 8px;border-radius:6px;text-decoration:none;opacity:.45;transition:opacity .2s;}
+.dashboard-link-btn{font-size:.72rem;color:var(--soft);background:transparent;border:1px solid var(--line);cursor:pointer;padding:5px 14px;border-radius:999px;text-decoration:none;opacity:.55;transition:opacity .2s;}
 .dashboard-link-btn:hover{opacity:.9;}
 .pin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;}
 .pin-modal.show{display:flex;}
@@ -863,14 +863,8 @@ h2{
           <div class="sakura-overflow" id="sakura-overflow"></div>
         </div>
 
-        <!-- 数字カード3枚 -->
+        <!-- 数字カード2枚（継続率は非表示） -->
         <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon">🥦</div>
-            <div class="stat-value" id="val-active">…</div>
-            <div class="stat-label">が継続中</div>
-            <div class="stat-sub">今も冒険している仲間の割合</div>
-          </div>
           <div class="stat-card">
             <div class="stat-icon">⏱</div>
             <div class="stat-value" id="val-avg">…</div>
@@ -1077,10 +1071,13 @@ h2{
     } catch(e){ return null; }
   })();
 
-  // ── ストーリーラベル ──
+  // ── ストーリーラベル（全種類対応） ──
   const storyLabels = {
     itachacha: '🥦 正体不明育成記',
     spartan:   '🐉 鬼教官の特訓',
+    gorilla:   '🦍 ゴリラ',
+    samurai:   '⚔️ 侍',
+    space:     '🚀 宇宙',
   };
   const licenseLabels = {
     tax_accountant: '税理士・簿記1級',
@@ -1090,6 +1087,7 @@ h2{
     language:       '語学',
     cpa:            '公認会計士',
     undecided:      '未定',
+    unanswered:     '未回答',
   };
 
   function fmt(min){
@@ -1168,21 +1166,28 @@ h2{
       const valStreak = document.getElementById('val-streak');
       if(valStreak) valStreak.textContent = avgStreak + '日';
 
-      // ストーリーモード分布
+      // ストーリーモード分布（物語の道のみ）
       const storyCounts = {};
+      const storyKeys = ['itachacha','spartan','gorilla','samurai','space'];
       docs.forEach(d=>{
-        const s = d.storyMode;
+        const s = d.storyMode || d.story_mode || d.storyId || d.story_id;
         if(!s) return;
+        // 資格系のキーは除外してストーリーのみ
+        if(licenseLabels[s]) return;
         const label = storyLabels[s] || s;
         storyCounts[label] = (storyCounts[label]||0) + 1;
       });
       renderBar('chart-story', storyCounts, false);
 
-      // 資格カテゴリ分布
+      // 資格カテゴリ分布（複数キーを試みる）
       const licenseCounts = {};
       docs.forEach(d=>{
-        const lc = d.licenseCategory || d.license_category;
+        const lc = d.licenseCategory || d.license_category
+          || d.licenseGoal || d.license_goal
+          || d.category || d.goal;
         if(!lc) return;
+        // ストーリー系のキーは除外
+        if(storyLabels[lc]) return;
         const label = licenseLabels[lc] || lc;
         licenseCounts[label] = (licenseCounts[label]||0) + 1;
       });
