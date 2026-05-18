@@ -56,8 +56,9 @@ h1 .g{color:var(--green)}
 /* ── キャラ カルーセル ── */
 .char-carousel-wrap{
   position:relative;
-  margin:44px -20px 0;
-  padding:0 20px 20px;
+  margin:44px 0 0;
+  padding:0 0 20px;
+  width:100%;
 }
 .char-carousel{
   display:flex;
@@ -67,7 +68,8 @@ h1 .g{color:var(--green)}
   -webkit-overflow-scrolling:touch;
   scrollbar-width:none;
   padding:8px 20px 16px;
-  margin:0 -20px;
+  justify-content:center;
+  flex-wrap:wrap;
 }
 .char-carousel::-webkit-scrollbar{display:none;}
 .char-card{
@@ -150,14 +152,26 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 .sakura-card{background:#fff;border-radius:20px;padding:28px 24px 20px;box-shadow:var(--shadow);border:1.5px solid var(--line);margin-bottom:20px;position:relative;overflow:hidden;}
 
 /* 総学習時間ヒーロー数字（中央揃え） */
-.sakura-title{font-size:.82rem;font-weight:800;color:var(--ink);text-align:center;margin-bottom:4px;}
+.sakura-title{
+  font-size:clamp(1.4rem,4vw,2.8rem);
+  font-weight:1000;text-align:center;margin-bottom:2px;
+  background:linear-gradient(135deg,#f9a8d4 0%,#f06a9d 50%,#ffd6e8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:.04em;
+}
 .sakura-sublabel{font-size:.72rem;color:var(--soft);text-align:center;margin-bottom:0;}
-.sakura-hero{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:8px 0 4px;flex-wrap:wrap;}
+.sakura-hero{display:flex;align-items:flex-end;justify-content:center;gap:6px;margin:4px 0 4px;flex-wrap:nowrap;}
 .sakura-big-num{
-  font-size:clamp(72px,12vw,130px);
-  font-weight:1000;line-height:.9;color:var(--pink);
+  font-size:clamp(56px,14vw,180px);
+  font-weight:1000;line-height:.9;
+  background:linear-gradient(135deg,#f9a8d4 0%,#f06a9d 40%,#fb7ab5 65%,#ffd6e8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
   letter-spacing:-.03em;font-variant-numeric:tabular-nums;
   position:relative;z-index:2;
+  filter:drop-shadow(0 4px 12px rgba(240,106,157,.3));
+  white-space:nowrap;
 }
 /* カウントアップ完了後の点滅 */
 .sakura-big-num.blink{
@@ -165,9 +179,15 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 }
 @keyframes numBlink{
   0%,100%{opacity:1;}
-  50%{opacity:.55;}
+  50%{opacity:.6;}
 }
-.sakura-big-suffix{font-size:clamp(22px,3vw,36px);font-weight:1000;color:var(--pink);margin-bottom:10px;position:relative;z-index:2;}
+.sakura-big-suffix{
+  font-size:clamp(18px,3.5vw,44px);font-weight:1000;
+  background:linear-gradient(135deg,#f06a9d,#ffd6e8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:8px;position:relative;z-index:2;white-space:nowrap;
+}
 
 /* パーティクルコンテナ（数字を中央に、桜が集まるイメージ） */
 .sakura-particle-wrap{
@@ -309,8 +329,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 .scene .mini-photo{position:absolute;right:16px;bottom:-12px;}
 
 /* ── STORY 横スクロール ── */
-.story-scroll-outer{position:relative;margin:0 -20px;padding:0 20px 4px;}
-.story-grid{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:14px;scrollbar-width:none;}
+.story-scroll-outer{position:relative;padding:0 0 4px;}
+.story-grid{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:0 20px 14px;scrollbar-width:none;justify-content:center;flex-wrap:wrap;}
 .story-grid::-webkit-scrollbar{display:none;}
 .story{flex-shrink:0;width:220px;scroll-snap-align:start;position:relative;min-height:190px;padding:22px 20px;border-radius:28px;border:1px solid rgba(255,255,255,.9);background:#fff;box-shadow:0 16px 36px rgba(73,91,125,.09);overflow:hidden;transition:transform .22s,box-shadow .22s;}
 .story:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 26px 52px rgba(73,91,125,.17);}
@@ -384,6 +404,67 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 .pin-btn{margin-top:14px;background:var(--green);color:#fff;border:none;border-radius:10px;padding:8px 28px;font-size:.82rem;font-weight:800;cursor:pointer;}
 .pin-error{font-size:.72rem;color:#e05a5a;margin-top:8px;min-height:18px;}
 .pin-close{position:absolute;top:12px;right:14px;background:transparent;border:none;font-size:1.1rem;cursor:pointer;color:var(--soft);}
+
+/* ── データ収集セクション ── */
+.data-policy-card{
+  background:linear-gradient(135deg,#f0fff8 0%,#f8f0ff 50%,#fff8f0 100%);
+  border:1.5px solid var(--line);border-radius:28px;
+  padding:28px 28px 22px;box-shadow:var(--shadow);
+}
+.data-policy-head{
+  display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;
+}
+.data-policy-icon{font-size:2rem;flex-shrink:0;line-height:1;margin-top:2px;}
+.data-policy-title{font-size:1.1rem;font-weight:1000;color:var(--ink);margin-bottom:4px;}
+.data-policy-sub{font-size:.82rem;color:var(--soft);line-height:1.6;}
+.data-policy-shield{
+  display:flex;align-items:flex-start;gap:12px;
+  background:rgba(53,185,91,.1);border:1px solid rgba(53,185,91,.3);
+  border-radius:14px;padding:14px 16px;margin-bottom:16px;
+}
+.data-policy-shield span{font-size:1.4rem;flex-shrink:0;margin-top:1px;}
+.data-policy-shield-title{font-size:.85rem;font-weight:800;color:var(--green);margin-bottom:4px;}
+.data-policy-shield-body{font-size:.75rem;color:var(--green);line-height:1.65;opacity:.85;}
+.data-policy-lead{font-size:.8rem;color:var(--soft);line-height:1.75;margin-bottom:14px;}
+.data-policy-items{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px;}
+.data-policy-item{
+  display:flex;align-items:flex-start;gap:10px;
+  background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+}
+.data-policy-item-icon{font-size:1.2rem;flex-shrink:0;margin-top:1px;}
+.data-policy-item-title{font-size:.78rem;font-weight:800;color:var(--ink);margin-bottom:3px;}
+.data-policy-item-body{font-size:.7rem;color:var(--soft);line-height:1.55;}
+.data-policy-note{
+  font-size:.75rem;color:var(--soft);line-height:1.85;
+  border-top:1px solid var(--line);padding-top:14px;
+}
+@media(max-width:560px){
+  .data-policy-items{grid-template-columns:1fr;}
+  .data-policy-card{padding:20px 16px 18px;}
+}
+
+/* ── キャラ大型コメント ── */
+.char-comment-wrap{
+  display:flex;align-items:flex-end;gap:12px;margin-top:18px;
+}
+.char-comment-img{
+  width:80px;height:80px;object-fit:contain;object-position:bottom;
+  flex-shrink:0;filter:drop-shadow(0 4px 8px rgba(23,32,51,.15));
+}
+.char-comment-bubble{
+  position:relative;background:#fff;border:2px solid var(--line);
+  border-radius:16px 16px 16px 4px;padding:12px 16px;
+  font-size:.82rem;font-weight:800;color:var(--ink);line-height:1.7;
+  box-shadow:0 6px 20px rgba(73,91,125,.1);flex:1;
+}
+.char-comment-bubble:before{
+  content:"";position:absolute;left:-10px;bottom:14px;
+  border:5px solid transparent;border-right-color:var(--line);
+}
+.char-comment-bubble:after{
+  content:"";position:absolute;left:-6px;bottom:15px;
+  border:4px solid transparent;border-right-color:#fff;
+}
 
 /* ── reveal アニメ ── */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.4,0,.2,1);}
@@ -481,79 +562,140 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     <div id="stats-error" class="stats-error" style="display:none;"></div>
     <div id="stats-body" style="display:none;">
 
-      <!-- 🌸 大カード -->
+      <!-- 🌸 大カード：タイトル→数字→桜の順 -->
       <div class="wrap">
         <div class="sakura-card reveal" style="margin-top:0;border-radius:0 0 24px 24px;border-top:none;">
-          <div class="sakura-title">みんなの軌跡</div>
-          <!-- パーティクル演出エリア（数字を内包） -->
+          <div class="sakura-title">🌸 みんなの軌跡 🌸</div>
+          <!-- 数字（タイトルのすぐ下） -->
+          <div class="sakura-hero" style="position:relative;z-index:2;pointer-events:none;margin:8px 0 0;">
+            <span class="sakura-big-num" id="val-hours-num">0</span>
+            <span class="sakura-big-suffix">時間</span>
+          </div>
+          <!-- 桜パーティクルエリア -->
           <div class="sakura-particle-wrap" id="sakura-particle-wrap">
-            <div class="sakura-hero" style="position:relative;z-index:2;pointer-events:none;">
-              <span class="sakura-big-num" id="val-hours-num">0</span>
-              <span class="sakura-big-suffix">時間</span>
-            </div>
             <div class="sakura-ground" id="sakura-ground"></div>
           </div>
-          <div class="sakura-sublabel">総学習時間 ／ 10分 ＝ 🌸1個　積み上がった仲間たちの足あと</div>
-
+          <!-- 2行サブラベル -->
+          <div style="text-align:center;margin-top:6px;">
+            <div class="sakura-sublabel" style="margin-bottom:2px;">総学習時間 ／ 10分 ＝ 🌸1個</div>
+            <div class="sakura-sublabel">積み上がった仲間たちの軌跡</div>
+          </div>
           <!-- 差分バッジ＋注釈 -->
           <div class="sakura-diff-wrap" id="sakura-diff-wrap"></div>
         </div>
       </div>
 
-      <!-- カウンターバンド -->
-      <div class="counter-band" aria-label="仲間たちの学習データ">
-        <div class="counter-item">
-          <div class="counter-val" id="c-hours" style="color:var(--green);">…</div>
-          <div class="counter-label">🌸 みんなの総学習時間</div>
-        </div>
-        <div class="counter-item">
-          <div class="counter-val" id="c-avg" style="color:var(--yellow);">…</div>
-          <div class="counter-label">⏱ 1日の平均学習時間</div>
-        </div>
-        <div class="counter-item">
-          <div class="counter-val" id="c-streak" style="color:var(--pink);">…</div>
-          <div class="counter-label">🔥 平均連続学習日数</div>
-        </div>
-      </div>
 
       <div class="wrap" style="padding-top:28px;">
-        <div class="stats-grid">
-          <div class="stat-card reveal reveal-delay-1">
-            <div class="stat-icon">⏱</div>
-            <div class="stat-value" id="val-avg">…</div>
-            <div class="stat-label">1日の平均学習時間</div>
-            <div class="stat-sub">仲間1人あたりの平均</div>
-          </div>
-          <div class="stat-card reveal reveal-delay-2">
-            <div class="stat-icon">🔥</div>
-            <div class="stat-value" id="val-streak">…</div>
-            <div class="stat-label">平均連続学習日数</div>
-            <div class="stat-sub">仲間の平均ストリーク</div>
-          </div>
-        </div>
         <div class="chart-section">
           <div class="chart-block reveal reveal-delay-1">
             <div class="chart-title">📖 メインストーリーを選んだ冒険者の割合</div>
             <div class="chart-note">ゴリラ・剣士・宇宙・育成・鬼教官などのフィクション系ストーリーを選択中の仲間</div>
             <div class="bar-list" id="chart-story"></div>
-            <div class="chart-comment">
-              <div class="chart-comment-face"><img src="./niyaburo-girl.png" alt="ニヤブロちゃん" style="width:40px;height:40px;object-fit:contain;border-radius:50%;background:linear-gradient(135deg,#f0ffe8,#ffe8f5);border:1.5px solid var(--line);padding:2px;"></div>
-              <div class="chart-comment-bubble">受験剣士多いねー！<br>デフォルト設定のままの仲間かな？<br>ぜひ自分だけの道も探してみて🌸</div>
+            <!-- キャラ大型コメント（女の子） -->
+            <div class="char-comment-wrap">
+              <img src="./niyaburo-girl.png" alt="ニヤブロちゃん" class="char-comment-img">
+              <div class="char-comment-bubble char-comment-bubble-left">
+                受験剣士多いね!!<br>デフォルト設定のままの仲間かな？<br>ぜひ自分だけの道も探してみてね🌸
+              </div>
             </div>
           </div>
           <div class="chart-block reveal reveal-delay-2">
             <div class="chart-title">🎓 資格ストーリーを選んだ冒険者の割合</div>
             <div class="chart-note">簿記・宅建・FPなど実際の資格取得を目指してコツサク中の仲間</div>
             <div class="bar-list" id="chart-license"></div>
-            <div class="chart-comment license-comment">
-              <div class="chart-comment-face"><img src="./uhogori-boy.png" alt="ウホゴリくん" style="width:40px;height:40px;object-fit:contain;border-radius:50%;background:linear-gradient(135deg,#e8f4ff,#e8fff0);border:1.5px solid var(--line);padding:2px;"></div>
-              <div class="chart-comment-bubble">硬派な資格ストーリーを<br>選んだ冒険者もステキ…！<br>本気組、ウホ尊いです🎓</div>
+            <!-- キャラ大型コメント（男の子） -->
+            <div class="char-comment-wrap">
+              <img src="./uhogori-boy.png" alt="ウホゴリくん" class="char-comment-img">
+              <div class="char-comment-bubble char-comment-bubble-left">
+                硬派な資格ストーリーを選んだ冒険者!!<br>本気組、ウホ尊いでゴリ🦍
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- ══ データ収集について（STATSの流れを受けて自然に） ══ -->
+  <section class="section" style="padding:32px 0 20px;">
+    <div class="wrap">
+      <div class="data-policy-card reveal">
+        <div class="data-policy-head">
+          <span class="data-policy-icon">🔒</span>
+          <div>
+            <div class="data-policy-title">この軌跡、どこから来ているの？</div>
+            <div class="data-policy-sub">アプリをお使いの仲間たちの学習データを、匿名で集計しています</div>
+          </div>
+        </div>
+        <div class="data-policy-shield">
+          <span>🛡</span>
+          <div>
+            <div class="data-policy-shield-title">個人情報は一切収集していません</div>
+            <div class="data-policy-shield-body">お名前・メールアドレス・電話番号など、ご本人を特定できる情報の登録や収集は行っておりません。</div>
+          </div>
+        </div>
+        <div class="data-policy-lead">アプリをより良くするため、以下の学習データを匿名で自動収集しています。</div>
+        <div class="data-policy-items">
+          <div class="data-policy-item">
+            <span class="data-policy-item-icon">⏱</span>
+            <div>
+              <div class="data-policy-item-title">学習データ</div>
+              <div class="data-policy-item-body">累計学習時間・学習日数・1日の平均学習時間・連続学習日数</div>
+            </div>
+          </div>
+          <div class="data-policy-item">
+            <span class="data-policy-item-icon">📖</span>
+            <div>
+              <div class="data-policy-item-title">ストーリー・資格</div>
+              <div class="data-policy-item-body">選択中のストーリーモード・資格カテゴリ</div>
+            </div>
+          </div>
+          <div class="data-policy-item">
+            <span class="data-policy-item-icon">🏅</span>
+            <div>
+              <div class="data-policy-item-title">レベル・バッジ</div>
+              <div class="data-policy-item-body">現在のレベル・取得済みバッジの種類と数</div>
+            </div>
+          </div>
+          <div class="data-policy-item">
+            <span class="data-policy-item-icon">📱</span>
+            <div>
+              <div class="data-policy-item-title">端末・利用状況</div>
+              <div class="data-policy-item-body">デバイス種別・OS・PWAインストール状況・アクセス時間帯</div>
+            </div>
+          </div>
+        </div>
+        <div class="data-policy-note">
+          収集されたデータは、アプリの改善・新機能の開発に活用するほか、仲間たちが積み上げてきた学習の軌跡として、このホームページに掲載することがあります。<br>
+          みなさんの10分10分が積み重なって、上の大きな数字になっています。掲載される情報はすべて匿名の統計データであり、個人が特定されることは一切ありません。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2本目ティッカー（データ収集セクション直下） -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker-inner" id="ticker2-inner">
+      <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t2-hours">…</span></div>
+      <div class="ticker-item">⏱ 1日の平均学習 <span class="ticker-val" id="t2-avg">…</span></div>
+      <div class="ticker-item">🔥 平均連続学習 <span class="ticker-val" id="t2-streak">…</span></div>
+      <div class="ticker-item">⚔️ 受験剣士の道で挑戦中の仲間がいます</div>
+      <div class="ticker-item">🥦 正体不明育成記をコツサク中</div>
+      <div class="ticker-item">📒 簿記2級に向けて1マスずつ</div>
+      <div class="ticker-item">🌸 10分 ＝ 🌸1個 の軌跡が積み重なっています</div>
+      <div class="ticker-item">🦍 ゴリラ成長記、伝説ゴリへの道</div>
+      <!-- ループ用2周目 -->
+      <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t2-hours2">…</span></div>
+      <div class="ticker-item">⏱ 1日の平均学習 <span class="ticker-val" id="t2-avg2">…</span></div>
+      <div class="ticker-item">🔥 平均連続学習 <span class="ticker-val" id="t2-streak2">…</span></div>
+      <div class="ticker-item">⚔️ 受験剣士の道で挑戦中の仲間がいます</div>
+      <div class="ticker-item">🥦 正体不明育成記をコツサク中</div>
+      <div class="ticker-item">📒 簿記2級に向けて1マスずつ</div>
+      <div class="ticker-item">🌸 10分 ＝ 🌸1個 の軌跡が積み重なっています</div>
+      <div class="ticker-item">🦍 ゴリラ成長記、伝説ゴリへの道</div>
+    </div>
+  </div>
 
   <!-- キャラ カルーセル（STATSの後） -->
   <div class="char-carousel-wrap" style="padding-bottom:40px;">
@@ -822,7 +964,10 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   function updateTicker(h, avg, streak) {
     [['t-hours',h+'時間'],['t-hours2',h+'時間'],
      ['t-avg','約'+avg+'分'],['t-avg2','約'+avg+'分'],
-     ['t-streak',streak+'日'],['t-streak2',streak+'日']
+     ['t-streak',streak+'日'],['t-streak2',streak+'日'],
+     ['t2-hours',h+'時間'],['t2-hours2',h+'時間'],
+     ['t2-avg','約'+avg+'分'],['t2-avg2','約'+avg+'分'],
+     ['t2-streak',streak+'日'],['t2-streak2',streak+'日'],
     ].forEach(([id,text])=>{ const el=document.getElementById(id); if(el) el.textContent=text; });
   }
 
@@ -853,22 +998,23 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     }
 
     // ── 中央に向かって上昇するパーティクル ──
-    // ラップの中心を基準に各桜がベクトルを計算
-    const wrapW = wrap.offsetWidth || 360;
-    const cx = wrapW / 2; // 中心X
-
+    // ラップのBoundingRectを使って画面上の実際の中心を取得
     function spawnParticle(i, total) {
       const sp = document.createElement('div');
       sp.className = 'sakura-particle';
       sp.textContent = '🌸';
 
-      // 発射位置：横全体に分散（端ほど多めに）
-      const startX = 20 + Math.random() * (wrapW - 40);
-      const startY = 180 + Math.random() * 20; // 下から発射
+      // wrapの現在のサイズを毎回取得
+      const rect = wrap.getBoundingClientRect();
+      const wrapW = rect.width || 360;
+      const cx = wrapW / 2; // wrapローカル座標での中心X
 
-      // 中心に向かうベクトル（少しランダムなばらつき付き）
-      const tx = (cx - startX) * (0.6 + Math.random() * 0.6);
-      const ty = -(140 + Math.random() * 60);
+      // 発射位置：wrapの横幅内でランダム
+      const startX = 10 + Math.random() * (wrapW - 20);
+
+      // 中心に向かうベクトル（必ず内側へ収束）
+      const tx = (cx - startX) * (0.7 + Math.random() * 0.5);
+      const ty = -(120 + Math.random() * 80);
 
       sp.style.left   = startX + 'px';
       sp.style.bottom = '0px';
@@ -891,7 +1037,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     launchWave();
     const waveIv = setInterval(launchWave, 800);
 
-    // カウントアップ完了（約2.2秒）後に大バースト→その後ゆっくり継続
+    // カウントアップ完了（約5秒）後に大バースト→その後ゆっくり継続
     setTimeout(()=>{
       clearInterval(waveIv);
       // 最終バースト
@@ -900,7 +1046,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       setInterval(()=>{
         for(let i=0; i<6; i++) setTimeout(()=>spawnParticle(i, 6), i * 120);
       }, 3000);
-    }, 2400);
+    }, 5200);
   }
 
   // localStorage差分
@@ -958,10 +1104,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       const avgStreak   = total>0 ? Math.round(docs.reduce((s,d)=>s+(d.streakDays||0),0)/total) : 0;
       const sakuraCount = Math.floor(totalMins/10);
 
-      countUp(document.getElementById('c-hours'),  totalHours,'時間',1800);
-      countUp(document.getElementById('c-avg'),    avgDaily,  '分',  1600);
-      countUp(document.getElementById('c-streak'), avgStreak, '日',  1400);
-      setTimeout(()=>{ const el=document.getElementById('c-avg'); if(el) el.textContent='約'+avgDaily+'分'; },1700);
+
 
       updateTicker(totalHours.toLocaleString(), avgDaily, avgStreak);
       setCharLevels(docs);
@@ -969,7 +1112,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       // 🌸 みんなの軌跡：-20時間から実値へカウントアップ→完了後に点滅
       const valHoursNum = document.getElementById('val-hours-num');
       const startHours  = Math.max(0, totalHours - 20);
-      const countDur    = 2400; // 2.4秒でカウントアップ
+      const countDur    = 5000; // 5秒でゆっくりカウントアップ
       if(valHoursNum){
         valHoursNum.textContent = startHours;
         const startTime = performance.now();
@@ -993,10 +1136,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       saveSnapshot(sakuraCount);
       launchParticles(sakuraCount);
 
-      const valAvg    = document.getElementById('val-avg');
-      const valStreak = document.getElementById('val-streak');
-      if(valAvg)    { countUp(valAvg, avgDaily,'分',1200); setTimeout(()=>{ if(avgDaily>0) valAvg.textContent='約'+avgDaily+'分'; },1300); }
-      if(valStreak) countUp(valStreak, avgStreak,'日',1000);
+
 
       const storyCounts={}, licenseCounts={};
       docs.forEach(d=>{
@@ -1042,41 +1182,53 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     },{ passive:true });
   }
 
-  // ランナー走行
+  // ランナー走行（コミカル強化版）
   function initRunners() {
     document.querySelectorAll('.runner-band').forEach(band=>{
       const chars = (band.dataset.runner||'🥦 🌸 🦍 🥸').split(' ').filter(Boolean);
-      const speed = parseFloat(band.dataset.speed||'2') * 100;
+      const baseSpeed = parseFloat(band.dataset.speed||'2') * 100;
+      // キャラごとにサイズ・速度をランダムに設定
       const runners = chars.map((emoji,i)=>{
         const el = document.createElement('div');
         el.className = 'runner-char runner-bounce';
         el.textContent = emoji;
+        // ランダムサイズ（1.2rem〜3.5rem）
+        const sz = 1.2 + Math.random() * 2.3;
+        el.style.fontSize = sz + 'rem';
         band.appendChild(el);
-        return {el, emoji, x: 9999};
+        // 個別スピード（baseSpeedの0.5〜1.8倍）
+        const spd = baseSpeed * (0.5 + Math.random() * 1.3);
+        return {el, emoji, x: 9999, speed: spd, size: sz};
       });
-      const events = ['stumble','jump','spin','bubble'];
+      const events = ['stumble','jump','spin','bubble','grow','shrink'];
       const bubbleTexts = {
-        '🥦':['ニヤニヤ〜！','コツコツ〜！','なんだこれ！','ぶろっこりー！'],
-        '🌸':['サクサク〜✨','10分！10分！','軌跡残すよ〜！','満開間近〜！'],
-        '🦍':['ウホウホ！','伝説ゴリへ！','コツサクだ！','ウホ…強くなる！'],
-        '🥸':['うーん🤔','資格の道も！','ステキ…！','ガチ勢もいるよ！'],
+        '🥦':['ニヤニヤ〜！','コツコツ〜！','なんだこれ！','ぶろっこりー！','うおおお！','10分！'],
+        '🌸':['サクサク〜✨','10分！10分！','軌跡残すよ〜！','満開間近〜！','ぽわわ〜','咲いた！'],
+        '🦍':['ウホウホ！','伝説ゴリへ！','コツサクだ！','ウホ…強くなる！','ウホウホウホ！！','筋肉〜！'],
+        '🥸':['うーん🤔','資格の道も！','ステキ…！','ガチ勢もいるよ！','なるほど…','本気だ！'],
       };
       let activated = false;
       function startAnimation() {
         if(activated) return; activated = true;
         const bw = band.offsetWidth;
-        runners.forEach((r,i)=>{ r.x = bw+60+i*90; });
+        runners.forEach((r,i)=>{ r.x = bw+60+i*110; });
         function frame() {
           const bw2 = band.offsetWidth;
           runners.forEach(r=>{
-            r.x -= speed/60;
-            if(r.x < -80){
-              r.x = bw2+60+Math.random()*80;
-              if(Math.random()<0.2) triggerEvent(r, bw2);
+            r.x -= r.speed/60;
+            if(r.x < -100){
+              r.x = bw2+60+Math.random()*100;
+              // 画面端で再登場時にサイズをランダムに変える
+              const newSz = 1.2 + Math.random() * 2.3;
+              r.el.style.fontSize = newSz + 'rem';
+              r.size = newSz;
+              // 速度もランダムに変える
+              r.speed = baseSpeed * (0.5 + Math.random() * 1.3);
+              if(Math.random()<0.25) triggerEvent(r, bw2);
             }
             r.el.style.left    = r.x+'px';
             r.el.style.top     = '50%';
-            r.el.style.marginTop = '-22px';
+            r.el.style.marginTop = -(r.size * 8) + 'px';
           });
           requestAnimationFrame(frame);
         }
@@ -1085,11 +1237,25 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
           const r=runners[Math.floor(Math.random()*runners.length)];
           const bw2=band.offsetWidth;
           if(r.x>20 && r.x<bw2-20) triggerEvent(r, bw2);
-        }, 2800);
+        }, 1800);
       }
       function triggerEvent(r, bw) {
         const ev=events[Math.floor(Math.random()*events.length)];
         if(ev==='bubble'){ showBubble(r,bw); return; }
+        if(ev==='grow'){
+          // 急に大きくなる
+          const big = 3.0 + Math.random()*1.2;
+          r.el.style.fontSize = big+'rem';
+          r.size = big;
+          setTimeout(()=>{ const s=1.2+Math.random()*2.3; r.el.style.fontSize=s+'rem'; r.size=s; },500);
+          return;
+        }
+        if(ev==='shrink'){
+          // 急に小さくなる
+          r.el.style.fontSize='0.7rem'; r.size=0.7;
+          setTimeout(()=>{ const s=1.2+Math.random()*2.3; r.el.style.fontSize=s+'rem'; r.size=s; },500);
+          return;
+        }
         r.el.classList.remove('runner-bounce','runner-stumble','runner-jump','runner-spin');
         r.el.classList.add('runner-'+ev);
         setTimeout(()=>{ r.el.classList.remove('runner-'+ev); r.el.classList.add('runner-bounce'); },600);
@@ -1099,7 +1265,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         const text=texts[Math.floor(Math.random()*texts.length)];
         const bubble=document.createElement('div');
         bubble.className='runner-bubble'; bubble.textContent=text;
-        bubble.style.left=Math.max(4,Math.min(r.x-10,bw-120))+'px';
+        bubble.style.left=Math.max(4,Math.min(r.x-10,bw-130))+'px';
         bubble.style.top='4px';
         band.appendChild(bubble);
         setTimeout(()=>bubble.remove(), 1600);
