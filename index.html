@@ -797,14 +797,13 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     requestAnimationFrame(tick);
   }
 
-  // 棒グラフ（アニメーション付き）
+  // 棒グラフ
   function renderBar(containerId, data, usePink) {
     const el = document.getElementById(containerId);
     if(!el) return;
     const total = Object.values(data).reduce((s,v)=>s+v,0);
     if(!total){ el.innerHTML='<div style="font-size:.72rem;color:#999;">データなし</div>'; return; }
-    const sorted = Object.entries(data).sort((a,b)=>b[1]-a[1]);
-    el.innerHTML = sorted.map(([key,val])=>{
+    el.innerHTML = Object.entries(data).sort((a,b)=>b[1]-a[1]).map(([key,val])=>{
       const pct = Math.round(val/total*100);
       return `<div class="bar-item">
         <div class="bar-meta"><span class="bar-name">${key}</span><span class="bar-pct">${pct}%</span></div>
@@ -818,12 +817,11 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     });
   }
 
-  // キャラレベルバー（全ユーザーの平均から算出）
+  // キャラレベルバー
   function setCharLevels(docs) {
     const avgLv = docs.length > 0
       ? Math.round(docs.reduce((s,d)=>s+(d.level||1),0)/docs.length) : 1;
-    const offsets = [3, -2, 5, -4];
-    offsets.forEach((off, i) => {
+    [3,-2,5,-4].forEach((off, i) => {
       const lv  = Math.max(1, avgLv + off);
       const pct = Math.min(Math.max(Math.round((lv % 10) / 10 * 100), 20), 95);
       const numEl = document.getElementById('lv' + i);
@@ -835,199 +833,117 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
   // ティッカー更新
   function updateTicker(h, avg, streak) {
-    const vals = [
-      ['t-hours', h + '時間'], ['t-hours2', h + '時間'],
-      ['t-avg', '約' + avg + '分'], ['t-avg2', '約' + avg + '分'],
-      ['t-streak', streak + '日'], ['t-streak2', streak + '日'],
-    ];
-    vals.forEach(([id, text]) => {
-      const el = document.getElementById(id);
-      if(el) el.textContent = text;
-    });
+    [['t-hours',h+'時間'],['t-hours2',h+'時間'],
+     ['t-avg','約'+avg+'分'],['t-avg2','約'+avg+'分'],
+     ['t-streak',streak+'日'],['t-streak2',streak+'日']
+    ].forEach(([id,text])=>{ const el=document.getElementById(id); if(el) el.textContent=text; });
   }
 
-  async function loadStats() {
-    const loading = document.getElementById('stats-loading');
-    const errEl   = document.getElementById('stats-error');
-    const body    = document.getElementById('stats-body');
-    if(!db) {
-      if(loading) loading.style.display='none';
-      if(errEl){ errEl.style.display='block'; errEl.textContent='データを取得できませんでした。'; }
-      return;
-    }
-    try {
-      const snap  = await db.collection('analytics').get();
-      const docs  = snap.docs.map(d=>d.data());
-      const total = docs.length;
-
-      const totalMins  = docs.reduce((s,d)=>s+(d.totalStudyMin||0),0);
-      const totalHours = Math.round(totalMins/60);
-      const avgDaily   = total > 0 ? Math.round(docs.reduce((s,d)=>s+(d.avgDailyMinutes||0),0)/total) : 0;
-      const avgStreak  = total > 0 ? Math.round(docs.reduce((s,d)=>s+(d.streakDays||0),0)/total) : 0;
-
-      // カウンターバンド
-      countUp(document.getElementById('c-hours'),  totalHours, '時間', 1800);
-      countUp(document.getElementById('c-avg'),    avgDaily,   '分',   1600);
-      countUp(document.getElementById('c-streak'), avgStreak,  '日',   1400);
-      // 「約」付きに上書き
-      setTimeout(()=>{ const el = document.getElementById('c-avg'); if(el) el.textContent = '約' + avgDaily + '分'; }, 1700);
-
-      // ティッカー
-      updateTicker(totalHours.toLocaleString(), avgDaily, avgStreak);
-
-      // キャラ
-      setCharLevels(docs);
-
-      // 🌸 総学習時間ヒーロー数字カウントアップ
-      const valHoursNum = document.getElementById('val-hours-num');
-      if(valHoursNum) countUp(valHoursNum, totalHours, '', 2200);
-
-      // 🌸 フィールド：1個ずつ時間差でポップインしながら表示→最後の1個をキラキラ
-      const units   = Math.floor(totalMins / 10);
-      const maxShow = 200;
-      const show    = Math.min(units, maxShow);
-      const sf      = document.getElementById('sakura-field');
-      const ovWrap  = document.getElementById('sakura-overflow-wrap');
-
-  // ── パーティクル演出 ──
+  // パーティクル演出
   function launchParticles(sakuraCount) {
-    const wrap = document.getElementById('sakura-particle-wrap');
+    const wrap   = document.getElementById('sakura-particle-wrap');
     const ground = document.getElementById('sakura-ground');
     if(!wrap) return;
-
-    // 地面に並ぶ🌸（表示数を制限して見やすく）
     const groundCount = Math.min(sakuraCount, 18);
     if(ground){
       ground.innerHTML = '';
-      for(let i = 0; i < groundCount; i++){
+      for(let i=0; i<groundCount; i++){
         const sp = document.createElement('span');
         sp.className = 'sakura-ground-item';
         sp.textContent = '🌸';
-        sp.style.setProperty('--gd', (i * 0.12) + 's');
+        sp.style.setProperty('--gd', (i*0.12)+'s');
         ground.appendChild(sp);
       }
     }
-
-    // 舞い上がるパーティクルを時間差で発射
-    const drifts = [-30,-20,-10,0,10,20,30,-25,25,-15,15];
-    const rots   = [160,200,240,180,220,160,200,240,180,220,160];
+    const drifts    = [-30,-20,-10,0,10,20,30,-25,25,-15,15];
+    const rots      = [160,200,240,180,220,160,200,240,180,220,160];
     const positions = [10,20,32,42,52,62,72,82,15,55,35];
-    const WAVE = 12; // 1波あたりの数
     let launched = 0;
-
     function launchWave() {
-      for(let i = 0; i < WAVE; i++){
-        const idx = (launched + i) % drifts.length;
+      for(let i=0; i<12; i++){
+        const idx = (launched+i) % drifts.length;
         const sp = document.createElement('div');
         sp.className = 'sakura-particle';
         sp.textContent = '🌸';
-        sp.style.left = positions[idx] + (Math.random() * 8 - 4) + '%';
+        sp.style.left   = positions[idx]+(Math.random()*8-4)+'%';
         sp.style.bottom = '8px';
-        sp.style.setProperty('--dur', (2.0 + Math.random() * 0.8) + 's');
-        sp.style.setProperty('--delay', (i * 0.14) + 's');
-        sp.style.setProperty('--drift', (drifts[idx] + Math.random() * 10 - 5) + 'px');
-        sp.style.setProperty('--rot', rots[idx] + 'deg');
+        sp.style.setProperty('--dur',   (2.0+Math.random()*0.8)+'s');
+        sp.style.setProperty('--delay', (i*0.14)+'s');
+        sp.style.setProperty('--drift', (drifts[idx]+Math.random()*10-5)+'px');
+        sp.style.setProperty('--rot',   rots[idx]+'deg');
         wrap.appendChild(sp);
-        // アニメーション終了後に削除
-        setTimeout(()=>{ sp.remove(); }, (2.8 + i * 0.14) * 1000);
+        setTimeout(()=>sp.remove(), (2.8+i*0.14)*1000);
       }
-      launched += WAVE;
+      launched += 12;
     }
-
-    // カウントアップ中は連続して発射
     launchWave();
-    const waveInterval = setInterval(launchWave, 1400);
-    // カウントアップ完了後（2.2秒）に止める
+    const waveIv = setInterval(launchWave, 1400);
     setTimeout(()=>{
-      clearInterval(waveInterval);
-      // 最後に大きなバースト
-      for(let i = 0; i < 20; i++){
+      clearInterval(waveIv);
+      for(let i=0; i<20; i++){
         setTimeout(()=>{
           const idx = i % drifts.length;
           const sp = document.createElement('div');
-          sp.className = 'sakura-particle';
-          sp.textContent = '🌸';
-          sp.style.left = (5 + Math.random() * 85) + '%';
-          sp.style.bottom = '8px';
-          sp.style.setProperty('--dur', (1.8 + Math.random() * 0.6) + 's');
+          sp.className = 'sakura-particle'; sp.textContent = '🌸';
+          sp.style.left = (5+Math.random()*85)+'%'; sp.style.bottom = '8px';
+          sp.style.setProperty('--dur',   (1.8+Math.random()*0.6)+'s');
           sp.style.setProperty('--delay', '0s');
-          sp.style.setProperty('--drift', (drifts[idx] + Math.random() * 20 - 10) + 'px');
-          sp.style.setProperty('--rot', rots[idx] + 'deg');
+          sp.style.setProperty('--drift', (drifts[idx]+Math.random()*20-10)+'px');
+          sp.style.setProperty('--rot',   rots[idx]+'deg');
           wrap.appendChild(sp);
-          setTimeout(()=>{ sp.remove(); }, 2600);
-        }, i * 60);
+          setTimeout(()=>sp.remove(), 2600);
+        }, i*60);
       }
-      // その後もゆっくり舞い続ける（ライブ感）
       setInterval(()=>{
         const sp = document.createElement('div');
-        sp.className = 'sakura-particle';
-        sp.textContent = '🌸';
-        sp.style.left = (5 + Math.random() * 85) + '%';
-        sp.style.bottom = '8px';
-        sp.style.setProperty('--dur', (2.2 + Math.random() * 0.8) + 's');
+        sp.className = 'sakura-particle'; sp.textContent = '🌸';
+        sp.style.left = (5+Math.random()*85)+'%'; sp.style.bottom = '8px';
+        sp.style.setProperty('--dur',   (2.2+Math.random()*0.8)+'s');
         sp.style.setProperty('--delay', '0s');
-        sp.style.setProperty('--drift', (Math.random() * 40 - 20) + 'px');
-        sp.style.setProperty('--rot', (150 + Math.random() * 100) + 'deg');
+        sp.style.setProperty('--drift', (Math.random()*40-20)+'px');
+        sp.style.setProperty('--rot',   (150+Math.random()*100)+'deg');
         wrap.appendChild(sp);
-        setTimeout(()=>{ sp.remove(); }, 3200);
+        setTimeout(()=>sp.remove(), 3200);
       }, 2800);
     }, 2400);
   }
 
-  // ── localStorage差分 ──
+  // localStorage差分
   const LS_KEY = 'kotsusaku_sakura_snapshot';
-
   function getSavedSnapshot() {
-    try {
-      const raw = localStorage.getItem(LS_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch(e) { return null; }
+    try { const r=localStorage.getItem(LS_KEY); return r?JSON.parse(r):null; } catch(e){ return null; }
   }
-
   function saveSnapshot(sakuraCount) {
     try {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = new Date().toISOString().slice(0,10);
       const saved = getSavedSnapshot();
-      // 今日まだ保存していなければ昨日分として前の値を保持しつつ今日を更新
-      if(!saved || saved.date !== today) {
+      if(!saved || saved.date !== today){
         localStorage.setItem(LS_KEY, JSON.stringify({
-          date: today,
-          count: sakuraCount,
+          date:today, count:sakuraCount,
           prevCount: saved ? saved.count : null,
           prevDate:  saved ? saved.date  : null,
         }));
       }
-    } catch(e) {}
+    } catch(e){}
   }
-
   function showDiff(currentCount) {
     const diffWrap = document.getElementById('sakura-diff-wrap');
     if(!diffWrap) return;
     const saved = getSavedSnapshot();
     if(!saved || saved.prevCount === null) return;
-
     const diff = currentCount - saved.prevCount;
     if(diff <= 0) return;
-
-    // 前回保存日からの差分ラベル
-    const prevDate = saved.prevDate;
-    const today    = new Date().toISOString().slice(0, 10);
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().slice(0, 10);
-
-    let label = '前回より';
-    if(prevDate === yesterdayStr) label = '昨日より';
-
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    const label = saved.prevDate === yesterday.toISOString().slice(0,10) ? '昨日より' : '前回より';
     diffWrap.innerHTML = `
       <div class="sakura-diff-badge">
         <span class="sakura-diff-dot"></span>
         ${label} <strong>+${diff.toLocaleString()}個</strong> 🌸 増えました
       </div>
-      <div class="sakura-diff-note">※端末・ブラウザによって誤差があります</div>
-    `;
+      <div class="sakura-diff-note">※端末・ブラウザによって誤差があります</div>`;
   }
 
+  // メインデータ取得
   async function loadStats() {
     const loading = document.getElementById('stats-loading');
     const errEl   = document.getElementById('stats-error');
@@ -1041,67 +957,48 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       const snap  = await db.collection('analytics').get();
       const docs  = snap.docs.map(d=>d.data());
       const total = docs.length;
+      const totalMins   = docs.reduce((s,d)=>s+(d.totalStudyMin||0),0);
+      const totalHours  = Math.round(totalMins/60);
+      const avgDaily    = total>0 ? Math.round(docs.reduce((s,d)=>s+(d.avgDailyMinutes||0),0)/total) : 0;
+      const avgStreak   = total>0 ? Math.round(docs.reduce((s,d)=>s+(d.streakDays||0),0)/total) : 0;
+      const sakuraCount = Math.floor(totalMins/10);
 
-      const totalMins  = docs.reduce((s,d)=>s+(d.totalStudyMin||0),0);
-      const totalHours = Math.round(totalMins/60);
-      const avgDaily   = total > 0 ? Math.round(docs.reduce((s,d)=>s+(d.avgDailyMinutes||0),0)/total) : 0;
-      const avgStreak  = total > 0 ? Math.round(docs.reduce((s,d)=>s+(d.streakDays||0),0)/total) : 0;
-      const sakuraCount = Math.floor(totalMins / 10);
+      countUp(document.getElementById('c-hours'),  totalHours,'時間',1800);
+      countUp(document.getElementById('c-avg'),    avgDaily,  '分',  1600);
+      countUp(document.getElementById('c-streak'), avgStreak, '日',  1400);
+      setTimeout(()=>{ const el=document.getElementById('c-avg'); if(el) el.textContent='約'+avgDaily+'分'; },1700);
 
-      // カウンターバンド
-      countUp(document.getElementById('c-hours'),  totalHours, '時間', 1800);
-      countUp(document.getElementById('c-avg'),    avgDaily,   '分',   1600);
-      countUp(document.getElementById('c-streak'), avgStreak,  '日',   1400);
-      setTimeout(()=>{ const el = document.getElementById('c-avg'); if(el) el.textContent = '約' + avgDaily + '分'; }, 1700);
-
-      // ティッカー
       updateTicker(totalHours.toLocaleString(), avgDaily, avgStreak);
-
-      // キャラ
       setCharLevels(docs);
 
-      // 🌸 総学習時間カウントアップ
       const valHoursNum = document.getElementById('val-hours-num');
       if(valHoursNum) countUp(valHoursNum, totalHours, '', 2200);
 
-      // 🌸 差分表示（カウントアップ開始前に取得・表示）
       showDiff(sakuraCount);
-
-      // 🌸 スナップショット保存
       saveSnapshot(sakuraCount);
-
-      // 🌸 パーティクル演出
       launchParticles(sakuraCount);
 
-      // 超過バッジ
       const ovWrap = document.getElementById('sakura-overflow-wrap');
       if(ovWrap){
-        if(sakuraCount > 200){
-          ovWrap.innerHTML = `<div class="sakura-live-badge"><span class="sakura-live-dot"></span>＋ほかにも ${(sakuraCount - 200).toLocaleString()} 個分の軌跡があります</div>`;
-        } else {
-          ovWrap.innerHTML = '';
-        }
+        ovWrap.innerHTML = sakuraCount>200
+          ? `<div class="sakura-live-badge"><span class="sakura-live-dot"></span>＋ほかにも ${(sakuraCount-200).toLocaleString()} 個分の軌跡があります</div>`
+          : '';
       }
 
-      // 数字カード
       const valAvg    = document.getElementById('val-avg');
       const valStreak = document.getElementById('val-streak');
-      if(valAvg)    { countUp(valAvg, avgDaily, '分', 1200); setTimeout(()=>{ if(avgDaily>0) valAvg.textContent='約'+avgDaily+'分'; }, 1300); }
-      if(valStreak) countUp(valStreak, avgStreak, '日', 1000);
+      if(valAvg)    { countUp(valAvg, avgDaily,'分',1200); setTimeout(()=>{ if(avgDaily>0) valAvg.textContent='約'+avgDaily+'分'; },1300); }
+      if(valStreak) countUp(valStreak, avgStreak,'日',1000);
 
-      // 棒グラフ
-      const storyCounts = {}, licenseCounts = {};
-      docs.forEach(d => {
-        const s = d.storyMode || '', lc = d.licenseCategory || '';
+      const storyCounts={}, licenseCounts={};
+      docs.forEach(d=>{
+        const s=d.storyMode||'', lc=d.licenseCategory||'';
         if(FICTION_IDS.includes(s)){
-          const label = storyLabels[s] || s;
-          storyCounts[label] = (storyCounts[label]||0) + 1;
+          const label=storyLabels[s]||s; storyCounts[label]=(storyCounts[label]||0)+1;
         } else if(LICENSE_IDS.includes(s)){
-          const label = licenseStoryLabels[s] || s;
-          licenseCounts[label] = (licenseCounts[label]||0) + 1;
+          const label=licenseStoryLabels[s]||s; licenseCounts[label]=(licenseCounts[label]||0)+1;
         } else if(lc && licenseCategoryLabels[lc]){
-          const label = licenseCategoryLabels[lc];
-          licenseCounts[label] = (licenseCounts[label]||0) + 1;
+          const label=licenseCategoryLabels[lc]; licenseCounts[label]=(licenseCounts[label]||0)+1;
         }
       });
       renderBar('chart-story',   storyCounts,   false);
@@ -1117,161 +1014,113 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     }
   }
 
-  // インストール済みの方はこちら → タブを閉じてアプリに戻る
+  // インストール済みの方はこちら
   window.closeToApp = function() {
-    try {
-      window.close();
-      // 閉じられなかった場合のフォールバック
-      setTimeout(()=>{
-        const msg = document.getElementById('close-fallback-msg');
-        if(msg) msg.style.display = 'block';
-      }, 400);
-    } catch(e) {}
+    window.close();
+    setTimeout(()=>{
+      const msg = document.getElementById('close-fallback-msg');
+      if(msg) msg.style.display = 'block';
+    }, 500);
   };
 
-  // カルーセルのスクロール連動ドット
+  // カルーセルドット
   function initCarousel() {
     const carousel = document.getElementById('char-carousel');
     const dots = document.querySelectorAll('.carousel-dot');
     if(!carousel || !dots.length) return;
-    carousel.addEventListener('scroll', () => {
-      const idx = Math.round(carousel.scrollLeft / (carousel.scrollWidth / dots.length));
-      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-    }, { passive: true });
+    carousel.addEventListener('scroll', ()=>{
+      const idx = Math.round(carousel.scrollLeft/(carousel.scrollWidth/dots.length));
+      dots.forEach((d,i)=>d.classList.toggle('active', i===idx));
+    },{ passive:true });
   }
 
-  // ── ランナー走行アニメーション ──
+  // ランナー走行
   function initRunners() {
-    document.querySelectorAll('.runner-band').forEach(band => {
-      const chars = (band.dataset.runner || '🥦 🌸 🦍 🥸').split(' ').filter(Boolean);
-      const speed = parseFloat(band.dataset.speed || '2') * 100; // px/frame換算
-
-      // キャラを作成
-      const runners = chars.map((emoji, i) => {
+    document.querySelectorAll('.runner-band').forEach(band=>{
+      const chars = (band.dataset.runner||'🥦 🌸 🦍 🥸').split(' ').filter(Boolean);
+      const speed = parseFloat(band.dataset.speed||'2') * 100;
+      const runners = chars.map((emoji,i)=>{
         const el = document.createElement('div');
         el.className = 'runner-char runner-bounce';
         el.textContent = emoji;
         band.appendChild(el);
-        return { el, emoji, x: 110 + i * 28, phase: i };
+        return {el, emoji, x: 9999};
       });
-
-      // コミカルなイベントテーブル（確率で発生）
-      const events = ['stumble', 'jump', 'spin', 'bubble'];
+      const events = ['stumble','jump','spin','bubble'];
       const bubbleTexts = {
-        '🥦': ['ニヤニヤ〜！', 'コツコツ〜！', 'なんだこれ！', 'ぶろっこりー！'],
-        '🌸': ['サクサク〜✨', '10分！10分！', '軌跡残すよ〜！', '満開間近〜！'],
-        '🦍': ['ウホウホ！', '伝説ゴリへ！', 'コツサクだ！', 'ウホ…強くなる！'],
-        '🥸': ['うーん🤔', '資格の道も！', 'ステキ…！', 'ガチ勢もいるよ！'],
+        '🥦':['ニヤニヤ〜！','コツコツ〜！','なんだこれ！','ぶろっこりー！'],
+        '🌸':['サクサク〜✨','10分！10分！','軌跡残すよ〜！','満開間近〜！'],
+        '🦍':['ウホウホ！','伝説ゴリへ！','コツサクだ！','ウホ…強くなる！'],
+        '🥸':['うーん🤔','資格の道も！','ステキ…！','ガチ勢もいるよ！'],
       };
-
       let activated = false;
-
       function startAnimation() {
-        if(activated) return;
-        activated = true;
-
-        const bandW = band.offsetWidth;
-        runners.forEach((r, i) => {
-          r.x = bandW + 60 + i * 90; // 右外からスタート
-        });
-
-        let tick = 0;
+        if(activated) return; activated = true;
+        const bw = band.offsetWidth;
+        runners.forEach((r,i)=>{ r.x = bw+60+i*90; });
         function frame() {
-          tick++;
-          const bw = band.offsetWidth;
-          runners.forEach((r, idx) => {
-            r.x -= speed / 60; // 60fpsで割る
-
-            // 画面外（左）に出たら右から再登場
-            if(r.x < -80) {
-              r.x = bw + 60 + Math.random() * 80;
-              // コミカルイベント発生（20%）
-              if(Math.random() < 0.2) triggerEvent(r, bw);
+          const bw2 = band.offsetWidth;
+          runners.forEach(r=>{
+            r.x -= speed/60;
+            if(r.x < -80){
+              r.x = bw2+60+Math.random()*80;
+              if(Math.random()<0.2) triggerEvent(r, bw2);
             }
-
-            r.el.style.left = r.x + 'px';
-            r.el.style.top  = '50%';
+            r.el.style.left    = r.x+'px';
+            r.el.style.top     = '50%';
             r.el.style.marginTop = '-22px';
           });
           requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
-
-        // 定期的にコミカルイベント
         setInterval(()=>{
-          const r = runners[Math.floor(Math.random() * runners.length)];
-          const bw = band.offsetWidth;
-          if(r.x > 20 && r.x < bw - 20) triggerEvent(r, bw);
+          const r=runners[Math.floor(Math.random()*runners.length)];
+          const bw2=band.offsetWidth;
+          if(r.x>20 && r.x<bw2-20) triggerEvent(r, bw2);
         }, 2800);
       }
-
       function triggerEvent(r, bw) {
-        const ev = events[Math.floor(Math.random() * events.length)];
-        if(ev === 'bubble') {
-          showBubble(r, bw);
-        } else {
-          // bounce → 別のアニメに切り替え
-          r.el.classList.remove('runner-bounce', 'runner-stumble', 'runner-jump', 'runner-spin');
-          r.el.classList.add('runner-' + ev);
-          setTimeout(()=>{
-            r.el.classList.remove('runner-' + ev);
-            r.el.classList.add('runner-bounce');
-          }, 600);
-        }
+        const ev=events[Math.floor(Math.random()*events.length)];
+        if(ev==='bubble'){ showBubble(r,bw); return; }
+        r.el.classList.remove('runner-bounce','runner-stumble','runner-jump','runner-spin');
+        r.el.classList.add('runner-'+ev);
+        setTimeout(()=>{ r.el.classList.remove('runner-'+ev); r.el.classList.add('runner-bounce'); },600);
       }
-
       function showBubble(r, bw) {
-        const texts = bubbleTexts[r.emoji] || ['コツサク〜！'];
-        const text  = texts[Math.floor(Math.random() * texts.length)];
-        const bubble = document.createElement('div');
-        bubble.className = 'runner-bubble';
-        bubble.textContent = text;
-        // キャラの上に配置
-        bubble.style.left = Math.max(4, Math.min(r.x - 10, bw - 120)) + 'px';
-        bubble.style.top  = '4px';
+        const texts=bubbleTexts[r.emoji]||['コツサク〜！'];
+        const text=texts[Math.floor(Math.random()*texts.length)];
+        const bubble=document.createElement('div');
+        bubble.className='runner-bubble'; bubble.textContent=text;
+        bubble.style.left=Math.max(4,Math.min(r.x-10,bw-120))+'px';
+        bubble.style.top='4px';
         band.appendChild(bubble);
-        setTimeout(()=> bubble.remove(), 1600);
+        setTimeout(()=>bubble.remove(), 1600);
       }
-
-      // IntersectionObserverで画面に入ったときに起動
-      const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => { if(e.isIntersecting) startAnimation(); });
-      }, { threshold: 0.3 });
+      const obs=new IntersectionObserver(entries=>{
+        entries.forEach(e=>{ if(e.isIntersecting) startAnimation(); });
+      },{threshold:0.3});
       obs.observe(band);
     });
   }
 
-  // スクロール reveal
+  // スクロールreveal
   function initReveal() {
-    const obs = new IntersectionObserver(entries=>{
+    const obs=new IntersectionObserver(entries=>{
       entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
-    },{ threshold:.1 });
+    },{threshold:.1});
     document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   }
 
   // PIN
-  window.openPinModal = function(){
-    document.getElementById('pin-modal').classList.add('show');
-    document.getElementById('pin-input').value='';
-    document.getElementById('pin-error').textContent='';
-    setTimeout(()=>document.getElementById('pin-input').focus(),100);
-  };
+  window.openPinModal  = function(){ document.getElementById('pin-modal').classList.add('show'); document.getElementById('pin-input').value=''; document.getElementById('pin-error').textContent=''; setTimeout(()=>document.getElementById('pin-input').focus(),100); };
   window.closePinModal = function(){ document.getElementById('pin-modal').classList.remove('show'); };
-  window.checkPin = function(){
-    const val = document.getElementById('pin-input').value;
-    if(val === '0509'){
-      window.location.href='https://urutoraktiti-boop.github.io/kotsusaku-dashboard/dashboard.html';
-    } else {
-      document.getElementById('pin-error').textContent='PINが正しくありません';
-      document.getElementById('pin-input').value='';
-    }
+  window.checkPin      = function(){
+    const val=document.getElementById('pin-input').value;
+    if(val==='0509'){ window.location.href='https://urutoraktiti-boop.github.io/kotsusaku-dashboard/dashboard.html'; }
+    else { document.getElementById('pin-error').textContent='PINが正しくありません'; document.getElementById('pin-input').value=''; }
   };
-  document.addEventListener('keydown', e=>{
-    if(e.key==='Enter' && document.getElementById('pin-modal').classList.contains('show')) window.checkPin();
-  });
-  document.getElementById('pin-modal').addEventListener('click', e=>{
-    if(e.target===document.getElementById('pin-modal')) window.closePinModal();
-  });
+  document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&document.getElementById('pin-modal').classList.contains('show')) window.checkPin(); });
+  document.getElementById('pin-modal').addEventListener('click',e=>{ if(e.target===document.getElementById('pin-modal')) window.closePinModal(); });
 
   initCarousel();
   initRunners();
