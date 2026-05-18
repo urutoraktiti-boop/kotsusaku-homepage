@@ -238,6 +238,53 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   color:var(--pink);margin-top:8px;
 }
 .sakura-live-dot{width:6px;height:6px;border-radius:50%;background:var(--pink);animation:livePulse 1.4s ease infinite;}
+
+/* ── ランナー帯 ── */
+.runner-band{
+  position:relative;overflow:hidden;height:72px;
+  background:linear-gradient(90deg,var(--mint),var(--cream),var(--rose),var(--blue));
+  background-size:400% 100%;animation:bandShift 8s ease infinite;
+  border-top:1px solid rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.7);
+}
+@keyframes bandShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.runner-track{position:absolute;inset:0;display:flex;align-items:center;}
+.runner-char{
+  position:absolute;font-size:2.2rem;white-space:nowrap;
+  filter:drop-shadow(2px 2px 0 rgba(255,255,255,.8));
+  transform-origin:center bottom;
+}
+.runner-bounce{animation:runBounce .26s ease-in-out infinite alternate;}
+@keyframes runBounce{from{transform:scaleY(1) translateY(0) rotate(-4deg);}to{transform:scaleY(.86) translateY(5px) rotate(4deg);}}
+.runner-stumble{animation:runStumble .5s ease-in-out forwards;}
+@keyframes runStumble{0%{transform:rotate(0);}30%{transform:rotate(30deg) translateY(8px);}60%{transform:rotate(-12deg);}100%{transform:rotate(0);}}
+.runner-jump{animation:runJump .55s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes runJump{0%{transform:translateY(0);}40%{transform:translateY(-24px) rotate(-10deg);}100%{transform:translateY(0);}}
+.runner-spin{animation:runSpin .5s linear forwards;}
+@keyframes runSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.runner-bubble{
+  position:absolute;background:#fff;border:2px solid var(--ink);
+  border-radius:14px 14px 14px 4px;padding:5px 10px;
+  font-size:.68rem;font-weight:800;color:var(--ink);white-space:nowrap;
+  box-shadow:3px 3px 0 rgba(23,32,51,.1);pointer-events:none;
+  animation:bubblePop .3s cubic-bezier(.34,1.56,.64,1) both;z-index:10;line-height:1.5;
+}
+@keyframes bubblePop{from{transform:scale(0) translateY(4px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+
+/* ── グラフ吹き出しコメント ── */
+.chart-comment{
+  display:flex;align-items:flex-start;gap:10px;margin-top:14px;
+  padding:12px 14px;background:linear-gradient(135deg,#fffdf0,#fff8f2);
+  border:1.5px solid #ffe4b8;border-radius:16px;
+}
+.chart-comment.license-comment{background:linear-gradient(135deg,#f0fff4,#f0f8ff);border-color:#b8e8d0;}
+.chart-comment-face{font-size:1.5rem;flex-shrink:0;margin-top:2px;}
+.chart-comment-bubble{
+  position:relative;background:#fff;border:1.5px solid var(--line);
+  border-radius:0 14px 14px 14px;padding:8px 12px;
+  font-size:.73rem;font-weight:800;color:var(--ink);line-height:1.65;flex:1;
+}
+.chart-comment-bubble:before{content:"";position:absolute;left:-8px;top:8px;border:4px solid transparent;border-right-color:var(--line);}
+.chart-comment-bubble:after{content:"";position:absolute;left:-5px;top:9px;border:3px solid transparent;border-right-color:#fff;}
 .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
 .stat-card{background:#fff;border-radius:18px;padding:22px 16px;text-align:center;box-shadow:var(--shadow);border:1.5px solid var(--line);transition:transform .2s,box-shadow .2s;}
 .stat-card:hover{transform:translateY(-3px);box-shadow:0 28px 56px rgba(73,91,125,.16);}
@@ -505,11 +552,19 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
             <div class="chart-title">📖 メインストーリーを選んだ冒険者の割合</div>
             <div class="chart-note">ゴリラ・剣士・宇宙・育成・鬼教官などのフィクション系ストーリーを選択中の仲間</div>
             <div class="bar-list" id="chart-story"></div>
+            <div class="chart-comment">
+              <div class="chart-comment-face">🥦</div>
+              <div class="chart-comment-bubble">受験剣士多いねー！<br>デフォルト設定のままの仲間かな？<br>ぜひ自分だけの道も探してみて🌸</div>
+            </div>
           </div>
           <div class="chart-block reveal reveal-delay-2">
             <div class="chart-title">🎓 資格ストーリーを選んだ冒険者の割合</div>
             <div class="chart-note">簿記・宅建・FPなど実際の資格取得を目指してコツサク中の仲間</div>
             <div class="bar-list" id="chart-license"></div>
+            <div class="chart-comment license-comment">
+              <div class="chart-comment-face">🦍</div>
+              <div class="chart-comment-bubble">硬派な資格ストーリーを<br>選んだ冒険者もステキ…！<br>本気組、ウホ尊いです🎓</div>
+            </div>
           </div>
         </div>
       </div>
@@ -560,6 +615,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     </div>
   </div>
 
+  <!-- ランナー帯① -->
+  <div class="runner-band" data-runner="🥦 🌸 🦍 🥸" data-speed="2.2"></div>
+
   <!-- ══ STORYBOARD ══ -->
   <section class="section" id="board">
     <div class="wrap">
@@ -575,6 +633,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       </div>
     </div>
   </section>
+
+  <!-- ランナー帯② -->
+  <div class="runner-band" data-runner="🌸 🥸 🥦 🦍" data-speed="1.9"></div>
 
   <!-- ══ STORY 横スクロール ══ -->
   <section class="section" id="story">
@@ -598,6 +659,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     </div>
   </section>
 
+  <!-- ランナー帯③ -->
+  <div class="runner-band" data-runner="🦍 🥦 🌸 🥸" data-speed="2.4"></div>
+
   <!-- ══ FEATURES ══ -->
   <section class="section" id="features">
     <div class="wrap">
@@ -612,6 +676,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       </div>
     </div>
   </section>
+
+  <!-- ランナー帯④ -->
+  <div class="runner-band" data-runner="🥸 🌸 🦍 🥦" data-speed="2.0"></div>
 
   <!-- ══ LICENSE ══ -->
   <section class="section" id="license">
@@ -1073,6 +1140,107 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     }, { passive: true });
   }
 
+  // ── ランナー走行アニメーション ──
+  function initRunners() {
+    document.querySelectorAll('.runner-band').forEach(band => {
+      const chars = (band.dataset.runner || '🥦 🌸 🦍 🥸').split(' ').filter(Boolean);
+      const speed = parseFloat(band.dataset.speed || '2') * 100; // px/frame換算
+
+      // キャラを作成
+      const runners = chars.map((emoji, i) => {
+        const el = document.createElement('div');
+        el.className = 'runner-char runner-bounce';
+        el.textContent = emoji;
+        band.appendChild(el);
+        return { el, emoji, x: 110 + i * 28, phase: i };
+      });
+
+      // コミカルなイベントテーブル（確率で発生）
+      const events = ['stumble', 'jump', 'spin', 'bubble'];
+      const bubbleTexts = {
+        '🥦': ['ニヤニヤ〜！', 'コツコツ〜！', 'なんだこれ！', 'ぶろっこりー！'],
+        '🌸': ['サクサク〜✨', '10分！10分！', '軌跡残すよ〜！', '満開間近〜！'],
+        '🦍': ['ウホウホ！', '伝説ゴリへ！', 'コツサクだ！', 'ウホ…強くなる！'],
+        '🥸': ['うーん🤔', '資格の道も！', 'ステキ…！', 'ガチ勢もいるよ！'],
+      };
+
+      let activated = false;
+
+      function startAnimation() {
+        if(activated) return;
+        activated = true;
+
+        const bandW = band.offsetWidth;
+        runners.forEach((r, i) => {
+          r.x = bandW + 60 + i * 90; // 右外からスタート
+        });
+
+        let tick = 0;
+        function frame() {
+          tick++;
+          const bw = band.offsetWidth;
+          runners.forEach((r, idx) => {
+            r.x -= speed / 60; // 60fpsで割る
+
+            // 画面外（左）に出たら右から再登場
+            if(r.x < -80) {
+              r.x = bw + 60 + Math.random() * 80;
+              // コミカルイベント発生（20%）
+              if(Math.random() < 0.2) triggerEvent(r, bw);
+            }
+
+            r.el.style.left = r.x + 'px';
+            r.el.style.top  = '50%';
+            r.el.style.marginTop = '-22px';
+          });
+          requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+
+        // 定期的にコミカルイベント
+        setInterval(()=>{
+          const r = runners[Math.floor(Math.random() * runners.length)];
+          const bw = band.offsetWidth;
+          if(r.x > 20 && r.x < bw - 20) triggerEvent(r, bw);
+        }, 2800);
+      }
+
+      function triggerEvent(r, bw) {
+        const ev = events[Math.floor(Math.random() * events.length)];
+        if(ev === 'bubble') {
+          showBubble(r, bw);
+        } else {
+          // bounce → 別のアニメに切り替え
+          r.el.classList.remove('runner-bounce', 'runner-stumble', 'runner-jump', 'runner-spin');
+          r.el.classList.add('runner-' + ev);
+          setTimeout(()=>{
+            r.el.classList.remove('runner-' + ev);
+            r.el.classList.add('runner-bounce');
+          }, 600);
+        }
+      }
+
+      function showBubble(r, bw) {
+        const texts = bubbleTexts[r.emoji] || ['コツサク〜！'];
+        const text  = texts[Math.floor(Math.random() * texts.length)];
+        const bubble = document.createElement('div');
+        bubble.className = 'runner-bubble';
+        bubble.textContent = text;
+        // キャラの上に配置
+        bubble.style.left = Math.max(4, Math.min(r.x - 10, bw - 120)) + 'px';
+        bubble.style.top  = '4px';
+        band.appendChild(bubble);
+        setTimeout(()=> bubble.remove(), 1600);
+      }
+
+      // IntersectionObserverで画面に入ったときに起動
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if(e.isIntersecting) startAnimation(); });
+      }, { threshold: 0.3 });
+      obs.observe(band);
+    });
+  }
+
   // スクロール reveal
   function initReveal() {
     const obs = new IntersectionObserver(entries=>{
@@ -1106,6 +1274,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   });
 
   initCarousel();
+  initRunners();
   initReveal();
   loadStats();
 })();
