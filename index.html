@@ -312,13 +312,13 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 /* 左吹き出し */
 .seg-bubble-main{
   position:absolute;left:0;bottom:calc(100% + 6px);
-  background:#eeedfe;border:1px solid #AFA9EC;
+  background:#e8fdf0;border:1px solid #7ee8a2;
   border-radius:10px 10px 10px 2px;
   padding:5px 10px;font-size:11px;font-weight:800;
-  color:#3C3489;white-space:nowrap;line-height:1.5;
-  box-shadow:0 4px 12px rgba(83,74,183,.12);
+  color:#1a6b3a;white-space:nowrap;line-height:1.5;
+  box-shadow:0 4px 12px rgba(53,185,91,.12);
 }
-.seg-bubble-main::after{content:"";position:absolute;left:10px;top:100%;border:5px solid transparent;border-top-color:#eeedfe;}
+.seg-bubble-main::after{content:"";position:absolute;left:10px;top:100%;border:5px solid transparent;border-top-color:#e8fdf0;}
 /* 右：ニヤブロちゃん */
 .seg-license-char{display:flex;flex-direction:column;align-items:center;gap:2px;position:relative;}
 .seg-niyaburo-img{width:60px;height:60px;object-fit:contain;object-position:bottom;filter:drop-shadow(0 2px 6px rgba(0,0,0,.13));}
@@ -327,13 +327,13 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 /* 右吹き出し */
 .seg-bubble-license{
   position:absolute;right:0;bottom:calc(100% + 6px);
-  background:#e1f5ee;border:1px solid #5DCAA5;
+  background:#ffe6f0;border:1px solid #ffb3d1;
   border-radius:10px 10px 2px 10px;
   padding:5px 10px;font-size:11px;font-weight:800;
-  color:#085041;white-space:nowrap;line-height:1.5;text-align:right;
-  box-shadow:0 4px 12px rgba(15,110,86,.12);
+  color:#a0305a;white-space:nowrap;line-height:1.5;text-align:right;
+  box-shadow:0 4px 12px rgba(240,106,157,.12);
 }
-.seg-bubble-license::after{content:"";position:absolute;right:10px;top:100%;border:5px solid transparent;border-top-color:#e1f5ee;}
+.seg-bubble-license::after{content:"";position:absolute;right:10px;top:100%;border:5px solid transparent;border-top-color:#ffe6f0;}
 
 /* バー本体 */
 .segment-bar-wrap{border-radius:12px;overflow:hidden;height:64px;}
@@ -343,8 +343,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   transition:flex 1.2s cubic-bezier(.4,0,.2,1);
   overflow:hidden;padding:0 16px;
 }
-.seg-main{background:linear-gradient(90deg,#7F77DD,#a8a3ed);}
-.seg-license{background:linear-gradient(90deg,#1D9E75,#4fc89a);align-items:flex-end;}
+.seg-main{background:linear-gradient(90deg,var(--green),#7ee8a2);}
+.seg-license{background:linear-gradient(90deg,var(--pink),#ffb3d1);align-items:flex-end;}
 /* 案A：大きな数字＋ラベル */
 .seg-num{
   font-size:22px;font-weight:900;color:#fff;line-height:1;
@@ -360,8 +360,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 .seg-leg{display:flex;align-items:center;gap:7px;font-size:.78rem;color:var(--soft);}
 .seg-leg strong{color:var(--ink);font-size:.85rem;margin-left:2px;}
 .seg-leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
-.dot-main{background:linear-gradient(135deg,#7F77DD,#a8a3ed);}
-.dot-license{background:linear-gradient(135deg,#1D9E75,#4fc89a);}
+.dot-main{background:linear-gradient(135deg,var(--green),#7ee8a2);}
+.dot-license{background:linear-gradient(135deg,var(--pink),#ffb3d1);}
 
 /* ── グラフ吹き出しコメント ── */
 .chart-comment{
@@ -711,8 +711,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
             </div>
           </div>
           <div class="segment-bar-legend">
-            <div class="seg-leg"><span class="seg-leg-dot dot-main"></span><span>メインストーリー</span><strong id="seg-main-count"></strong></div>
-            <div class="seg-leg"><span class="seg-leg-dot dot-license"></span><span>資格ストーリー</span><strong id="seg-license-count"></strong></div>
+            <div class="seg-leg"><span class="seg-leg-dot dot-main"></span><span>メインストーリー</span></div>
+            <div class="seg-leg"><span class="seg-leg-dot dot-license"></span><span>資格ストーリー</span></div>
           </div>
         </div>
       </div>
@@ -1068,12 +1068,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
     const mainPctEl    = document.getElementById('seg-main-pct');
     const licensePctEl = document.getElementById('seg-license-pct');
-    const mainCountEl  = document.getElementById('seg-main-count');
-    const licCountEl   = document.getElementById('seg-license-count');
     if(mainPctEl)    mainPctEl.textContent    = mainPct + '%';
     if(licensePctEl) licensePctEl.textContent = licensePct + '%';
-    if(mainCountEl)  mainCountEl.textContent  = '（' + mainTotal + '人）';
-    if(licCountEl)   licCountEl.textContent   = '（' + licenseTotal + '人）';
   }
 
   // 棒グラフ
