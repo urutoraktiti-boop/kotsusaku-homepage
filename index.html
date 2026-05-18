@@ -39,44 +39,98 @@ body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Seg
 @keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
 
 /* ── HERO ── */
-.hero{position:relative;padding:52px 0 64px;overflow:hidden;background:radial-gradient(circle at 8% 8%,#fff0a8 0 10%,transparent 26%),radial-gradient(circle at 92% 14%,#ffd7e8 0 12%,transparent 28%),radial-gradient(circle at 14% 84%,#d6fff0 0 14%,transparent 30%),linear-gradient(135deg,#fffdf6 0%,#f2fbff 44%,#fff4f8 100%);}
+.hero{position:relative;padding:52px 0 48px;overflow:hidden;background:radial-gradient(circle at 8% 8%,#fff0a8 0 10%,transparent 26%),radial-gradient(circle at 92% 14%,#ffd7e8 0 12%,transparent 28%),radial-gradient(circle at 14% 84%,#d6fff0 0 14%,transparent 30%),linear-gradient(135deg,#fffdf6 0%,#f2fbff 44%,#fff4f8 100%);}
 .hero-float{position:absolute;pointer-events:none;font-weight:1000;color:rgba(96,200,255,.13);font-size:220px;right:3vw;top:56px;line-height:1;}
 .wrap{width:min(1180px,100%);margin:auto;padding:0 20px}
-.hero-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:32px;align-items:center;position:relative;z-index:1;}
+.hero-inner{position:relative;z-index:1;text-align:center;max-width:780px;margin:0 auto;}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 24px rgba(73,91,125,.08);border-radius:999px;padding:7px 14px;color:#25984b;font-size:13px;font-weight:1000;margin-bottom:18px;}
-h1{margin:0;font-size:clamp(44px,7.5vw,92px);line-height:.94;font-weight:1000;}
+h1{margin:0;font-size:clamp(44px,8.5vw,100px);line-height:.94;font-weight:1000;}
 h1 .g{color:var(--green)}
-.lead{margin:20px 0 0;font-size:clamp(17px,2.2vw,26px);line-height:1.5;font-weight:950;}
-.sub{margin:13px 0 0;max-width:560px;color:var(--soft);font-size:14.5px;line-height:1.85;}
-.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.lead{margin:20px 0 0;font-size:clamp(16px,2.2vw,24px);line-height:1.5;font-weight:950;}
+.sub{margin:13px auto 0;max-width:520px;color:var(--soft);font-size:14.5px;line-height:1.85;}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;justify-content:center;}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;border-radius:999px;padding:0 24px;text-decoration:none;color:#fff;background:var(--ink);font-weight:1000;font-size:15px;box-shadow:0 14px 28px rgba(23,32,51,.17);transition:transform .18s,box-shadow .18s;}
 .btn:hover{transform:translateY(-2px);box-shadow:0 20px 36px rgba(23,32,51,.22);}
 .btn.light{color:var(--ink);background:#fff;border:1.5px solid var(--line);box-shadow:0 10px 22px rgba(73,91,125,.1);}
 
-/* キャラステージ */
-.stage{position:relative;min-height:500px;border-radius:46px;background:radial-gradient(circle at 22% 18%,rgba(255,255,255,.9) 0 10%,transparent 20%),linear-gradient(135deg,#ecfff0 0%,#e8f8ff 36%,#ffeaf3 70%,#fff8d7 100%);border:1px solid rgba(255,255,255,.92);box-shadow:var(--shadow);overflow:hidden;}
-.spark{position:absolute;font-weight:1000;}
-.s1{left:7%;top:9%;font-size:34px;color:#ffcc40;animation:floatSpark 3.2s ease-in-out infinite;}
-.s2{right:11%;top:11%;font-size:30px;color:#60c8ff;animation:floatSpark 2.8s ease-in-out infinite .4s;}
-.s3{left:15%;bottom:13%;font-size:30px;color:#f06a9d;animation:floatSpark 3.6s ease-in-out infinite .8s;}
-.s4{right:8%;bottom:16%;font-size:36px;color:#35b95b;animation:floatSpark 3s ease-in-out infinite 1.2s;}
-@keyframes floatSpark{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
-.real-team{position:absolute;inset:auto 4% 34px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:end;}
-.real-buddy{position:relative;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;transform:translateY(var(--jump,0));animation:buddyFloat var(--dur,3.2s) ease-in-out infinite var(--delay,0s);}
-.real-buddy:nth-child(1){--jump:-18px;--dur:3.2s;--delay:0s}
-.real-buddy:nth-child(2){--jump:8px;--dur:2.9s;--delay:.5s}
-.real-buddy:nth-child(3){--jump:0;--dur:3.5s;--delay:.2s}
-.real-buddy:nth-child(4){--jump:-10px;--dur:3.1s;--delay:.7s}
-@keyframes buddyFloat{0%,100%{transform:translateY(var(--jump,0))}50%{transform:translateY(calc(var(--jump,0) - 10px))}}
-.real-buddy:before{content:"";position:absolute;left:50%;bottom:48px;width:min(168px,22vw);height:min(168px,22vw);transform:translateX(-50%);border-radius:50%;background:rgba(255,255,255,.72);box-shadow:inset 0 0 0 1px rgba(255,255,255,.86),0 14px 30px rgba(73,91,125,.1);}
-.real-buddy img{position:relative;z-index:1;display:block;width:min(188px,23vw);height:min(288px,35vw);object-fit:contain;object-position:center;filter:drop-shadow(0 18px 18px rgba(23,32,51,.16));}
-.buddy-badge{position:relative;z-index:2;margin-top:10px;display:flex;flex-direction:column;align-items:center;gap:4px;}
-.buddy-name{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:0 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11px;font-weight:1000;box-shadow:0 8px 18px rgba(73,91,125,.09);white-space:nowrap;}
+/* ── キャラ カルーセル ── */
+.char-carousel-wrap{
+  position:relative;
+  margin:44px -20px 0;
+  padding:0 20px 20px;
+}
+.char-carousel{
+  display:flex;
+  gap:16px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  padding:8px 20px 16px;
+  margin:0 -20px;
+}
+.char-carousel::-webkit-scrollbar{display:none;}
+.char-card{
+  flex-shrink:0;
+  width:200px;
+  scroll-snap-align:center;
+  border-radius:32px;
+  background:linear-gradient(160deg,#ecfff0,#e8f8ff,#fff8d7);
+  border:1.5px solid rgba(255,255,255,.9);
+  box-shadow:0 16px 40px rgba(73,91,125,.13);
+  display:flex;flex-direction:column;align-items:center;
+  padding:20px 16px 18px;
+  position:relative;
+  overflow:visible;
+  transition:transform .22s,box-shadow .22s;
+  animation:buddyFloat var(--dur,3.2s) ease-in-out infinite var(--delay,0s);
+}
+.char-card:nth-child(1){--dur:3.2s;--delay:0s;background:linear-gradient(160deg,#e8fdf0,#d6f8ff);}
+.char-card:nth-child(2){--dur:2.9s;--delay:.5s;background:linear-gradient(160deg,#fff0f7,#ffe8f8);}
+.char-card:nth-child(3){--dur:3.5s;--delay:.2s;background:linear-gradient(160deg,#e8f4ff,#ddf3ff);}
+.char-card:nth-child(4){--dur:3.1s;--delay:.7s;background:linear-gradient(160deg,#fffae0,#fff3b5);}
+.char-card:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 24px 52px rgba(73,91,125,.18);}
+@keyframes buddyFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.char-img-wrap{
+  width:150px;height:180px;
+  display:flex;align-items:flex-end;justify-content:center;
+  position:relative;margin-bottom:10px;
+}
+.char-img-wrap:before{
+  content:"";position:absolute;left:50%;bottom:0;
+  width:120px;height:120px;transform:translateX(-50%);
+  border-radius:50%;
+  background:rgba(255,255,255,.72);
+  box-shadow:0 8px 20px rgba(73,91,125,.1);
+}
+.char-card img{
+  position:relative;z-index:1;
+  width:140px;height:175px;
+  object-fit:contain;object-position:bottom center;
+  filter:drop-shadow(0 12px 12px rgba(23,32,51,.14));
+}
+.buddy-name{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:28px;padding:0 12px;border-radius:999px;
+  background:#fff;border:1px solid var(--line);
+  font-size:11px;font-weight:1000;
+  box-shadow:0 6px 14px rgba(73,91,125,.09);white-space:nowrap;
+  margin-bottom:6px;
+}
 .buddy-lv-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;padding:0 6px;}
 .buddy-lv-label{font-size:9px;font-weight:900;color:var(--soft);}
 .buddy-lv-bar{width:100%;height:5px;background:rgba(0,0,0,.1);border-radius:999px;overflow:hidden;}
 .buddy-lv-fill{height:100%;border-radius:999px;transition:width 1.2s cubic-bezier(.4,0,.2,1);width:0%;}
 .buddy-lv-num{font-size:11px;font-weight:900;color:var(--green);}
+/* カルーセル スクロールドット */
+.carousel-dots{
+  display:flex;justify-content:center;gap:6px;margin-top:10px;
+}
+.carousel-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--line);transition:all .25s;
+}
+.carousel-dot.active{background:var(--ink);width:18px;border-radius:999px;}
 
 /* ── カウンターバンド ── */
 .counter-band{background:var(--ink);display:grid;grid-template-columns:repeat(3,1fr);text-align:center;}
@@ -162,6 +216,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 .bar-fill.pink{background:linear-gradient(90deg,var(--pink),#ffb3d1);}
 .stats-loading{text-align:center;font-size:.82rem;color:var(--soft);padding:24px 0;}
 .stats-error{text-align:center;font-size:.78rem;color:var(--soft);padding:12px 0;}
+.chart-note{font-size:.68rem;color:var(--soft);line-height:1.5;margin-bottom:12px;}
 
 /* ── STORYBOARD ── */
 .storyboard{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
@@ -261,10 +316,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 /* ── RESPONSIVE ── */
 @media(max-width:960px){
   .nav-links a:not(.primary){display:none}
-  .hero{padding-top:28px;}
-  .hero-grid{grid-template-columns:1fr;}
-  .stage{min-height:420px;order:-1;}
-  .real-team{grid-template-columns:repeat(4,1fr);gap:4px;inset:auto 3% 28px;}
+  .hero{padding-top:36px;}
   .section-head{display:block;}
   .section-head p{margin-top:12px;}
   .storyboard{grid-template-columns:repeat(2,1fr);}
@@ -280,10 +332,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 }
 @media(max-width:560px){
   .hero-float{display:none;}
-  .stage{min-height:420px;border-radius:32px;}
-  .real-team{grid-template-columns:repeat(2,1fr);inset:auto 5% 22px;gap:10px 6px;}
-  .real-buddy{min-height:210px;}
-  .real-buddy img{width:min(140px,36vw);height:min(180px,46vw);}
+  .char-card{width:170px;}
+  .char-card img{width:120px;height:150px;}
+  .char-img-wrap{width:130px;height:158px;}
   .storyboard{grid-template-columns:1fr;}
   .counter-band{grid-template-columns:1fr;}
   .counter-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.08);}
@@ -335,104 +386,108 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   <!-- ══ HERO ══ -->
   <section class="hero">
     <div class="hero-float" aria-hidden="true">10</div>
-    <div class="wrap hero-grid">
-      <div>
+    <div class="wrap">
+      <div class="hero-inner">
         <div class="eyebrow">コツコツ・軌跡から、サクサク・開花へ</div>
         <h1><span class="g">コツコツ軌跡。</span><br>今日の冒険を、<br>1マスずつ。</h1>
-        <p class="lead">ニヤブロも、ウホゴリも。<br>今日の10分、コツサク中。</p>
-        <p class="sub">この4人もアプリを開いて、10分を記録して、星を集めて、少しずつ育っていく仲間です。小さな1マスが、未来の景色につながっていきます。</p>
+        <p class="lead">ニヤブロも、ウホゴリも。今日の10分、コツサク中。</p>
         <div class="actions">
           <a class="btn" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">アプリを開く</a>
-          <a class="btn light" href="#board">軌跡の流れを見る</a>
+          <a class="btn light" href="#stats">軌跡を見る</a>
         </div>
       </div>
-      <div class="stage" aria-label="4人がコツサクを使っている配置">
-        <div class="spark s1">★</div>
-        <div class="spark s2">10分</div>
-        <div class="spark s3">♪</div>
-        <div class="spark s4">✓</div>
-        <div class="real-team">
-          <div class="real-buddy">
+    </div>
+
+    <!-- キャラ カルーセル -->
+    <div class="char-carousel-wrap">
+      <div class="char-carousel" id="char-carousel">
+        <div class="char-card">
+          <div class="char-img-wrap">
             <img src="./niyaburo-boy.png" alt="ニヤブロくん">
-            <div class="buddy-badge">
-              <div class="buddy-name">ニヤブロくん</div>
-              <div class="buddy-lv-wrap">
-                <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv0" style="color:var(--green);">-</span></div>
-                <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb0" style="background:linear-gradient(90deg,#35b95b,#7ee8a2);"></div></div>
-              </div>
-            </div>
           </div>
-          <div class="real-buddy">
-            <img src="./niyaburo-girl.png" alt="ニヤブロちゃん">
-            <div class="buddy-badge">
-              <div class="buddy-name">ニヤブロちゃん</div>
-              <div class="buddy-lv-wrap">
-                <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv1" style="color:var(--pink);">-</span></div>
-                <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb1" style="background:linear-gradient(90deg,#f06a9d,#ffb3d1);"></div></div>
-              </div>
-            </div>
-          </div>
-          <div class="real-buddy">
-            <img src="./uhogori-boy.png" alt="ウホゴリくん">
-            <div class="buddy-badge">
-              <div class="buddy-name">ウホゴリくん</div>
-              <div class="buddy-lv-wrap">
-                <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv2" style="color:var(--sky);">-</span></div>
-                <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb2" style="background:linear-gradient(90deg,#60c8ff,#a8e6ff);"></div></div>
-              </div>
-            </div>
-          </div>
-          <div class="real-buddy">
-            <img src="./uhogori-girl.png" alt="ウホゴリちゃん">
-            <div class="buddy-badge">
-              <div class="buddy-name">ウホゴリちゃん</div>
-              <div class="buddy-lv-wrap">
-                <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv3" style="color:var(--yellow);">-</span></div>
-                <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb3" style="background:linear-gradient(90deg,#ffd94f,#ffe9a0);"></div></div>
-              </div>
-            </div>
+          <div class="buddy-name">ニヤブロくん</div>
+          <div class="buddy-lv-wrap">
+            <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv0" style="color:var(--green);">-</span></div>
+            <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb0" style="background:linear-gradient(90deg,#35b95b,#7ee8a2);"></div></div>
           </div>
         </div>
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <img src="./niyaburo-girl.png" alt="ニヤブロちゃん">
+          </div>
+          <div class="buddy-name">ニヤブロちゃん</div>
+          <div class="buddy-lv-wrap">
+            <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv1" style="color:var(--pink);">-</span></div>
+            <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb1" style="background:linear-gradient(90deg,#f06a9d,#ffb3d1);"></div></div>
+          </div>
+        </div>
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <img src="./uhogori-boy.png" alt="ウホゴリくん">
+          </div>
+          <div class="buddy-name">ウホゴリくん</div>
+          <div class="buddy-lv-wrap">
+            <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv2" style="color:var(--sky);">-</span></div>
+            <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb2" style="background:linear-gradient(90deg,#60c8ff,#a8e6ff);"></div></div>
+          </div>
+        </div>
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <img src="./uhogori-girl.png" alt="ウホゴリちゃん">
+          </div>
+          <div class="buddy-name">ウホゴリちゃん</div>
+          <div class="buddy-lv-wrap">
+            <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv3" style="color:var(--yellow);">-</span></div>
+            <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb3" style="background:linear-gradient(90deg,#ffd94f,#ffe9a0);"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-dots" id="carousel-dots">
+        <div class="carousel-dot active"></div>
+        <div class="carousel-dot"></div>
+        <div class="carousel-dot"></div>
+        <div class="carousel-dot"></div>
       </div>
     </div>
   </section>
 
-  <!-- カウンターバンド -->
-  <div class="counter-band" aria-label="仲間たちの学習データ">
-    <div class="counter-item">
-      <div class="counter-val" id="c-hours" style="color:var(--green);">…</div>
-      <div class="counter-label">🌸 みんなの総学習時間</div>
-    </div>
-    <div class="counter-item">
-      <div class="counter-val" id="c-avg" style="color:var(--yellow);">…</div>
-      <div class="counter-label">⏱ 1日の平均学習時間</div>
-    </div>
-    <div class="counter-item">
-      <div class="counter-val" id="c-streak" style="color:var(--pink);">…</div>
-      <div class="counter-label">🔥 平均連続学習日数</div>
-    </div>
-  </div>
+  <!-- ══ STATS（ティッカー直下・トップインパクト） ══ -->
+  <section class="section" id="stats" style="padding-top:0;">
+    <div id="stats-loading" class="stats-loading" style="padding:32px 0;">軌跡を集めています…</div>
+    <div id="stats-error" class="stats-error" style="display:none;"></div>
+    <div id="stats-body" style="display:none;">
 
-  <!-- ══ STATS ══ -->
-  <section class="section" id="stats">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <h2>仲間たちの、<br>軌跡。</h2>
-        <p>同じアプリで、今日もどこかでコツコツ続けている仲間がいます。</p>
-      </div>
-      <div id="stats-loading" class="stats-loading">軌跡を集めています…</div>
-      <div id="stats-error" class="stats-error" style="display:none;"></div>
-      <div id="stats-body" style="display:none;">
-        <div class="sakura-card reveal">
-          <div class="sakura-title">🌸 みんなの総学習時間</div>
+      <!-- 🌸 大カードをフル幅で -->
+      <div class="wrap">
+        <div class="sakura-card reveal" style="margin-top:0;border-radius:0 0 24px 24px;border-top:none;">
+          <div class="sakura-title">みんなの軌跡</div>
           <div class="sakura-hero">
             <span class="sakura-big-num" id="val-hours-num">0</span>
             <span class="sakura-big-suffix">時間</span>
           </div>
-          <div class="sakura-sublabel">10分 ＝ 🌸1個　積み上がった仲間たちの軌跡</div>
+          <div class="sakura-sublabel">総学習時間 ／ 10分 ＝ 🌸1個　積み上がった仲間たちの足あと</div>
           <div class="sakura-field" id="sakura-field"></div>
           <div id="sakura-overflow-wrap"></div>
         </div>
+      </div>
+
+      <!-- カウンターバンド -->
+      <div class="counter-band" aria-label="仲間たちの学習データ">
+        <div class="counter-item">
+          <div class="counter-val" id="c-hours" style="color:var(--green);">…</div>
+          <div class="counter-label">🌸 みんなの総学習時間</div>
+        </div>
+        <div class="counter-item">
+          <div class="counter-val" id="c-avg" style="color:var(--yellow);">…</div>
+          <div class="counter-label">⏱ 1日の平均学習時間</div>
+        </div>
+        <div class="counter-item">
+          <div class="counter-val" id="c-streak" style="color:var(--pink);">…</div>
+          <div class="counter-label">🔥 平均連続学習日数</div>
+        </div>
+      </div>
+
+      <div class="wrap" style="padding-top:28px;">
         <div class="stats-grid">
           <div class="stat-card reveal reveal-delay-1">
             <div class="stat-icon">⏱</div>
@@ -449,11 +504,13 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         </div>
         <div class="chart-section">
           <div class="chart-block reveal reveal-delay-1">
-            <div class="chart-title">📖 選んだ物語の道</div>
+            <div class="chart-title">📖 メインストーリーを選んだ冒険者の割合</div>
+            <div class="chart-note">ゴリラ・剣士・宇宙・育成・鬼教官などのフィクション系ストーリーを選択中の仲間</div>
             <div class="bar-list" id="chart-story"></div>
           </div>
           <div class="chart-block reveal reveal-delay-2">
-            <div class="chart-title">🎓 選んだ資格の道</div>
+            <div class="chart-title">🎓 資格ストーリーを選んだ冒険者の割合</div>
+            <div class="chart-note">簿記・宅建・FPなど実際の資格取得を目指してコツサク中の仲間</div>
             <div class="bar-list" id="chart-license"></div>
           </div>
         </div>
@@ -465,8 +522,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   <section class="section" id="board">
     <div class="wrap">
       <div class="section-head reveal">
-        <h2>まずは、<br>コツコツ軌跡。</h2>
-        <p>同じアプリを使っている仲間として、今日の10分を記録しながら、それぞれの物語を育てています。残した1マスが、今日の足あとになります。</p>
+        <h2>まずは、<br>1マス残す。</h2>
+        <p>朝でも夜でも、10分でいい。残した1マスが、今日の足あとになります。</p>
       </div>
       <div class="storyboard">
         <div class="scene reveal reveal-delay-1" data-step="01"><img class="mini-photo" src="./niyaburo-boy.png" alt="ニヤブロくん"><h3>朝、アプリを開く</h3><p>ニヤブロくんも眠そうに起きて、まずは今日の冒険をセット。</p></div>
@@ -481,8 +538,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   <section class="section" id="story">
     <div class="wrap">
       <div class="section-head reveal">
-        <h2>選んだ道に、<br>足あとが残る。</h2>
-        <p>選んだストーリーに合わせてレベルや表示が変わります。気分で選べるから、今日の10分が少しだけ冒険になります。</p>
+        <h2>どの道を行く？<br>5つの冒険。</h2>
+        <p>選んだストーリーが、10分の色を変える。気分で選んでいい。いつでも変えられます。</p>
       </div>
     </div>
     <div class="story-scroll-outer reveal">
@@ -503,13 +560,13 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   <section class="section" id="features">
     <div class="wrap">
       <div class="section-head reveal">
-        <h2>今日の10分を、<br>軌跡にする。</h2>
-        <p>毎日の記録、My Crazy、早朝自習室。キャラたちも同じ仕組みで星を集め、物語を進めています。</p>
+        <h2>10分で、<br>何かが変わる。</h2>
+        <p>難しい機能はない。タップして、残して、眺める。それだけで軌跡になっていきます。</p>
       </div>
       <div class="cards">
-        <div class="feature reveal reveal-delay-1"><h3>10分をタップで残す</h3><p>時間表のマスを押すだけ。4人も同じように、今日のコツコツを残しています。</p><img class="mini-photo" src="./niyaburo-girl.png" alt="ニヤブロちゃん"></div>
-        <div class="feature reveal reveal-delay-2"><h3>星とバッジでサクサク感</h3><p>30分ごとに星が増え、達成した日はトロフィーも。キャラたちの成長にもつながります。</p><div class="mini-face peek pink" style="position:absolute;right:18px;bottom:-18px;z-index:1;">★</div></div>
-        <div class="feature reveal reveal-delay-3"><h3>My Crazyをつくれる</h3><p>自分で決められる特訓枠。イベント名や時間をセットして、今日だけの軌跡を残せます。</p><img class="mini-photo" src="./uhogori-girl.png" alt="ウホゴリちゃん"></div>
+        <div class="feature reveal reveal-delay-1"><h3>10分を<br>タップで残す</h3><p>マスを押すだけ。それが今日の軌跡になる。</p><img class="mini-photo" src="./niyaburo-girl.png" alt="ニヤブロちゃん"></div>
+        <div class="feature reveal reveal-delay-2"><h3>星が増えて<br>サクサク感</h3><p>30分でひとつ。積み重なる星が、続けた証になる。</p><div class="mini-face peek pink" style="position:absolute;right:18px;bottom:-18px;z-index:1;">★</div></div>
+        <div class="feature reveal reveal-delay-3"><h3>My Crazyを<br>つくれる</h3><p>今日だけの特訓枠。自分で名前をつけて、1マス刻む。</p><img class="mini-photo" src="./uhogori-girl.png" alt="ウホゴリちゃん"></div>
       </div>
     </div>
   </section>
@@ -520,7 +577,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       <div class="license reveal">
         <img class="mini-photo" src="./niyaburo-boy.png" alt="ニヤブロくん">
         <h2>資格の道も、<br>もちろん選べる。</h2>
-        <p style="margin:14px 0 0;max-width:590px;color:var(--soft);font-size:15px;line-height:1.85;">フィクションで楽しく。資格の道で本気に。目的に合わせて、今日の10分をコツサクできます。</p>
+        <p style="margin:14px 0 0;max-width:590px;color:var(--soft);font-size:15px;line-height:1.85;">楽しむも、本気で挑むも、どちらでもいい。目指す先を選んで、今日の10分を刻みます。</p>
         <div class="chips">
           <span class="chip">📗 簿記3級</span><span class="chip">📒 簿記2級</span>
           <span class="chip">🏠 宅建</span><span class="chip">💰 FP2級</span>
@@ -539,7 +596,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         <div class="bloom-grid">
           <div>
             <h2><span class="pink">サクサク開花。</span><br>未来の景色が、<br>少しずつひらく。</h2>
-            <p>1マスずつ残した軌跡は、星になって、バッジになって、物語になります。今日の小さな冒険が、未来の見え方を変えていきます。</p>
+            <p>残した1マスが、星になる。星がバッジになる。気づいたら、景色が変わっている。</p>
           </div>
           <div class="bloom-steps">
             <div class="bloom-step">1マス残す <span>今日の軌跡</span></div>
@@ -815,6 +872,17 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     }
   }
 
+  // カルーセルのスクロール連動ドット
+  function initCarousel() {
+    const carousel = document.getElementById('char-carousel');
+    const dots = document.querySelectorAll('.carousel-dot');
+    if(!carousel || !dots.length) return;
+    carousel.addEventListener('scroll', () => {
+      const idx = Math.round(carousel.scrollLeft / (carousel.scrollWidth / dots.length));
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }, { passive: true });
+  }
+
   // スクロール reveal
   function initReveal() {
     const obs = new IntersectionObserver(entries=>{
@@ -847,6 +915,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     if(e.target===document.getElementById('pin-modal')) window.closePinModal();
   });
 
+  initCarousel();
   initReveal();
   loadStats();
 })();
