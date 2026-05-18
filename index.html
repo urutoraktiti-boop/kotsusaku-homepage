@@ -7,725 +7,150 @@
 <meta name="description" content="10分単位で学習を記録し、ストーリー・星・バッジで楽しく続ける学習記録アプリ。">
 <style>
 :root{
-  --ink:#172033;
-  --soft:#647084;
-  --green:#35b95b;
-  --pink:#f06a9d;
-  --sky:#60c8ff;
-  --yellow:#ffd94f;
-  --cream:#fff9e8;
-  --mint:#e5ffe8;
-  --rose:#ffe6f0;
-  --blue:#e4f6ff;
-  --line:#e7edf5;
+  --ink:#172033;--soft:#647084;--green:#35b95b;--pink:#f06a9d;
+  --sky:#60c8ff;--yellow:#ffd94f;--cream:#fff9e8;--mint:#e5ffe8;
+  --rose:#ffe6f0;--blue:#e4f6ff;--line:#e7edf5;
   --shadow:0 22px 48px rgba(73,91,125,.12);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{
-  margin:0;
-  color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:
-    radial-gradient(circle at 8% 8%,#fff0a8 0 10%,transparent 25%),
-    radial-gradient(circle at 92% 18%,#ffd7e8 0 12%,transparent 28%),
-    radial-gradient(circle at 16% 82%,#d6fff0 0 14%,transparent 30%),
-    linear-gradient(135deg,#fffdf6 0%,#f2fbff 44%,#fff4f8 100%);
-  letter-spacing:0;
-}
-.nav{
-  position:sticky;
-  top:0;
-  z-index:20;
-  background:rgba(255,255,255,.78);
-  border-bottom:1px solid rgba(220,228,240,.78);
-  backdrop-filter:blur(18px);
-}
-.nav-inner{
-  width:min(1180px,100%);
-  margin:auto;
-  padding:13px 20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-}
-.brand{
-  font-size:clamp(18px,3vw,27px);
-  font-weight:1000;
-  white-space:nowrap;
-}
-.brand .green{color:var(--green)}
-.brand .pink{color:var(--pink)}
-.nav-links{display:flex;align-items:center;gap:8px}
-.nav-links a{
-  color:#394255;
-  text-decoration:none;
-  font-size:13px;
-  font-weight:950;
-  padding:8px 11px;
-  border-radius:999px;
-}
-.nav-links .primary{
-  color:#fff;
-  background:#172033;
-}
+body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;letter-spacing:0;overflow-x:hidden;}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);border-bottom:1px solid rgba(220,228,240,.7);backdrop-filter:blur(20px);}
+.nav-inner{width:min(1180px,100%);margin:auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.brand{font-size:clamp(17px,2.8vw,26px);font-weight:1000;white-space:nowrap;}
+.brand .green{color:var(--green)}.brand .pink{color:var(--pink)}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{color:#394255;text-decoration:none;font-size:13px;font-weight:950;padding:7px 11px;border-radius:999px;transition:background .15s;}
+.nav-links a:hover{background:var(--line);}
+.nav-links .primary{color:#fff;background:var(--ink);}
+.nav-links .primary:hover{background:#2a3a55;}
+
+/* ── TICKER ── */
+.ticker-wrap{background:var(--ink);overflow:hidden;padding:9px 0;}
+.ticker-inner{display:flex;animation:tickerMove 30s linear infinite;white-space:nowrap;width:max-content;}
+.ticker-inner:hover{animation-play-state:paused;}
+@keyframes tickerMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{display:inline-flex;align-items:center;gap:7px;padding:0 28px;font-size:12px;font-weight:800;color:rgba(255,255,255,.5);border-right:1px solid rgba(255,255,255,.1);}
+.ticker-val{color:var(--yellow);font-size:13px;}
+.ticker-live{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.08);border-radius:999px;padding:1px 8px;font-size:10px;color:var(--green);font-weight:900;}
+.ticker-live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:livePulse 1.4s ease infinite;}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+
+/* ── HERO ── */
+.hero{position:relative;padding:52px 0 64px;overflow:hidden;background:radial-gradient(circle at 8% 8%,#fff0a8 0 10%,transparent 26%),radial-gradient(circle at 92% 14%,#ffd7e8 0 12%,transparent 28%),radial-gradient(circle at 14% 84%,#d6fff0 0 14%,transparent 30%),linear-gradient(135deg,#fffdf6 0%,#f2fbff 44%,#fff4f8 100%);}
+.hero-float{position:absolute;pointer-events:none;font-weight:1000;color:rgba(96,200,255,.13);font-size:220px;right:3vw;top:56px;line-height:1;}
 .wrap{width:min(1180px,100%);margin:auto;padding:0 20px}
-.hero{
-  position:relative;
-  padding:46px 0 58px;
-  overflow:hidden;
-}
-.hero:before{
-  content:"10";
-  position:absolute;
-  right:4vw;
-  top:64px;
-  font-size:220px;
-  line-height:1;
-  font-weight:1000;
-  color:rgba(96,200,255,.16);
-  pointer-events:none;
-}
-.hero-top{
-  display:grid;
-  grid-template-columns:.9fr 1.1fr;
-  gap:28px;
-  align-items:center;
-  position:relative;
-  z-index:1;
-}
-.eyebrow{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  background:#fff;
-  border:1px solid var(--line);
-  box-shadow:0 12px 28px rgba(73,91,125,.08);
-  border-radius:999px;
-  padding:8px 14px;
-  color:#25984b;
-  font-size:13px;
-  font-weight:1000;
-  margin-bottom:18px;
-}
-h1{
-  margin:0;
-  font-size:clamp(46px,8vw,96px);
-  line-height:.95;
-  font-weight:1000;
-  letter-spacing:0;
-}
+.hero-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:32px;align-items:center;position:relative;z-index:1;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 24px rgba(73,91,125,.08);border-radius:999px;padding:7px 14px;color:#25984b;font-size:13px;font-weight:1000;margin-bottom:18px;}
+h1{margin:0;font-size:clamp(44px,7.5vw,92px);line-height:.94;font-weight:1000;}
 h1 .g{color:var(--green)}
-h1 .p{color:var(--pink)}
-.lead{
-  margin:22px 0 0;
-  font-size:clamp(18px,2.3vw,28px);
-  line-height:1.55;
-  font-weight:950;
-}
-.sub{
-  margin:14px 0 0;
-  max-width:590px;
-  color:var(--soft);
-  font-size:15px;
-  line-height:1.85;
-}
+.lead{margin:20px 0 0;font-size:clamp(17px,2.2vw,26px);line-height:1.5;font-weight:950;}
+.sub{margin:13px 0 0;max-width:560px;color:var(--soft);font-size:14.5px;line-height:1.85;}
 .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:52px;
-  border-radius:999px;
-  padding:0 22px;
-  text-decoration:none;
-  color:#fff;
-  background:#172033;
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;border-radius:999px;padding:0 24px;text-decoration:none;color:#fff;background:var(--ink);font-weight:1000;font-size:15px;box-shadow:0 14px 28px rgba(23,32,51,.17);transition:transform .18s,box-shadow .18s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 20px 36px rgba(23,32,51,.22);}
+.btn.light{color:var(--ink);background:#fff;border:1.5px solid var(--line);box-shadow:0 10px 22px rgba(73,91,125,.1);}
+
+/* キャラステージ */
+.stage{position:relative;min-height:500px;border-radius:46px;background:radial-gradient(circle at 22% 18%,rgba(255,255,255,.9) 0 10%,transparent 20%),linear-gradient(135deg,#ecfff0 0%,#e8f8ff 36%,#ffeaf3 70%,#fff8d7 100%);border:1px solid rgba(255,255,255,.92);box-shadow:var(--shadow);overflow:hidden;}
+.spark{position:absolute;font-weight:1000;}
+.s1{left:7%;top:9%;font-size:34px;color:#ffcc40;animation:floatSpark 3.2s ease-in-out infinite;}
+.s2{right:11%;top:11%;font-size:30px;color:#60c8ff;animation:floatSpark 2.8s ease-in-out infinite .4s;}
+.s3{left:15%;bottom:13%;font-size:30px;color:#f06a9d;animation:floatSpark 3.6s ease-in-out infinite .8s;}
+.s4{right:8%;bottom:16%;font-size:36px;color:#35b95b;animation:floatSpark 3s ease-in-out infinite 1.2s;}
+@keyframes floatSpark{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
+.real-team{position:absolute;inset:auto 4% 34px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:end;}
+.real-buddy{position:relative;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;transform:translateY(var(--jump,0));animation:buddyFloat var(--dur,3.2s) ease-in-out infinite var(--delay,0s);}
+.real-buddy:nth-child(1){--jump:-18px;--dur:3.2s;--delay:0s}
+.real-buddy:nth-child(2){--jump:8px;--dur:2.9s;--delay:.5s}
+.real-buddy:nth-child(3){--jump:0;--dur:3.5s;--delay:.2s}
+.real-buddy:nth-child(4){--jump:-10px;--dur:3.1s;--delay:.7s}
+@keyframes buddyFloat{0%,100%{transform:translateY(var(--jump,0))}50%{transform:translateY(calc(var(--jump,0) - 10px))}}
+.real-buddy:before{content:"";position:absolute;left:50%;bottom:48px;width:min(168px,22vw);height:min(168px,22vw);transform:translateX(-50%);border-radius:50%;background:rgba(255,255,255,.72);box-shadow:inset 0 0 0 1px rgba(255,255,255,.86),0 14px 30px rgba(73,91,125,.1);}
+.real-buddy img{position:relative;z-index:1;display:block;width:min(188px,23vw);height:min(288px,35vw);object-fit:contain;object-position:center;filter:drop-shadow(0 18px 18px rgba(23,32,51,.16));}
+.buddy-badge{position:relative;z-index:2;margin-top:10px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.buddy-name{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:0 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11px;font-weight:1000;box-shadow:0 8px 18px rgba(73,91,125,.09);white-space:nowrap;}
+.buddy-lv-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;padding:0 6px;}
+.buddy-lv-label{font-size:9px;font-weight:900;color:var(--soft);}
+.buddy-lv-bar{width:100%;height:5px;background:rgba(0,0,0,.1);border-radius:999px;overflow:hidden;}
+.buddy-lv-fill{height:100%;border-radius:999px;transition:width 1.2s cubic-bezier(.4,0,.2,1);width:0%;}
+.buddy-lv-num{font-size:11px;font-weight:900;color:var(--green);}
+
+/* ── カウンターバンド ── */
+.counter-band{background:var(--ink);display:grid;grid-template-columns:repeat(3,1fr);text-align:center;}
+.counter-item{padding:22px 16px;border-right:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden;}
+.counter-item:last-child{border-right:none;}
+.counter-item:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.04) 0,transparent 70%);}
+.counter-val{font-size:clamp(24px,4vw,40px);font-weight:1000;line-height:1;position:relative;z-index:1;}
+.counter-label{font-size:11px;font-weight:800;color:rgba(255,255,255,.45);margin-top:5px;position:relative;z-index:1;letter-spacing:.04em;}
+
+/* ── SECTION ── */
+.section{padding:60px 0}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px;}
+h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
+.section-head p{margin:0;max-width:480px;color:var(--soft);line-height:1.8;}
+
+/* ── STATS ── */
+.sakura-card{background:#fff;border-radius:20px;padding:28px 24px;box-shadow:var(--shadow);border:1.5px solid var(--line);margin-bottom:20px;position:relative;overflow:hidden;}
+.sakura-card:before{content:"🌸";position:absolute;right:-10px;top:-18px;font-size:120px;opacity:.055;pointer-events:none;line-height:1;}
+
+/* 総学習時間ヒーロー数字 */
+.sakura-hero{display:flex;align-items:flex-end;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+.sakura-big-num{
+  font-size:clamp(64px,10vw,120px);
   font-weight:1000;
-  box-shadow:0 15px 30px rgba(23,32,51,.17);
-}
-.btn.light{
-  color:#172033;
-  background:#fff;
-  border:1px solid var(--line);
-  box-shadow:0 12px 24px rgba(73,91,125,.08);
-}
-.stage{
-  position:relative;
-  min-height:500px;
-  border-radius:46px;
-  background:
-    radial-gradient(circle at 24% 20%,rgba(255,255,255,.9) 0 11%,transparent 20%),
-    linear-gradient(135deg,#ecfff0 0%,#e8f8ff 38%,#ffeaf3 72%,#fff8d7 100%);
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.stage:before{
-  content:"";
-  position:absolute;
-  left:8%;
-  right:8%;
-  bottom:28px;
-  height:34px;
-  border-radius:50%;
-  background:rgba(74,91,126,.10);
-  filter:blur(1px);
-}
-.real-team{
-  position:absolute;
-  inset:auto 4% 34px;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  align-items:end;
-}
-.real-buddy{
-  position:relative;
-  min-height:340px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-end;
-  transform:translateY(var(--jump,0));
-}
-.real-buddy:nth-child(1){--jump:-18px}
-.real-buddy:nth-child(2){--jump:8px}
-.real-buddy:nth-child(3){--jump:0}
-.real-buddy:nth-child(4){--jump:-10px}
-.real-buddy:before{
-  content:"";
-  position:absolute;
-  left:50%;
-  bottom:40px;
-  width:min(170px,22vw);
-  height:min(170px,22vw);
-  transform:translateX(-50%);
-  border-radius:50%;
-  background:rgba(255,255,255,.72);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.86),0 14px 30px rgba(73,91,125,.10);
-}
-.real-buddy img{
-  position:relative;
-  z-index:1;
-  display:block;
-  width:min(190px,23vw);
-  height:min(290px,35vw);
-  object-fit:contain;
-  object-position:center;
-  border-radius:0;
-  border:0;
-  background:transparent;
-  filter:drop-shadow(0 18px 18px rgba(23,32,51,.16));
-}
-.real-buddy .label{
-  position:relative;
-  z-index:2;
-  margin-top:12px;
-}
-.spark{
-  position:absolute;
-  font-weight:1000;
-  color:#fff;
-  text-shadow:0 2px 0 rgba(23,32,51,.12);
-}
-.s1{left:8%;top:10%;font-size:34px;color:#ffcc40}
-.s2{right:12%;top:12%;font-size:30px;color:#60c8ff}
-.s3{left:16%;bottom:14%;font-size:30px;color:#f06a9d}
-.s4{right:9%;bottom:17%;font-size:36px;color:#35b95b}
-.team{
-  position:absolute;
-  inset:auto 5% 38px;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  align-items:end;
-}
-.team{display:none}
-.buddy{
-  position:relative;
-  min-height:300px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-end;
-  transform:translateY(var(--jump,0));
-}
-.buddy:nth-child(1){--jump:-14px}
-.buddy:nth-child(2){--jump:10px}
-.buddy:nth-child(3){--jump:0}
-.buddy:nth-child(4){--jump:-8px}
-.body{
-  width:min(132px,21vw);
-  height:min(172px,27vw);
-  max-width:132px;
-  max-height:172px;
-  border-radius:42% 42% 32% 32%;
-  background:linear-gradient(180deg,#fff,#e8fff0);
-  border:5px solid #172033;
-  box-shadow:0 16px 0 rgba(23,32,51,.10);
-}
-.buddy.gori .body{background:linear-gradient(180deg,#fff,#eeeeff)}
-.head-char{
-  position:absolute;
-  top:18px;
-  width:min(146px,23vw);
-  height:min(146px,23vw);
-  max-width:146px;
-  max-height:146px;
-  display:grid;
-  place-items:center;
-  border-radius:42% 42% 47% 47%;
-  background:#7bdc52;
-  border:5px solid #172033;
-  box-shadow:0 12px 0 rgba(23,32,51,.10);
-  font-size:52px;
-}
-.buddy.gori .head-char{
-  background:#6f7080;
-  color:#fff;
-}
-.head-char:after{
-  content:attr(data-face);
-  position:absolute;
-  bottom:17px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:25px;
-}
-.pose{
-  position:absolute;
-  top:118px;
-  width:38px;
-  height:84px;
-  border-radius:999px;
-  background:#172033;
-}
-.pose.left{left:16px;transform:rotate(-28deg)}
-.pose.right{right:16px;transform:rotate(28deg)}
-.label{
-  margin-top:14px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:36px;
-  padding:0 12px;
-  border-radius:999px;
-  background:#fff;
-  border:1px solid var(--line);
-  font-size:12px;
-  font-weight:1000;
-  box-shadow:0 10px 20px rgba(73,91,125,.08);
-  white-space:nowrap;
-}
-.section{padding:58px 0}
-.section-head{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:24px;
-  margin-bottom:24px;
-}
-h2{
-  margin:0;
-  font-size:clamp(32px,5vw,60px);
-  line-height:1.05;
-  font-weight:1000;
-}
-.section-head p{
-  margin:0;
-  max-width:480px;
-  color:var(--soft);
-  line-height:1.8;
-}
-.storyboard{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
-.scene{
-  position:relative;
-  min-height:246px;
-  padding:22px;
-  border-radius:34px;
-  background:#fff;
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.scene:nth-child(1){background:linear-gradient(180deg,#fff,#fff4cc)}
-.scene:nth-child(2){background:linear-gradient(180deg,#fff,#e7f8ff)}
-.scene:nth-child(3){background:linear-gradient(180deg,#fff,#ffe8f2)}
-.scene:nth-child(4){background:linear-gradient(180deg,#fff,#eaffec)}
-.scene:before{
-  content:attr(data-step);
-  position:absolute;
-  right:18px;
-  top:14px;
-  color:rgba(23,32,51,.08);
-  font-size:64px;
-  font-weight:1000;
-  line-height:1;
-}
-.scene .mini-face{
-  position:absolute;
-  right:18px;
-  bottom:-12px;
-}
-.scene h3{
-  position:relative;
-  z-index:1;
-  margin:88px 0 0;
-  font-size:25px;
-  line-height:1.22;
-}
-.scene p{
-  position:relative;
-  z-index:1;
-  margin:12px 0 0;
-  color:var(--soft);
-  line-height:1.68;
-  font-size:14px;
-}
-.story-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:13px;
-}
-.story{
-  position:relative;
-  min-height:180px;
-  padding:20px;
-  border-radius:30px;
-  border:1px solid rgba(255,255,255,.9);
-  background:#fff;
-  box-shadow:0 18px 38px rgba(73,91,125,.09);
-  overflow:hidden;
-}
-.story:nth-child(1){background:linear-gradient(180deg,#fff,#f0ffe8)}
-.story:nth-child(2){background:linear-gradient(180deg,#fff,#fff3d0)}
-.story:nth-child(3){background:linear-gradient(180deg,#fff,#e7f7ff)}
-.story:nth-child(4){background:linear-gradient(180deg,#fff,#ecffe9)}
-.story:nth-child(5){background:linear-gradient(180deg,#fff,#ffe9f2)}
-.story .mini-face{
-  position:absolute;
-  right:-10px;
-  top:-14px;
-}
-.story b{
-  display:block;
-  position:relative;
-  z-index:1;
-  font-size:17px;
-  line-height:1.36;
-  margin-top:54px;
-}
-.story span{
-  display:block;
-  position:relative;
-  z-index:1;
-  margin-top:10px;
-  color:var(--soft);
-  font-size:13px;
-  line-height:1.55;
-}
-.mini-face{
-  width:82px;
-  height:82px;
-  display:grid;
-  place-items:center;
-  border-radius:50%;
-  border:4px solid #172033;
-  background:#7bdc52;
-  box-shadow:0 10px 0 rgba(23,32,51,.08);
-  font-size:28px;
-}
-.mini-photo{
-  width:86px;
-  height:86px;
-  border-radius:50%;
-  border:4px solid #fff;
-  background:linear-gradient(135deg,#f7fff3,#fff1f7);
-  box-shadow:0 10px 0 rgba(23,32,51,.08),0 12px 24px rgba(23,32,51,.12);
-  object-fit:contain;
-  padding:3px;
-}
-.scene .mini-photo{
-  position:absolute;
-  right:18px;
-  bottom:-12px;
-}
-.story .mini-photo{
-  position:absolute;
-  right:-10px;
-  top:-14px;
-}
-.feature .mini-photo,
-.license .mini-photo{
-  position:absolute;
-  right:18px;
-  bottom:-18px;
-  z-index:1;
-}
-.license .mini-photo{
-  right:26px;
-  top:-18px;
-  bottom:auto;
-}
-.mini-face.gori{background:#6f7080;color:#fff}
-.mini-face.pink{background:#ffd6e7}
-.cards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
-}
-.feature{
-  position:relative;
-  min-height:250px;
-  padding:28px;
-  border-radius:36px;
-  background:#fff;
-  border:1px solid var(--line);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.feature:after{
-  content:"";
-  position:absolute;
-  right:-44px;
-  bottom:-44px;
-  width:160px;
-  height:160px;
-  border-radius:50%;
-  background:var(--blue);
-  opacity:.8;
-}
-.feature:nth-child(2):after{background:var(--rose)}
-.feature:nth-child(3):after{background:var(--mint)}
-.feature .peek{
-  position:absolute;
-  right:18px;
-  bottom:-18px;
-  z-index:1;
-}
-.feature h3{
-  margin:0;
-  max-width:240px;
-  font-size:29px;
-  line-height:1.2;
-}
-.feature p{
-  position:relative;
-  z-index:2;
-  margin:14px 0 0;
-  max-width:280px;
-  color:var(--soft);
-  line-height:1.75;
-  font-size:14px;
-}
-.license{
-  position:relative;
-  padding:36px;
-  border-radius:40px;
-  background:
-    linear-gradient(135deg,#ffffff 0%,#fff8db 46%,#e7f8ff 100%);
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.license .peek{
-  position:absolute;
-  right:26px;
-  top:-18px;
-}
-.chips{
-  position:relative;
-  z-index:1;
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-  margin-top:20px;
-  max-width:860px;
-}
-.chip{
-  padding:9px 13px;
-  border-radius:999px;
-  background:#fff;
-  border:1px solid var(--line);
-  color:#344054;
-  font-size:13px;
-  font-weight:950;
-}
-.bloom{
-  position:relative;
-  padding:38px;
-  border-radius:44px;
-  background:
-    radial-gradient(circle at 18% 20%,rgba(255,217,79,.34) 0 10%,transparent 24%),
-    radial-gradient(circle at 84% 18%,rgba(240,106,157,.24) 0 12%,transparent 28%),
-    linear-gradient(135deg,#ffffff 0%,#efffed 36%,#fff2f7 68%,#e8f8ff 100%);
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.bloom:before{
-  content:"";
-  position:absolute;
-  right:-44px;
-  bottom:-70px;
-  width:260px;
-  height:260px;
-  border-radius:50%;
-  background:conic-gradient(from 12deg,#35b95b,#ffd94f,#f06a9d,#60c8ff,#35b95b);
-  opacity:.22;
-}
-.bloom-grid{
-  position:relative;
-  z-index:1;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:24px;
-  align-items:center;
-}
-.bloom h2{
-  font-size:clamp(36px,6vw,74px);
-}
-.bloom p{
-  margin:18px 0 0;
-  color:var(--soft);
-  line-height:1.85;
-}
-.bloom-steps{
-  display:grid;
-  gap:10px;
-}
-.bloom-step{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  padding:15px 16px;
-  border-radius:22px;
-  background:rgba(255,255,255,.76);
-  border:1px solid rgba(255,255,255,.9);
-  font-weight:1000;
-}
-.bloom-step span{
-  color:var(--soft);
-  font-size:13px;
-  font-weight:900;
-}
-.cta{
-  padding:70px 20px 96px;
-  text-align:center;
-}
-.cta-panel{
-  position:relative;
-  width:min(900px,100%);
-  margin:auto;
-  padding:52px 24px;
-  border-radius:46px;
-  background:#172033;
-  color:#fff;
-  overflow:hidden;
-  box-shadow:0 24px 56px rgba(23,32,51,.18);
-}
-.cta-panel:before{
-  content:"";
-  position:absolute;
-  inset:auto -80px -120px auto;
-  width:270px;
-  height:270px;
-  border-radius:50%;
-  background:#35b95b;
-}
-.cta-panel:after{
-  content:"";
-  position:absolute;
-  left:-80px;
-  top:-120px;
-  width:260px;
-  height:260px;
-  border-radius:50%;
-  background:#f06a9d;
-}
-.cta h2{
-  position:relative;
-  z-index:1;
-  font-size:clamp(36px,6vw,72px);
-}
-.cta p{
-  position:relative;
-  z-index:1;
-  margin:18px auto 28px;
-  max-width:620px;
-  line-height:1.8;
-  color:#dfe7f2;
-}
-.cta .btn{
-  position:relative;
-  z-index:1;
-  background:#fff;
-  color:#172033;
-}
-@media(max-width:960px){
-  .nav-links a:not(.primary){display:none}
-  .hero{padding-top:28px}
-  .hero-top{grid-template-columns:1fr}
-  .stage{min-height:430px;order:-1}
-  .team{grid-template-columns:repeat(4,1fr);gap:4px;inset:auto 3% 30px}
-  .real-team{grid-template-columns:repeat(4,1fr);gap:4px;inset:auto 3% 30px}
-  .buddy{min-height:250px}
-  .real-buddy{min-height:290px}
-  .real-buddy img{height:min(250px,34vw)}
-  .pose{display:none}
-  .label{font-size:10px;padding:0 8px}
-  .section-head{display:block}
-  .section-head p{margin-top:12px}
-  .storyboard{grid-template-columns:repeat(2,1fr)}
-  .story-grid{display:flex;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory}
-  .story{min-width:200px;scroll-snap-align:start}
-  .cards{grid-template-columns:1fr}
-  .bloom-grid{grid-template-columns:1fr}
-}
-@media(max-width:560px){
-  .hero:before{display:none}
-  .stage{min-height:530px;border-radius:34px}
-  .team{
-    grid-template-columns:repeat(2,1fr);
-    inset:auto 6% 26px;
-    gap:12px 8px;
-  }
-  .real-team{
-    grid-template-columns:repeat(2,1fr);
-    inset:auto 6% 24px;
-    gap:12px 8px;
-  }
-  .buddy{min-height:205px}
-  .real-buddy{min-height:225px}
-  .real-buddy img{width:min(150px,38vw);height:min(190px,48vw)}
-  .head-char{top:8px}
-  .body{height:118px}
-  .story-grid{margin-right:-20px}
-  .storyboard{grid-template-columns:1fr}
-}
-.sakura-card{background:#fff;border-radius:16px;padding:20px;box-shadow:var(--shadow);border:1.5px solid var(--line);margin-bottom:20px;}
-.sakura-header{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  line-height:.9;
+  color:var(--pink);
+  letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;
+}
+.sakura-big-suffix{font-size:clamp(22px,3vw,36px);font-weight:1000;color:var(--pink);margin-bottom:8px;}
 .sakura-title{font-size:.82rem;font-weight:800;color:var(--ink);}
-.sakura-num{font-size:1.3rem;font-weight:900;color:var(--pink);}
-.sakura-unit{font-size:.72rem;color:var(--soft);}
-.sakura-field{line-height:1.7;letter-spacing:1px;word-break:break-all;font-size:1rem;}
+.sakura-unit{font-size:.75rem;color:var(--soft);}
+.sakura-sublabel{font-size:.72rem;color:var(--soft);margin-bottom:16px;}
+
+/* 🌸 フィールド */
+.sakura-field{line-height:1.8;letter-spacing:2px;word-break:break-all;font-size:1.05rem;min-height:32px;}
 .sakura-overflow{font-size:.72rem;color:var(--soft);margin-top:6px;}
-/* ── stats section ── */
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px}
-.stat-card{background:#fff;border-radius:16px;padding:20px 16px;text-align:center;box-shadow:var(--shadow);border:1.5px solid var(--line);}
-.stat-icon{font-size:1.8rem;margin-bottom:6px;}
-.stat-value{font-size:1.9rem;font-weight:900;color:var(--green);line-height:1.1;margin-bottom:2px;}
+
+/* 🌸ひとつずつポップインアニメ */
+.sakura-field span{
+  display:inline-block;
+  animation:sakuraPop .35s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes sakuraPop{
+  from{opacity:0;transform:scale(0) rotate(-20deg);}
+  to{opacity:1;transform:scale(1) rotate(0deg);}
+}
+/* リアルタイム感：最後の🌸がキラキラ */
+.sakura-latest{
+  display:inline-block;
+  animation:sakuraLatest 1.6s ease-in-out infinite;
+}
+@keyframes sakuraLatest{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.4) rotate(10deg);}
+}
+/* +N個テキスト */
+.sakura-live-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(90deg,#fff0f5,#ffe4ef);
+  border:1px solid #f8bad5;border-radius:999px;
+  padding:4px 12px;font-size:.72rem;font-weight:800;
+  color:var(--pink);margin-top:8px;
+}
+.sakura-live-dot{width:6px;height:6px;border-radius:50%;background:var(--pink);animation:livePulse 1.4s ease infinite;}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:#fff;border-radius:18px;padding:22px 16px;text-align:center;box-shadow:var(--shadow);border:1.5px solid var(--line);transition:transform .2s,box-shadow .2s;}
+.stat-card:hover{transform:translateY(-3px);box-shadow:0 28px 56px rgba(73,91,125,.16);}
+.stat-icon{font-size:1.9rem;margin-bottom:6px;}
+.stat-value{font-size:1.9rem;font-weight:900;color:var(--green);line-height:1.1;margin-bottom:3px;}
 .stat-label{font-size:.8rem;font-weight:700;color:var(--ink);margin-bottom:3px;}
 .stat-sub{font-size:.68rem;color:var(--soft);}
 .chart-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px;}
-.chart-block{background:#fff;border-radius:16px;padding:20px 20px 16px;box-shadow:var(--shadow);border:1.5px solid var(--line);}
+.chart-block{background:#fff;border-radius:18px;padding:20px 20px 16px;box-shadow:var(--shadow);border:1.5px solid var(--line);}
 .chart-title{font-size:.82rem;font-weight:800;color:var(--ink);margin-bottom:14px;}
 .bar-list{display:flex;flex-direction:column;gap:10px;}
 .bar-item{display:flex;flex-direction:column;gap:4px;}
@@ -733,26 +158,93 @@ h2{
 .bar-name{font-size:.75rem;font-weight:600;color:var(--ink);}
 .bar-pct{font-size:.75rem;font-weight:800;color:var(--green);}
 .bar-track{height:8px;background:var(--line);border-radius:999px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),#7ee8a2);transition:width .6s ease;}
+.bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),#7ee8a2);transition:width .8s cubic-bezier(.4,0,.2,1);width:0%;}
 .bar-fill.pink{background:linear-gradient(90deg,var(--pink),#ffb3d1);}
-.stats-loading{text-align:center;font-size:.82rem;color:var(--soft);padding:20px 0;}
+.stats-loading{text-align:center;font-size:.82rem;color:var(--soft);padding:24px 0;}
 .stats-error{text-align:center;font-size:.78rem;color:var(--soft);padding:12px 0;}
-@media(max-width:680px){
-  .stats-grid{grid-template-columns:1fr 1fr;gap:10px;}
-  .stat-card{padding:14px 10px;}
-  .stat-value{font-size:1.4rem;}
-  .chart-section{grid-template-columns:1fr;}
-}
-@media(max-width:400px){
-  .stats-grid{grid-template-columns:1fr;gap:8px;}
-}
-/* ── dashboard link ── */
+
+/* ── STORYBOARD ── */
+.storyboard{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.scene{position:relative;min-height:240px;padding:22px;border-radius:32px;background:#fff;border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow);overflow:hidden;transition:transform .22s,box-shadow .22s;}
+.scene:hover{transform:translateY(-5px);box-shadow:0 30px 60px rgba(73,91,125,.18);}
+.scene:nth-child(1){background:linear-gradient(180deg,#fff,#fff4cc)}
+.scene:nth-child(2){background:linear-gradient(180deg,#fff,#e7f8ff)}
+.scene:nth-child(3){background:linear-gradient(180deg,#fff,#ffe8f2)}
+.scene:nth-child(4){background:linear-gradient(180deg,#fff,#eaffec)}
+.scene:before{content:attr(data-step);position:absolute;right:16px;top:12px;color:rgba(23,32,51,.07);font-size:62px;font-weight:1000;line-height:1;}
+.scene h3{position:relative;z-index:1;margin:84px 0 0;font-size:22px;line-height:1.22;}
+.scene p{position:relative;z-index:1;margin:10px 0 0;color:var(--soft);line-height:1.68;font-size:13.5px;}
+.mini-photo{width:84px;height:84px;border-radius:50%;border:4px solid #fff;background:linear-gradient(135deg,#f7fff3,#fff1f7);box-shadow:0 10px 0 rgba(23,32,51,.08),0 12px 24px rgba(23,32,51,.12);object-fit:contain;padding:3px;}
+.scene .mini-photo{position:absolute;right:16px;bottom:-12px;}
+
+/* ── STORY 横スクロール ── */
+.story-scroll-outer{position:relative;margin:0 -20px;padding:0 20px 4px;}
+.story-grid{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:14px;scrollbar-width:none;}
+.story-grid::-webkit-scrollbar{display:none;}
+.story{flex-shrink:0;width:220px;scroll-snap-align:start;position:relative;min-height:190px;padding:22px 20px;border-radius:28px;border:1px solid rgba(255,255,255,.9);background:#fff;box-shadow:0 16px 36px rgba(73,91,125,.09);overflow:hidden;transition:transform .22s,box-shadow .22s;}
+.story:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 26px 52px rgba(73,91,125,.17);}
+.story:nth-child(1){background:linear-gradient(160deg,#fff,#f0ffe8)}
+.story:nth-child(2){background:linear-gradient(160deg,#fff,#fff3d0)}
+.story:nth-child(3){background:linear-gradient(160deg,#fff,#e7f7ff)}
+.story:nth-child(4){background:linear-gradient(160deg,#fff,#ecffe9)}
+.story:nth-child(5){background:linear-gradient(160deg,#fff,#ffe9f2)}
+.story .mini-face{position:absolute;right:-10px;top:-14px;}
+.story .mini-photo{position:absolute;right:-10px;top:-14px;}
+.story b{display:block;position:relative;z-index:1;font-size:16px;line-height:1.36;margin-top:58px;}
+.story span{display:block;position:relative;z-index:1;margin-top:9px;color:var(--soft);font-size:13px;line-height:1.55;}
+.scroll-hint{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;color:var(--soft);margin-top:8px;}
+.scroll-hint-arrow{animation:arrowBounce 1.5s ease-in-out infinite;}
+@keyframes arrowBounce{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+.mini-face{width:82px;height:82px;display:grid;place-items:center;border-radius:50%;border:4px solid var(--ink);background:#7bdc52;box-shadow:0 10px 0 rgba(23,32,51,.08);font-size:28px;}
+.mini-face.pink{background:#ffd6e7}
+
+/* ── FEATURES ── */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.feature{position:relative;min-height:250px;padding:28px;border-radius:36px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;transition:transform .22s,box-shadow .22s;}
+.feature:hover{transform:translateY(-5px);box-shadow:0 32px 64px rgba(73,91,125,.18);}
+.feature:after{content:"";position:absolute;right:-44px;bottom:-44px;width:160px;height:160px;border-radius:50%;background:var(--blue);opacity:.8;}
+.feature:nth-child(2):after{background:var(--rose)}
+.feature:nth-child(3):after{background:var(--mint)}
+.feature .mini-photo{position:absolute;right:18px;bottom:-18px;z-index:1;}
+.feature .peek{position:absolute;right:18px;bottom:-18px;z-index:1;}
+.feature h3{margin:0;max-width:240px;font-size:27px;line-height:1.22;}
+.feature p{position:relative;z-index:2;margin:13px 0 0;max-width:280px;color:var(--soft);line-height:1.75;font-size:14px;}
+
+/* ── LICENSE ── */
+.license{position:relative;padding:36px;border-radius:40px;background:linear-gradient(135deg,#ffffff 0%,#fff8db 46%,#e7f8ff 100%);border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow);overflow:hidden;}
+.license .mini-photo{position:absolute;right:26px;top:-18px;}
+.chips{position:relative;z-index:1;display:flex;gap:9px;flex-wrap:wrap;margin-top:20px;max-width:860px;}
+.chip{padding:9px 13px;border-radius:999px;background:#fff;border:1px solid var(--line);color:#344054;font-size:13px;font-weight:950;transition:transform .15s,background .15s,border-color .15s;cursor:default;}
+.chip:hover{transform:scale(1.07);background:var(--mint);border-color:var(--green);}
+
+/* ── BLOOM ── */
+.bloom{position:relative;padding:40px;border-radius:44px;background:radial-gradient(circle at 18% 20%,rgba(255,217,79,.32) 0 10%,transparent 24%),radial-gradient(circle at 84% 18%,rgba(240,106,157,.22) 0 12%,transparent 28%),linear-gradient(135deg,#ffffff 0%,#efffed 36%,#fff2f7 68%,#e8f8ff 100%);border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow);overflow:hidden;}
+.bloom:before{content:"";position:absolute;right:-44px;bottom:-70px;width:260px;height:260px;border-radius:50%;background:conic-gradient(from 12deg,#35b95b,#ffd94f,#f06a9d,#60c8ff,#35b95b);opacity:.2;}
+.bloom-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;}
+.bloom h2{font-size:clamp(34px,5.5vw,70px);}
+.bloom .pink{color:var(--pink);}
+.bloom p{margin:18px 0 0;color:var(--soft);line-height:1.85;}
+.bloom-steps{display:grid;gap:10px;}
+.bloom-step{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 16px;border-radius:20px;background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.9);font-weight:1000;transition:transform .18s,background .18s;}
+.bloom-step:hover{transform:translateX(4px);background:rgba(255,255,255,.95);}
+.bloom-step span{color:var(--soft);font-size:13px;font-weight:900;}
+
+/* ── CTA ── */
+.cta{padding:72px 20px 100px;text-align:center;}
+.cta-panel{position:relative;width:min(900px,100%);margin:auto;padding:56px 24px;border-radius:48px;background:var(--ink);color:#fff;overflow:hidden;box-shadow:0 28px 60px rgba(23,32,51,.2);}
+.cta-panel:before{content:"";position:absolute;inset:auto -80px -120px auto;width:270px;height:270px;border-radius:50%;background:#35b95b;}
+.cta-panel:after{content:"";position:absolute;left:-80px;top:-120px;width:260px;height:260px;border-radius:50%;background:#f06a9d;}
+.cta h2{position:relative;z-index:1;font-size:clamp(34px,5.5vw,70px);}
+.cta p{position:relative;z-index:1;margin:18px auto 28px;max-width:620px;line-height:1.8;color:#dfe7f2;}
+.cta .btn{position:relative;z-index:1;background:#fff;color:var(--ink);}
+
+/* ── dashboard ── */
 .dashboard-link-wrap{text-align:center;padding:12px 0 4px;}
-.dashboard-link-btn{font-size:.72rem;color:var(--soft);background:transparent;border:1px solid var(--line);cursor:pointer;padding:5px 14px;border-radius:999px;text-decoration:none;opacity:.55;transition:opacity .2s;}
-.dashboard-link-btn:hover{opacity:.9;}
-.pin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;}
+.dashboard-link-btn{font-size:.7rem;color:var(--soft);background:transparent;border:1px solid var(--line);cursor:pointer;padding:5px 14px;border-radius:999px;opacity:.5;transition:opacity .2s;}
+.dashboard-link-btn:hover{opacity:.85;}
+.pin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:1000;align-items:center;justify-content:center;}
 .pin-modal.show{display:flex;}
-.pin-box{background:#fff;border-radius:20px;padding:28px 24px;max-width:300px;width:90%;text-align:center;box-shadow:0 16px 48px rgba(0,0,0,.18);}
+.pin-box{background:#fff;border-radius:22px;padding:28px 24px;max-width:300px;width:90%;text-align:center;box-shadow:0 20px 52px rgba(0,0,0,.2);}
 .pin-title{font-size:.9rem;font-weight:800;color:var(--ink);margin-bottom:6px;}
 .pin-sub{font-size:.72rem;color:var(--soft);margin-bottom:16px;}
 .pin-input{width:120px;font-size:1.5rem;font-weight:800;text-align:center;letter-spacing:.2em;border:2px solid var(--line);border-radius:10px;padding:8px 12px;outline:none;color:var(--ink);}
@@ -760,8 +252,48 @@ h2{
 .pin-btn{margin-top:14px;background:var(--green);color:#fff;border:none;border-radius:10px;padding:8px 28px;font-size:.82rem;font-weight:800;cursor:pointer;}
 .pin-error{font-size:.72rem;color:#e05a5a;margin-top:8px;min-height:18px;}
 .pin-close{position:absolute;top:12px;right:14px;background:transparent;border:none;font-size:1.1rem;cursor:pointer;color:var(--soft);}
+
+/* ── reveal アニメ ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.4,0,.2,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:.1s;}.reveal-delay-2{transition-delay:.2s;}.reveal-delay-3{transition-delay:.3s;}.reveal-delay-4{transition-delay:.4s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .nav-links a:not(.primary){display:none}
+  .hero{padding-top:28px;}
+  .hero-grid{grid-template-columns:1fr;}
+  .stage{min-height:420px;order:-1;}
+  .real-team{grid-template-columns:repeat(4,1fr);gap:4px;inset:auto 3% 28px;}
+  .section-head{display:block;}
+  .section-head p{margin-top:12px;}
+  .storyboard{grid-template-columns:repeat(2,1fr);}
+  .cards{grid-template-columns:1fr;}
+  .bloom-grid{grid-template-columns:1fr;}
+}
+@media(max-width:680px){
+  .stats-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .stat-card{padding:16px 12px;}
+  .stat-value{font-size:1.5rem;}
+  .chart-section{grid-template-columns:1fr;}
+  .counter-val{font-size:22px;}
+}
+@media(max-width:560px){
+  .hero-float{display:none;}
+  .stage{min-height:420px;border-radius:32px;}
+  .real-team{grid-template-columns:repeat(2,1fr);inset:auto 5% 22px;gap:10px 6px;}
+  .real-buddy{min-height:210px;}
+  .real-buddy img{width:min(140px,36vw);height:min(180px,46vw);}
+  .storyboard{grid-template-columns:1fr;}
+  .counter-band{grid-template-columns:1fr;}
+  .counter-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.08);}
+  .counter-item:last-child{border-bottom:none;}
+  .stats-grid{grid-template-columns:1fr;}
+}
 </style>
+</head>
 <body>
+
 <nav class="nav">
   <div class="nav-inner">
     <div class="brand"><span class="green">コツコツ</span> <span class="pink">サクサク</span></div>
@@ -775,9 +307,35 @@ h2{
   </div>
 </nav>
 
+<!-- ライブティッカー -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-inner">
+    <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t-hours">…</span></div>
+    <div class="ticker-item">⏱ 1日の平均学習 <span class="ticker-val" id="t-avg">…</span></div>
+    <div class="ticker-item">🔥 平均連続学習 <span class="ticker-val" id="t-streak">…</span></div>
+    <div class="ticker-item">⚔️ 受験剣士の道で挑戦中の仲間がいます</div>
+    <div class="ticker-item">🥦 正体不明育成記をコツサク中</div>
+    <div class="ticker-item">📒 簿記2級に向けて1マスずつ</div>
+    <div class="ticker-item">🌸 10分 ＝ 🌸1個 の軌跡が積み重なっています</div>
+    <div class="ticker-item">🦍 ゴリラ成長記、伝説ゴリへの道</div>
+    <!-- ループ用2周目 -->
+    <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t-hours2">…</span></div>
+    <div class="ticker-item">⏱ 1日の平均学習 <span class="ticker-val" id="t-avg2">…</span></div>
+    <div class="ticker-item">🔥 平均連続学習 <span class="ticker-val" id="t-streak2">…</span></div>
+    <div class="ticker-item">⚔️ 受験剣士の道で挑戦中の仲間がいます</div>
+    <div class="ticker-item">🥦 正体不明育成記をコツサク中</div>
+    <div class="ticker-item">📒 簿記2級に向けて1マスずつ</div>
+    <div class="ticker-item">🌸 10分 ＝ 🌸1個 の軌跡が積み重なっています</div>
+    <div class="ticker-item">🦍 ゴリラ成長記、伝説ゴリへの道</div>
+  </div>
+</div>
+
 <main>
+
+  <!-- ══ HERO ══ -->
   <section class="hero">
-    <div class="wrap hero-top">
+    <div class="hero-float" aria-hidden="true">10</div>
+    <div class="wrap hero-grid">
       <div>
         <div class="eyebrow">コツコツ・軌跡から、サクサク・開花へ</div>
         <h1><span class="g">コツコツ軌跡。</span><br>今日の冒険を、<br>1マスずつ。</h1>
@@ -796,228 +354,194 @@ h2{
         <div class="real-team">
           <div class="real-buddy">
             <img src="./niyaburo-boy.png" alt="ニヤブロくん">
-            <div class="label">ニヤブロくん</div>
+            <div class="buddy-badge">
+              <div class="buddy-name">ニヤブロくん</div>
+              <div class="buddy-lv-wrap">
+                <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv0" style="color:var(--green);">-</span></div>
+                <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb0" style="background:linear-gradient(90deg,#35b95b,#7ee8a2);"></div></div>
+              </div>
+            </div>
           </div>
           <div class="real-buddy">
             <img src="./niyaburo-girl.png" alt="ニヤブロちゃん">
-            <div class="label">ニヤブロちゃん</div>
+            <div class="buddy-badge">
+              <div class="buddy-name">ニヤブロちゃん</div>
+              <div class="buddy-lv-wrap">
+                <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv1" style="color:var(--pink);">-</span></div>
+                <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb1" style="background:linear-gradient(90deg,#f06a9d,#ffb3d1);"></div></div>
+              </div>
+            </div>
           </div>
           <div class="real-buddy">
             <img src="./uhogori-boy.png" alt="ウホゴリくん">
-            <div class="label">ウホゴリくん</div>
+            <div class="buddy-badge">
+              <div class="buddy-name">ウホゴリくん</div>
+              <div class="buddy-lv-wrap">
+                <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv2" style="color:var(--sky);">-</span></div>
+                <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb2" style="background:linear-gradient(90deg,#60c8ff,#a8e6ff);"></div></div>
+              </div>
+            </div>
           </div>
           <div class="real-buddy">
             <img src="./uhogori-girl.png" alt="ウホゴリちゃん">
-            <div class="label">ウホゴリちゃん</div>
-          </div>
-        </div>
-        <div class="team">
-          <div class="buddy">
-            <div class="head-char" data-face="^_^">🥦</div>
-            <div class="pose left"></div>
-            <div class="body"></div>
-            <div class="label">ニヤブロくん</div>
-          </div>
-          <div class="buddy">
-            <div class="head-char" data-face="^o^">🥦</div>
-            <div class="pose right"></div>
-            <div class="body"></div>
-            <div class="label">ニヤブロちゃん</div>
-          </div>
-          <div class="buddy gori">
-            <div class="head-char" data-face="^^">🦍</div>
-            <div class="pose left"></div>
-            <div class="body"></div>
-            <div class="label">ウホゴリくん</div>
-          </div>
-          <div class="buddy gori">
-            <div class="head-char" data-face="^▽^">🦍</div>
-            <div class="pose right"></div>
-            <div class="body"></div>
-            <div class="label">ウホゴリちゃん</div>
+            <div class="buddy-badge">
+              <div class="buddy-name">ウホゴリちゃん</div>
+              <div class="buddy-lv-wrap">
+                <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv3" style="color:var(--yellow);">-</span></div>
+                <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb3" style="background:linear-gradient(90deg,#ffd94f,#ffe9a0);"></div></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- カウンターバンド -->
+  <div class="counter-band" aria-label="仲間たちの学習データ">
+    <div class="counter-item">
+      <div class="counter-val" id="c-hours" style="color:var(--green);">…</div>
+      <div class="counter-label">🌸 みんなの総学習時間</div>
+    </div>
+    <div class="counter-item">
+      <div class="counter-val" id="c-avg" style="color:var(--yellow);">…</div>
+      <div class="counter-label">⏱ 1日の平均学習時間</div>
+    </div>
+    <div class="counter-item">
+      <div class="counter-val" id="c-streak" style="color:var(--pink);">…</div>
+      <div class="counter-label">🔥 平均連続学習日数</div>
+    </div>
+  </div>
+
+  <!-- ══ STATS ══ -->
   <section class="section" id="stats">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>仲間たちの、<br>軌跡。</h2>
         <p>同じアプリで、今日もどこかでコツコツ続けている仲間がいます。</p>
       </div>
-
       <div id="stats-loading" class="stats-loading">軌跡を集めています…</div>
       <div id="stats-error" class="stats-error" style="display:none;"></div>
-
       <div id="stats-body" style="display:none;">
-        <!-- 🌸 桜カード（一番上） -->
-        <div class="sakura-card">
-          <div class="sakura-header">
-            <span class="sakura-title">🌸 みんなの総学習時間</span>
-            <span class="sakura-num" id="val-hours-num">…</span>
-            <span class="sakura-unit">時間（10分＝🌸1個）</span>
+        <div class="sakura-card reveal">
+          <div class="sakura-title">🌸 みんなの総学習時間</div>
+          <div class="sakura-hero">
+            <span class="sakura-big-num" id="val-hours-num">0</span>
+            <span class="sakura-big-suffix">時間</span>
           </div>
+          <div class="sakura-sublabel">10分 ＝ 🌸1個　積み上がった仲間たちの軌跡</div>
           <div class="sakura-field" id="sakura-field"></div>
-          <div class="sakura-overflow" id="sakura-overflow"></div>
+          <div id="sakura-overflow-wrap"></div>
         </div>
-
-        <!-- 数字カード2枚 -->
         <div class="stats-grid">
-          <div class="stat-card">
+          <div class="stat-card reveal reveal-delay-1">
             <div class="stat-icon">⏱</div>
             <div class="stat-value" id="val-avg">…</div>
             <div class="stat-label">1日の平均学習時間</div>
             <div class="stat-sub">仲間1人あたりの平均</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card reveal reveal-delay-2">
             <div class="stat-icon">🔥</div>
             <div class="stat-value" id="val-streak">…</div>
             <div class="stat-label">平均連続学習日数</div>
             <div class="stat-sub">仲間の平均ストリーク</div>
           </div>
         </div>
-
-        <!-- 棒グラフ2列 -->
         <div class="chart-section">
-          <div class="chart-block">
+          <div class="chart-block reveal reveal-delay-1">
             <div class="chart-title">📖 選んだ物語の道</div>
             <div class="bar-list" id="chart-story"></div>
           </div>
-          <div class="chart-block">
+          <div class="chart-block reveal reveal-delay-2">
             <div class="chart-title">🎓 選んだ資格の道</div>
             <div class="bar-list" id="chart-license"></div>
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
+  <!-- ══ STORYBOARD ══ -->
   <section class="section" id="board">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>まずは、<br>コツコツ軌跡。</h2>
         <p>同じアプリを使っている仲間として、今日の10分を記録しながら、それぞれの物語を育てています。残した1マスが、今日の足あとになります。</p>
       </div>
       <div class="storyboard">
-        <div class="scene" data-step="01">
-          <img class="mini-photo" src="./niyaburo-boy.png" alt="ニヤブロくん">
-          <h3>朝、アプリを開く</h3>
-          <p>ニヤブロくんも眠そうに起きて、まずは今日の冒険をセット。</p>
-        </div>
-        <div class="scene" data-step="02">
-          <img class="mini-photo" src="./niyaburo-girl.png" alt="ニヤブロちゃん">
-          <h3>10分だけ進める</h3>
-          <p>ニヤブロちゃんは小さく1マス。完璧じゃなくても、軌跡が残る。</p>
-        </div>
-        <div class="scene" data-step="03">
-          <img class="mini-photo" src="./uhogori-boy.png" alt="ウホゴリくん">
-          <h3>星が増える</h3>
-          <p>ウホゴリくんは星を見てニヤリ。30分でひとつ、進んだ景色が見える。</p>
-        </div>
-        <div class="scene" data-step="04">
-          <img class="mini-photo" src="./uhogori-girl.png" alt="ウホゴリちゃん">
-          <h3>明日もちょっと進む</h3>
-          <p>ウホゴリちゃんはバッジを眺めて、明日の冒険を楽しみにする。</p>
-        </div>
+        <div class="scene reveal reveal-delay-1" data-step="01"><img class="mini-photo" src="./niyaburo-boy.png" alt="ニヤブロくん"><h3>朝、アプリを開く</h3><p>ニヤブロくんも眠そうに起きて、まずは今日の冒険をセット。</p></div>
+        <div class="scene reveal reveal-delay-2" data-step="02"><img class="mini-photo" src="./niyaburo-girl.png" alt="ニヤブロちゃん"><h3>10分だけ進める</h3><p>ニヤブロちゃんは小さく1マス。完璧じゃなくても、軌跡が残る。</p></div>
+        <div class="scene reveal reveal-delay-3" data-step="03"><img class="mini-photo" src="./uhogori-boy.png" alt="ウホゴリくん"><h3>星が増える</h3><p>ウホゴリくんは星を見てニヤリ。30分でひとつ、進んだ景色が見える。</p></div>
+        <div class="scene reveal reveal-delay-4" data-step="04"><img class="mini-photo" src="./uhogori-girl.png" alt="ウホゴリちゃん"><h3>明日もちょっと進む</h3><p>ウホゴリちゃんはバッジを眺めて、明日の冒険を楽しみにする。</p></div>
       </div>
     </div>
   </section>
 
+  <!-- ══ STORY 横スクロール ══ -->
   <section class="section" id="story">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>選んだ道に、<br>足あとが残る。</h2>
         <p>選んだストーリーに合わせてレベルや表示が変わります。気分で選べるから、今日の10分が少しだけ冒険になります。</p>
       </div>
+    </div>
+    <div class="story-scroll-outer reveal">
       <div class="story-grid">
-        <div class="story">
-          <img class="mini-photo" src="./uhogori-boy.png" alt="ウホゴリくん">
-          <b>ゴリラ成長記</b>
-          <span>コツコツするほど、伝説ゴリに近づく。</span>
-        </div>
-        <div class="story">
-          <div class="mini-face pink">⚔️</div>
-          <b>受験剣士の道</b>
-          <span>今日の1問が、明日の刃になる。</span>
-        </div>
-        <div class="story">
-          <div class="mini-face">🚀</div>
-          <b>宇宙探検家の旅</b>
-          <span>知識の宇宙をサクサク進む。</span>
-        </div>
-        <div class="story">
-          <img class="mini-photo" src="./niyaburo-boy.png" alt="ニヤブロくん">
-          <b>正体不明育成記</b>
-          <span>なんだこれ、から始まるニヤニヤ。</span>
-        </div>
-        <div class="story">
-          <div class="mini-face pink">🔥</div>
-          <b>鬼教官の特訓</b>
-          <span>言い訳を置いて、10分いく。</span>
-        </div>
+        <div class="story"><img class="mini-photo" src="./uhogori-boy.png" alt="ウホゴリくん"><b>🦍 ゴリラ成長記</b><span>コツコツするほど、伝説ゴリに近づく。</span></div>
+        <div class="story"><div class="mini-face pink">⚔️</div><b>⚔️ 受験剣士の道</b><span>今日の1問が、明日の刃になる。</span></div>
+        <div class="story"><div class="mini-face">🚀</div><b>🚀 宇宙探検家の旅</b><span>知識の宇宙をサクサク進む。</span></div>
+        <div class="story"><img class="mini-photo" src="./niyaburo-boy.png" alt="ニヤブロくん"><b>🥦 正体不明育成記</b><span>なんだこれ、から始まるニヤニヤ。</span></div>
+        <div class="story"><div class="mini-face pink">🔥</div><b>🐉 鬼教官の特訓</b><span>言い訳を置いて、10分いく。</span></div>
+      </div>
+      <div class="wrap">
+        <div class="scroll-hint">スワイプして全部見る <span class="scroll-hint-arrow">→</span></div>
       </div>
     </div>
   </section>
 
+  <!-- ══ FEATURES ══ -->
   <section class="section" id="features">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>今日の10分を、<br>軌跡にする。</h2>
         <p>毎日の記録、My Crazy、早朝自習室。キャラたちも同じ仕組みで星を集め、物語を進めています。</p>
       </div>
       <div class="cards">
-        <div class="feature">
-          <h3>10分をタップで残す</h3>
-          <p>時間表のマスを押すだけ。4人も同じように、今日のコツコツを残しています。</p>
-          <img class="mini-photo" src="./niyaburo-girl.png" alt="ニヤブロちゃん">
-        </div>
-        <div class="feature">
-          <h3>星とバッジでサクサク感</h3>
-          <p>30分ごとに星が増え、達成した日はトロフィーも。キャラたちの成長にもつながります。</p>
-          <div class="mini-face peek pink">★</div>
-        </div>
-        <div class="feature">
-          <h3>My Crazyをつくれる</h3>
-          <p>自分で決められる特訓枠。イベント名や時間をセットして、今日だけの軌跡を残せます。</p>
-          <img class="mini-photo" src="./uhogori-girl.png" alt="ウホゴリちゃん">
-        </div>
+        <div class="feature reveal reveal-delay-1"><h3>10分をタップで残す</h3><p>時間表のマスを押すだけ。4人も同じように、今日のコツコツを残しています。</p><img class="mini-photo" src="./niyaburo-girl.png" alt="ニヤブロちゃん"></div>
+        <div class="feature reveal reveal-delay-2"><h3>星とバッジでサクサク感</h3><p>30分ごとに星が増え、達成した日はトロフィーも。キャラたちの成長にもつながります。</p><div class="mini-face peek pink" style="position:absolute;right:18px;bottom:-18px;z-index:1;">★</div></div>
+        <div class="feature reveal reveal-delay-3"><h3>My Crazyをつくれる</h3><p>自分で決められる特訓枠。イベント名や時間をセットして、今日だけの軌跡を残せます。</p><img class="mini-photo" src="./uhogori-girl.png" alt="ウホゴリちゃん"></div>
       </div>
     </div>
   </section>
 
+  <!-- ══ LICENSE ══ -->
   <section class="section" id="license">
     <div class="wrap">
-      <div class="license">
+      <div class="license reveal">
         <img class="mini-photo" src="./niyaburo-boy.png" alt="ニヤブロくん">
         <h2>資格の道も、<br>もちろん選べる。</h2>
-        <p class="sub">フィクションで楽しく。資格の道で本気に。目的に合わせて、今日の10分をコツサクできます。</p>
+        <p style="margin:14px 0 0;max-width:590px;color:var(--soft);font-size:15px;line-height:1.85;">フィクションで楽しく。資格の道で本気に。目的に合わせて、今日の10分をコツサクできます。</p>
         <div class="chips">
-          <span class="chip">簿記3級</span>
-          <span class="chip">簿記2級</span>
-          <span class="chip">宅建</span>
-          <span class="chip">FP2級</span>
-          <span class="chip">社労士</span>
-          <span class="chip">税理士</span>
-          <span class="chip">公務員</span>
-          <span class="chip">中小企業診断士</span>
-          <span class="chip">公認会計士</span>
+          <span class="chip">📗 簿記3級</span><span class="chip">📒 簿記2級</span>
+          <span class="chip">🏠 宅建</span><span class="chip">💰 FP2級</span>
+          <span class="chip">⚖️ 社労士</span><span class="chip">🧮 税理士</span>
+          <span class="chip">🏛️ 公務員</span><span class="chip">💼 中小企業診断士</span>
+          <span class="chip">🔍 公認会計士</span>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ══ BLOOM ══ -->
   <section class="section">
     <div class="wrap">
-      <div class="bloom">
+      <div class="bloom reveal">
         <div class="bloom-grid">
           <div>
             <h2><span class="pink">サクサク開花。</span><br>未来の景色が、<br>少しずつひらく。</h2>
             <p>1マスずつ残した軌跡は、星になって、バッジになって、物語になります。今日の小さな冒険が、未来の見え方を変えていきます。</p>
           </div>
-          <div class="bloom-steps" aria-label="コツコツからサクサク開花までの流れ">
+          <div class="bloom-steps">
             <div class="bloom-step">1マス残す <span>今日の軌跡</span></div>
             <div class="bloom-step">星が増える <span>見える進み具合</span></div>
             <div class="bloom-step">物語が育つ <span>キャラも一緒に成長</span></div>
@@ -1044,19 +568,21 @@ h2{
     </div>
   </div>
 
+  <!-- ══ CTA ══ -->
   <section class="cta">
-    <div class="cta-panel">
+    <div class="cta-panel reveal">
       <h2>今日の冒険を、<br>1マスずつ。</h2>
       <p>4人もあなたも、ニヤニヤしながらコツコツ軌跡を残して、気づいたらサクサク開花している。そんな入口です。</p>
       <a class="btn" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">アプリを開く</a>
     </div>
   </section>
+
 </main>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
 (function(){
-  // Firebase初期化
   const db = (() => {
     try {
       firebase.initializeApp({
@@ -1071,45 +597,38 @@ h2{
     } catch(e){ return null; }
   })();
 
-  // ── ストーリーラベル（フィクション系・アプリ表示名に合わせる） ──
   const storyLabels = {
-    itachacha: '🥦 正体不明育成記',
-    spartan:   '🐉 鬼教官の特訓',
-    gorilla:   '🦍 ゴリラ成長記',
-    samurai:   '⚔️ 受験剣士の道',
-    space:     '🚀 宇宙探検家の旅',
+    itachacha:'🥦 正体不明育成記', spartan:'🐉 鬼教官の特訓',
+    gorilla:'🦍 ゴリラ成長記', samurai:'⚔️ 受験剣士の道', space:'🚀 宇宙探検家の旅',
   };
-
-  // ── 資格ラベル（storyId直接 → 表示名）──
-  // アプリの設定画面に表示されているラベルと1対1で対応
   const licenseStoryLabels = {
-    boki3:      '📗 簿記3級',
-    boki2:      '📒 簿記2級',
-    zeirishi:   '🧮 税理士試験',
-    sharoshi:   '⚖️ 社労士',
-    takken:     '🏠 宅建',
-    fp2:        '💰 FP2級',
-    koumuin:    '🏛️ 公務員試験',
-    shindanshi: '💼 中小企業診断士',
-    kaikeishi:  '🔍 公認会計士',
+    boki3:'📗 簿記3級', boki2:'📒 簿記2級', zeirishi:'🧮 税理士試験',
+    sharoshi:'⚖️ 社労士', takken:'🏠 宅建', fp2:'💰 FP2級',
+    koumuin:'🏛️ 公務員試験', shindanshi:'💼 中小企業診断士', kaikeishi:'🔍 公認会計士',
   };
-
-  // ── 旧バージョンのグループ値フォールバック（licenseCategory フィールド用） ──
   const licenseCategoryLabels = {
-    tax_accountant: '🧮 税理士・簿記系',
-    real_estate:    '🏠 宅建',
-    fp:             '💰 FP',
-    civil_servant:  '🏛️ 公務員',
-    language:       '🌐 語学',
-    cpa:            '🔍 公認会計士',
-    undecided:      '❓ 未定',
-    unanswered:     '－ 未回答',
+    tax_accountant:'🧮 税理士・簿記系', real_estate:'🏠 宅建', fp:'💰 FP',
+    civil_servant:'🏛️ 公務員', language:'🌐 語学', cpa:'🔍 公認会計士',
+    undecided:'❓ 未定', unanswered:'－ 未回答',
   };
-
   const FICTION_IDS  = ['gorilla','samurai','space','itachacha','spartan'];
   const LICENSE_IDS  = ['boki3','boki2','takken','sharoshi','zeirishi','fp2','koumuin','shindanshi','kaikeishi'];
 
-  function renderBar(containerId, data, usePink){
+  // カウントアップ
+  function countUp(el, target, suffix, dur) {
+    if(!el || target === 0) { if(el) el.textContent = target + suffix; return; }
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * ease) + suffix;
+      if(p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // 棒グラフ（アニメーション付き）
+  function renderBar(containerId, data, usePink) {
     const el = document.getElementById(containerId);
     if(!el) return;
     const total = Object.values(data).reduce((s,v)=>s+v,0);
@@ -1117,119 +636,201 @@ h2{
     const sorted = Object.entries(data).sort((a,b)=>b[1]-a[1]);
     el.innerHTML = sorted.map(([key,val])=>{
       const pct = Math.round(val/total*100);
-      const fillClass = usePink ? 'bar-fill pink' : 'bar-fill';
       return `<div class="bar-item">
-        <div class="bar-meta">
-          <span class="bar-name">${key}</span>
-          <span class="bar-pct">${pct}%</span>
-        </div>
-        <div class="bar-track"><div class="${fillClass}" style="width:${pct}%"></div></div>
+        <div class="bar-meta"><span class="bar-name">${key}</span><span class="bar-pct">${pct}%</span></div>
+        <div class="bar-track"><div class="${usePink?'bar-fill pink':'bar-fill'}" data-w="${pct}" style="width:0%"></div></div>
       </div>`;
     }).join('');
+    requestAnimationFrame(()=>{
+      el.querySelectorAll('[data-w]').forEach(bar=>{
+        requestAnimationFrame(()=>{ bar.style.width = bar.dataset.w + '%'; });
+      });
+    });
   }
 
-  async function loadStats(){
+  // キャラレベルバー（全ユーザーの平均から算出）
+  function setCharLevels(docs) {
+    const avgLv = docs.length > 0
+      ? Math.round(docs.reduce((s,d)=>s+(d.level||1),0)/docs.length) : 1;
+    const offsets = [3, -2, 5, -4];
+    offsets.forEach((off, i) => {
+      const lv  = Math.max(1, avgLv + off);
+      const pct = Math.min(Math.max(Math.round((lv % 10) / 10 * 100), 20), 95);
+      const numEl = document.getElementById('lv' + i);
+      const barEl = document.getElementById('lb' + i);
+      if(numEl) numEl.textContent = lv;
+      if(barEl) setTimeout(()=>{ barEl.style.width = pct + '%'; }, 700 + i * 130);
+    });
+  }
+
+  // ティッカー更新
+  function updateTicker(h, avg, streak) {
+    const vals = [
+      ['t-hours', h + '時間'], ['t-hours2', h + '時間'],
+      ['t-avg', '約' + avg + '分'], ['t-avg2', '約' + avg + '分'],
+      ['t-streak', streak + '日'], ['t-streak2', streak + '日'],
+    ];
+    vals.forEach(([id, text]) => {
+      const el = document.getElementById(id);
+      if(el) el.textContent = text;
+    });
+  }
+
+  async function loadStats() {
     const loading = document.getElementById('stats-loading');
     const errEl   = document.getElementById('stats-error');
     const body    = document.getElementById('stats-body');
-    if(!db){
+    if(!db) {
       if(loading) loading.style.display='none';
       if(errEl){ errEl.style.display='block'; errEl.textContent='データを取得できませんでした。'; }
       return;
     }
     try {
-      const analyticsSnap = await db.collection('analytics').get();
-      const docs  = analyticsSnap.docs.map(d=>d.data());
+      const snap  = await db.collection('analytics').get();
+      const docs  = snap.docs.map(d=>d.data());
       const total = docs.length;
 
-      // 🌱 仲間の人数は非表示のため取得のみ（将来利用可）
-
-      // 🌸 総学習時間（桜カード）
       const totalMins  = docs.reduce((s,d)=>s+(d.totalStudyMin||0),0);
       const totalHours = Math.round(totalMins/60);
-      const valHoursNum = document.getElementById('val-hours-num');
-      if(valHoursNum) valHoursNum.textContent = totalHours.toLocaleString();
+      const avgDaily   = total > 0 ? Math.round(docs.reduce((s,d)=>s+(d.avgDailyMinutes||0),0)/total) : 0;
+      const avgStreak  = total > 0 ? Math.round(docs.reduce((s,d)=>s+(d.streakDays||0),0)/total) : 0;
 
-      // 桜を並べる（10分=🌸1個・最大200個）
-      const units = Math.floor(totalMins / 10);
-      const max   = 200;
-      const show  = Math.min(units, max);
-      const sakuraField    = document.getElementById('sakura-field');
-      const sakuraOverflow = document.getElementById('sakura-overflow');
-      if(sakuraField) sakuraField.textContent = '🌸'.repeat(show);
-      if(sakuraOverflow){
-        sakuraOverflow.textContent = units > max
-          ? '＋ほかにも ' + (units - max).toLocaleString() + ' 個分の軌跡があります'
-          : '';
+      // カウンターバンド
+      countUp(document.getElementById('c-hours'),  totalHours, '時間', 1800);
+      countUp(document.getElementById('c-avg'),    avgDaily,   '分',   1600);
+      countUp(document.getElementById('c-streak'), avgStreak,  '日',   1400);
+      // 「約」付きに上書き
+      setTimeout(()=>{ const el = document.getElementById('c-avg'); if(el) el.textContent = '約' + avgDaily + '分'; }, 1700);
+
+      // ティッカー
+      updateTicker(totalHours.toLocaleString(), avgDaily, avgStreak);
+
+      // キャラ
+      setCharLevels(docs);
+
+      // 🌸 総学習時間ヒーロー数字カウントアップ
+      const valHoursNum = document.getElementById('val-hours-num');
+      if(valHoursNum) countUp(valHoursNum, totalHours, '', 2200);
+
+      // 🌸 フィールド：1個ずつ時間差でポップインしながら表示→最後の1個をキラキラ
+      const units   = Math.floor(totalMins / 10);
+      const maxShow = 200;
+      const show    = Math.min(units, maxShow);
+      const sf      = document.getElementById('sakura-field');
+      const ovWrap  = document.getElementById('sakura-overflow-wrap');
+
+      if(sf){
+        sf.innerHTML = '';
+        // 一気に出すと重いので最初の80個はすぐ、残りはまとめて
+        const INSTANT = 80;
+        // 即座に表示する分
+        for(let i = 0; i < Math.min(show, INSTANT); i++){
+          const sp = document.createElement('span');
+          sp.textContent = '🌸';
+          sp.style.animationDelay = (i * 18) + 'ms';
+          sf.appendChild(sp);
+        }
+        // 残りは少し遅らせてまとめて追加
+        if(show > INSTANT){
+          setTimeout(()=>{
+            for(let i = INSTANT; i < show - 1; i++){
+              const sp = document.createElement('span');
+              sp.textContent = '🌸';
+              sp.style.animationDelay = '0ms';
+              sf.appendChild(sp);
+            }
+            // 最後の1個はキラキラ演出
+            const last = document.createElement('span');
+            last.textContent = '🌸';
+            last.className = 'sakura-latest';
+            sf.appendChild(last);
+          }, INSTANT * 18 + 200);
+        } else if(show > 0){
+          // 80個以下のときも最後をキラキラ
+          setTimeout(()=>{
+            const lastEl = sf.lastElementChild;
+            if(lastEl) lastEl.className = 'sakura-latest';
+          }, show * 18 + 400);
+        }
       }
 
-      // ⏱ 1日平均学習時間
-      const avgDaily = total > 0
-        ? Math.round(docs.reduce((s,d)=>s+(d.avgDailyMinutes||0),0)/total) : 0;
-      const valAvg = document.getElementById('val-avg');
-      if(valAvg) valAvg.textContent = '約' + avgDaily + '分';
-
-      // 🔥 平均連続学習日数
-      const avgStreak = total > 0
-        ? Math.round(docs.reduce((s,d)=>s+(d.streakDays||0),0)/total) : 0;
-      const valStreak = document.getElementById('val-streak');
-      if(valStreak) valStreak.textContent = avgStreak + '日';
-
-      // 📖 物語の道 / 🎓 資格の道
-      // ─ 判定ルール ─────────────────────────────────────────────
-      // ① storyMode がフィクション系ID → 物語の道
-      // ② storyMode が資格系storyId  → 資格の道（storyIdラベル＝アプリ表示名）
-      // ③ ①②いずれでもなく licenseCategory あり → 資格の道（旧グループ値で表示）
-      // ④ 上記いずれにも該当しない → 除外（storyMode未送信などのノイズ）
-      // ──────────────────────────────────────────────────────────
-      const storyCounts   = {};
-      const licenseCounts = {};
-
-      docs.forEach(d => {
-        const s  = d.storyMode || '';
-        const lc = d.licenseCategory || '';
-
-        if(FICTION_IDS.includes(s)){
-          // ① フィクション系
-          const label = storyLabels[s] || s;
-          storyCounts[label] = (storyCounts[label] || 0) + 1;
-
-        } else if(LICENSE_IDS.includes(s)){
-          // ② 資格系storyId → アプリ表示名と一致したラベル
-          const label = licenseStoryLabels[s] || s;
-          licenseCounts[label] = (licenseCounts[label] || 0) + 1;
-
-        } else if(lc && licenseCategoryLabels[lc]){
-          // ③ 旧バージョンのグループ値フォールバック
-          const label = licenseCategoryLabels[lc];
-          licenseCounts[label] = (licenseCounts[label] || 0) + 1;
+      // 超過分バッジ表示
+      if(ovWrap){
+        if(units > maxShow){
+          ovWrap.innerHTML = `<div class="sakura-live-badge"><span class="sakura-live-dot"></span>＋ほかにも ${(units - maxShow).toLocaleString()} 個分の軌跡があります</div>`;
+        } else {
+          ovWrap.innerHTML = '';
         }
-        // ④ 該当なし → 除外
-      });
+      }
 
+      // リアルタイム演出：1秒ごとに🌸が1個ずつ増えていく（仲間が今も学習中のイメージ）
+      // ※実際には止まった値だが「今まさに積み上がっている」感を演出
+      let liveCount = show;
+      const LIVE_MAX = maxShow;
+      const liveInterval = setInterval(()=>{
+        if(!sf) { clearInterval(liveInterval); return; }
+        if(liveCount >= LIVE_MAX) { clearInterval(liveInterval); return; }
+        // 最後のキラキラを通常に戻す
+        const prevLast = sf.querySelector('.sakura-latest');
+        if(prevLast) { prevLast.className = ''; prevLast.style.animationDelay = '0ms'; }
+        // 新しい🌸を追加してキラキラ
+        const sp = document.createElement('span');
+        sp.textContent = '🌸';
+        sp.className = 'sakura-latest';
+        sf.appendChild(sp);
+        liveCount++;
+      }, 2800);
+
+      // 数字カード
+      const valAvg    = document.getElementById('val-avg');
+      const valStreak = document.getElementById('val-streak');
+      if(valAvg)    { countUp(valAvg, avgDaily, '分', 1200); setTimeout(()=>{ if(avgDaily>0) valAvg.textContent='約'+avgDaily+'分'; }, 1300); }
+      if(valStreak) countUp(valStreak, avgStreak, '日', 1000);
+
+      // 棒グラフ
+      const storyCounts = {}, licenseCounts = {};
+      docs.forEach(d => {
+        const s = d.storyMode || '', lc = d.licenseCategory || '';
+        if(FICTION_IDS.includes(s)){
+          const label = storyLabels[s] || s;
+          storyCounts[label] = (storyCounts[label]||0) + 1;
+        } else if(LICENSE_IDS.includes(s)){
+          const label = licenseStoryLabels[s] || s;
+          licenseCounts[label] = (licenseCounts[label]||0) + 1;
+        } else if(lc && licenseCategoryLabels[lc]){
+          const label = licenseCategoryLabels[lc];
+          licenseCounts[label] = (licenseCounts[label]||0) + 1;
+        }
+      });
       renderBar('chart-story',   storyCounts,   false);
       renderBar('chart-license', licenseCounts, true);
 
       if(loading) loading.style.display='none';
-      if(body) body.style.display='block';
+      if(body)    body.style.display='block';
 
-    } catch(e){
+    } catch(e) {
       if(loading) loading.style.display='none';
       if(errEl){ errEl.style.display='block'; errEl.textContent='データの読み込みに失敗しました。'; }
       console.warn('stats load error:', e);
     }
   }
 
-  // ── PINモーダル ──
+  // スクロール reveal
+  function initReveal() {
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+    },{ threshold:.1 });
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  }
+
+  // PIN
   window.openPinModal = function(){
     document.getElementById('pin-modal').classList.add('show');
     document.getElementById('pin-input').value='';
     document.getElementById('pin-error').textContent='';
     setTimeout(()=>document.getElementById('pin-input').focus(),100);
   };
-  window.closePinModal = function(){
-    document.getElementById('pin-modal').classList.remove('show');
-  };
+  window.closePinModal = function(){ document.getElementById('pin-modal').classList.remove('show'); };
   window.checkPin = function(){
     const val = document.getElementById('pin-input').value;
     if(val === '0509'){
@@ -1239,19 +840,16 @@ h2{
       document.getElementById('pin-input').value='';
     }
   };
-  // Enterキーでも確認
-  document.addEventListener('keydown', function(e){
-    if(e.key==='Enter' && document.getElementById('pin-modal').classList.contains('show')){
-      window.checkPin();
-    }
+  document.addEventListener('keydown', e=>{
+    if(e.key==='Enter' && document.getElementById('pin-modal').classList.contains('show')) window.checkPin();
   });
-  // モーダル外クリックで閉じる
-  document.getElementById('pin-modal').addEventListener('click', function(e){
-    if(e.target===this) window.closePinModal();
+  document.getElementById('pin-modal').addEventListener('click', e=>{
+    if(e.target===document.getElementById('pin-modal')) window.closePinModal();
   });
 
-  // ページ読み込み時にデータ取得
+  initReveal();
   loadStats();
 })();
 </script>
 </body>
+</html>
