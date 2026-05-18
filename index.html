@@ -386,8 +386,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 .stat-label{font-size:.8rem;font-weight:700;color:var(--ink);margin-bottom:3px;}
 .stat-sub{font-size:.68rem;color:var(--soft);}
 .chart-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px;}
-.chart-block{background:#fff;border-radius:18px;padding:20px 20px 16px;box-shadow:var(--shadow);border:1.5px solid var(--line);}
-.chart-title{font-size:.82rem;font-weight:800;color:var(--ink);margin-bottom:14px;}
+.chart-block{background:#fff;border-radius:18px;padding:20px 20px 16px;box-shadow:var(--shadow);border:1.5px solid var(--line);display:flex;flex-direction:column;}
+.chart-block .bar-list{flex:1;}
+.char-comment-wrap{margin-top:auto;padding-top:16px;}.chart-title{font-size:.82rem;font-weight:800;color:var(--ink);margin-bottom:14px;}
 .bar-list{display:flex;flex-direction:column;gap:10px;}
 .bar-item{display:flex;flex-direction:column;gap:4px;}
 .bar-meta{display:flex;justify-content:space-between;align-items:center;}
@@ -606,14 +607,18 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
 <!-- ライブティッカー -->
 <div class="ticker-wrap" aria-hidden="true">
-  <div class="ticker-inner">
+  <div class="ticker-inner" id="ticker1-inner">
     <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t-hours">…</span></div>
     <div class="ticker-item">⚔️ メインストーリー選択中の仲間 <span class="ticker-val" id="t-main-pct">…</span></div>
     <div class="ticker-item">🌸 資格ストーリー選択中の仲間 <span class="ticker-val" id="t-license-pct">…</span></div>
+    <div id="t-story-details"></div>
+    <div id="t-license-details"></div>
     <!-- ループ用2周目 -->
     <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t-hours2">…</span></div>
     <div class="ticker-item">⚔️ メインストーリー選択中の仲間 <span class="ticker-val" id="t-main-pct2">…</span></div>
     <div class="ticker-item">🌸 資格ストーリー選択中の仲間 <span class="ticker-val" id="t-license-pct2">…</span></div>
+    <div id="t-story-details2"></div>
+    <div id="t-license-details2"></div>
   </div>
 </div>
 
@@ -811,10 +816,14 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t2-hours">…</span></div>
       <div class="ticker-item">⚔️ メインストーリー選択中の仲間 <span class="ticker-val" id="t2-main-pct">…</span></div>
       <div class="ticker-item">🌸 資格ストーリー選択中の仲間 <span class="ticker-val" id="t2-license-pct">…</span></div>
+      <div id="t2-story-details"></div>
+      <div id="t2-license-details"></div>
       <!-- ループ用2周目 -->
       <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t2-hours2">…</span></div>
       <div class="ticker-item">⚔️ メインストーリー選択中の仲間 <span class="ticker-val" id="t2-main-pct2">…</span></div>
       <div class="ticker-item">🌸 資格ストーリー選択中の仲間 <span class="ticker-val" id="t2-license-pct2">…</span></div>
+      <div id="t2-story-details2"></div>
+      <div id="t2-license-details2"></div>
     </div>
   </div>
 
@@ -1107,7 +1116,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   }
 
   // ティッカー更新
-  function updateTicker(h, mainPct, licensePct) {
+  function updateTicker(h, mainPct, licensePct, storyCounts, licenseCounts) {
     const mainText    = mainPct + '%';
     const licenseText = licensePct + '%';
     [
@@ -1124,6 +1133,40 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       ['t2-license-pct',  licenseText],
       ['t2-license-pct2', licenseText],
     ].forEach(([id,text])=>{ const el=document.getElementById(id); if(el) el.textContent=text; });
+
+    // 個々の割合アイテムを生成（0%除外）
+    const storyEmoji = {
+      '🥦 正体不明育成記':'🥦','⚔️ 受験剣士の道':'⚔️','🦍 ゴリラ成長記':'🦍',
+      '🚀 宇宙探検家の旅':'🚀','🐉 鬼教官の特訓':'🐉',
+    };
+    const licenseEmoji = {
+      '📗 簿記3級':'📗','📒 簿記2級':'📒','🧮 税理士試験':'🧮',
+      '⚖️ 社労士':'⚖️','🏠 宅建':'🏠','💰 FP2級':'💰',
+      '🏛️ 公務員試験':'🏛️','💼 中小企業診断士':'💼','🔍 公認会計士':'🔍',
+    };
+
+    function buildDetailItems(counts, emojiMap) {
+      const total = Object.values(counts).reduce((s,v)=>s+v, 0);
+      if(!total) return '';
+      return Object.entries(counts)
+        .sort((a,b)=>b[1]-a[1])
+        .map(([label, val]) => {
+          const pct = Math.round(val / total * 100);
+          if(pct === 0) return '';
+          const emoji = emojiMap[label] || '';
+          return `<div class="ticker-item">${emoji} ${label} <span class="ticker-val">${pct}%</span></div>`;
+        }).join('');
+    }
+
+    const storyHTML   = buildDetailItems(storyCounts,   storyEmoji);
+    const licenseHTML = buildDetailItems(licenseCounts, licenseEmoji);
+
+    ['t-story-details','t-story-details2','t2-story-details','t2-story-details2'].forEach(id=>{
+      const el = document.getElementById(id); if(el) el.innerHTML = storyHTML;
+    });
+    ['t-license-details','t-license-details2','t2-license-details','t2-license-details2'].forEach(id=>{
+      const el = document.getElementById(id); if(el) el.innerHTML = licenseHTML;
+    });
   }
 
   // パーティクル演出（中央収束型）
@@ -1261,7 +1304,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
 
 
-      updateTicker(totalHours.toLocaleString(), 0, 0);
+      updateTicker(totalHours.toLocaleString(), 0, 0, {}, {});
       setCharLevels(docs);
 
       // 🌸 みんなの軌跡：-20時間から実値へカウントアップ→完了後に点滅
@@ -1314,7 +1357,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       const storyTotal   = mainTotal + licenseTotal;
       const mainPct    = storyTotal > 0 ? Math.round(mainTotal    / storyTotal * 100) : 0;
       const licensePct = storyTotal > 0 ? Math.round(licenseTotal / storyTotal * 100) : 0;
-      updateTicker(totalHours.toLocaleString(), mainPct, licensePct);
+      updateTicker(totalHours.toLocaleString(), mainPct, licensePct, storyCounts, licenseCounts);
 
       if(loading) loading.style.display='none';
       if(body)    body.style.display='block';
