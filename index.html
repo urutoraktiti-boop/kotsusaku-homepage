@@ -718,13 +718,8 @@ h2{
 .sakura-field{line-height:1.7;letter-spacing:1px;word-break:break-all;font-size:1rem;}
 .sakura-overflow{font-size:.72rem;color:var(--soft);margin-top:6px;}
 /* ── stats section ── */
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px}
 .stat-card{background:#fff;border-radius:16px;padding:20px 16px;text-align:center;box-shadow:var(--shadow);border:1.5px solid var(--line);}
-.stat-card.accent{background:linear-gradient(135deg,#172033 0%,#2a3a55 100%);border-color:transparent;}
-.stat-card.accent .stat-icon{opacity:.8;}
-.stat-card.accent .stat-value{color:#ffd94f;}
-.stat-card.accent .stat-label{color:rgba(255,255,255,.9);}
-.stat-card.accent .stat-sub{color:rgba(255,255,255,.5);}
 .stat-icon{font-size:1.8rem;margin-bottom:6px;}
 .stat-value{font-size:1.9rem;font-weight:900;color:var(--green);line-height:1.1;margin-bottom:2px;}
 .stat-label{font-size:.8rem;font-weight:700;color:var(--ink);margin-bottom:3px;}
@@ -868,14 +863,8 @@ h2{
           <div class="sakura-overflow" id="sakura-overflow"></div>
         </div>
 
-        <!-- 数字カード3枚 -->
+        <!-- 数字カード2枚 -->
         <div class="stats-grid">
-          <div class="stat-card accent">
-            <div class="stat-icon">🌱</div>
-            <div class="stat-value" id="val-members">…</div>
-            <div class="stat-label">コツサク中の仲間</div>
-            <div class="stat-sub">データを送ってくれた人数</div>
-          </div>
           <div class="stat-card">
             <div class="stat-icon">⏱</div>
             <div class="stat-value" id="val-avg">…</div>
@@ -1153,9 +1142,7 @@ h2{
       const docs  = analyticsSnap.docs.map(d=>d.data());
       const total = docs.length;
 
-      // 🌱 仲間の人数（analyticsドキュメント数 = データ送信済みユーザー数）
-      const valMembers = document.getElementById('val-members');
-      if(valMembers) valMembers.textContent = total.toLocaleString() + '人';
+      // 🌱 仲間の人数は非表示のため取得のみ（将来利用可）
 
       // 🌸 総学習時間（桜カード）
       const totalMins  = docs.reduce((s,d)=>s+(d.totalStudyMin||0),0);
@@ -1180,7 +1167,7 @@ h2{
       const avgDaily = total > 0
         ? Math.round(docs.reduce((s,d)=>s+(d.avgDailyMinutes||0),0)/total) : 0;
       const valAvg = document.getElementById('val-avg');
-      if(valAvg) valAvg.textContent = avgDaily + '分';
+      if(valAvg) valAvg.textContent = '約' + avgDaily + '分';
 
       // 🔥 平均連続学習日数
       const avgStreak = total > 0
