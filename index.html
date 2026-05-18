@@ -147,74 +147,61 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 .section-head p{margin:0;max-width:480px;color:var(--soft);line-height:1.8;}
 
 /* ── STATS ── */
-.sakura-card{background:#fff;border-radius:20px;padding:28px 24px;box-shadow:var(--shadow);border:1.5px solid var(--line);margin-bottom:20px;position:relative;overflow:hidden;}
-.sakura-card:before{content:"🌸";position:absolute;right:-10px;top:-18px;font-size:120px;opacity:.055;pointer-events:none;line-height:1;}
+.sakura-card{background:#fff;border-radius:20px;padding:28px 24px 20px;box-shadow:var(--shadow);border:1.5px solid var(--line);margin-bottom:20px;position:relative;overflow:hidden;}
 
-/* 総学習時間ヒーロー数字 */
-.sakura-hero{display:flex;align-items:flex-end;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+/* 総学習時間ヒーロー数字（中央揃え） */
+.sakura-title{font-size:.82rem;font-weight:800;color:var(--ink);text-align:center;margin-bottom:4px;}
+.sakura-sublabel{font-size:.72rem;color:var(--soft);text-align:center;margin-bottom:0;}
+.sakura-hero{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:8px 0 4px;flex-wrap:wrap;}
 .sakura-big-num{
-  font-size:clamp(64px,10vw,120px);
-  font-weight:1000;
-  line-height:.9;
-  color:var(--pink);
-  letter-spacing:-.03em;
-  font-variant-numeric:tabular-nums;
+  font-size:clamp(72px,12vw,130px);
+  font-weight:1000;line-height:.9;color:var(--pink);
+  letter-spacing:-.03em;font-variant-numeric:tabular-nums;
+  position:relative;z-index:2;
 }
-.sakura-big-suffix{font-size:clamp(22px,3vw,36px);font-weight:1000;color:var(--pink);margin-bottom:8px;}
-.sakura-title{font-size:.82rem;font-weight:800;color:var(--ink);}
-.sakura-unit{font-size:.75rem;color:var(--soft);}
-.sakura-sublabel{font-size:.72rem;color:var(--soft);margin-bottom:16px;}
+/* カウントアップ完了後の点滅 */
+.sakura-big-num.blink{
+  animation:numBlink 1.6s ease-in-out infinite;
+}
+@keyframes numBlink{
+  0%,100%{opacity:1;}
+  50%{opacity:.55;}
+}
+.sakura-big-suffix{font-size:clamp(22px,3vw,36px);font-weight:1000;color:var(--pink);margin-bottom:10px;position:relative;z-index:2;}
 
-/* 🌸 フィールド */
-.sakura-field{line-height:1.8;letter-spacing:2px;word-break:break-all;font-size:1.05rem;min-height:32px;position:relative;}
-.sakura-overflow{font-size:.72rem;color:var(--soft);margin-top:6px;}
-
-/* パーティクルコンテナ */
+/* パーティクルコンテナ（数字を中央に、桜が集まるイメージ） */
 .sakura-particle-wrap{
-  position:relative;height:120px;overflow:hidden;
-  margin:8px 0 4px;border-radius:16px;
-  background:linear-gradient(180deg,rgba(255,240,250,.6) 0%,rgba(255,255,255,0) 100%);
+  position:relative;height:200px;overflow:visible;
+  margin:0 -24px;
+  display:flex;align-items:center;justify-content:center;
 }
-.sakura-particle{
-  position:absolute;font-size:16px;pointer-events:none;
-  animation:particleRise var(--dur,2.4s) ease-out var(--delay,0s) both;
-}
-@keyframes particleRise{
-  0%  {transform:translateX(0) translateY(0) rotate(0deg) scale(.6);opacity:0;}
-  10% {opacity:1;}
-  100%{transform:translateX(var(--drift,15px)) translateY(-130px) rotate(var(--rot,200deg)) scale(1);opacity:0;}
-}
-/* 地面でパルスする🌸 */
+/* 地面でふわふわする🌸（横並び・大量） */
 .sakura-ground{
-  position:absolute;bottom:8px;width:100%;
-  display:flex;justify-content:center;gap:3px;flex-wrap:wrap;padding:0 12px;
+  position:absolute;bottom:0;width:100%;
+  display:flex;justify-content:center;align-items:flex-end;
+  gap:2px;flex-wrap:wrap;padding:0 8px;
+  pointer-events:none;
 }
 .sakura-ground-item{
-  font-size:13px;
-  animation:groundPulse 1.8s ease-in-out infinite var(--gd,0s);
-}
-@keyframes groundPulse{
-  0%,100%{transform:scale(1);opacity:.55;}
-  50%{transform:scale(1.35) rotate(8deg);opacity:1;}
-}
-/* 最後の一個点滅 */
-.sakura-latest{
+  font-size:var(--gs,14px);
+  animation:groundFloat var(--gf,2.2s) ease-in-out infinite var(--gd,0s);
   display:inline-block;
-  animation:sakuraLatest 1.6s ease-in-out infinite;
 }
-@keyframes sakuraLatest{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.4) rotate(10deg);}
+@keyframes groundFloat{
+  0%,100%{transform:translateY(0) rotate(var(--gr,0deg)) scale(1);opacity:.6;}
+  30%{transform:translateY(-6px) rotate(calc(var(--gr,0deg) + 8deg)) scale(1.1);opacity:.9;}
+  70%{transform:translateY(-3px) rotate(calc(var(--gr,0deg) - 5deg)) scale(.95);opacity:.75;}
 }
-
-/* 🌸ひとつずつポップインアニメ */
-.sakura-field span{
-  display:inline-block;
-  animation:sakuraPop .35s cubic-bezier(.34,1.56,.64,1) both;
+/* 中央に向かって上昇するパーティクル */
+.sakura-particle{
+  position:absolute;font-size:var(--ps,18px);pointer-events:none;
+  animation:riseToCenter var(--dur,2.6s) ease-out var(--delay,0s) both;
 }
-@keyframes sakuraPop{
-  from{opacity:0;transform:scale(0) rotate(-20deg);}
-  to{opacity:1;transform:scale(1) rotate(0deg);}
+@keyframes riseToCenter{
+  0%  {transform:translate(0,0) rotate(0deg) scale(.5);opacity:0;}
+  12% {opacity:1;}
+  80% {opacity:.8;}
+  100%{transform:translate(var(--tx,0px),var(--ty,-160px)) rotate(var(--rot,200deg)) scale(1.1);opacity:0;}
 }
 
 /* 差分バッジ */
@@ -381,6 +368,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 .cta h2{position:relative;z-index:1;font-size:clamp(34px,5.5vw,70px);}
 .cta p{position:relative;z-index:1;margin:18px auto 28px;max-width:620px;line-height:1.8;color:#dfe7f2;}
 .cta .btn{position:relative;z-index:1;background:#fff;color:var(--ink);}
+.cta .actions-cta{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px;}
 
 /* ── dashboard ── */
 .dashboard-link-wrap{text-align:center;padding:12px 0 4px;}
@@ -442,7 +430,6 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       <a href="#board">世界観</a>
       <a href="#features">できること</a>
       <a href="#license">資格の道</a>
-      <a class="primary" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">アプリを開く</a>
     </div>
   </div>
 </nav>
@@ -498,21 +485,18 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       <div class="wrap">
         <div class="sakura-card reveal" style="margin-top:0;border-radius:0 0 24px 24px;border-top:none;">
           <div class="sakura-title">みんなの軌跡</div>
-          <div class="sakura-hero">
-            <span class="sakura-big-num" id="val-hours-num">0</span>
-            <span class="sakura-big-suffix">時間</span>
+          <!-- パーティクル演出エリア（数字を内包） -->
+          <div class="sakura-particle-wrap" id="sakura-particle-wrap">
+            <div class="sakura-hero" style="position:relative;z-index:2;pointer-events:none;">
+              <span class="sakura-big-num" id="val-hours-num">0</span>
+              <span class="sakura-big-suffix">時間</span>
+            </div>
+            <div class="sakura-ground" id="sakura-ground"></div>
           </div>
           <div class="sakura-sublabel">総学習時間 ／ 10分 ＝ 🌸1個　積み上がった仲間たちの足あと</div>
 
-          <!-- パーティクル演出エリア -->
-          <div class="sakura-particle-wrap" id="sakura-particle-wrap">
-            <div class="sakura-ground" id="sakura-ground"></div>
-          </div>
-
           <!-- 差分バッジ＋注釈 -->
           <div class="sakura-diff-wrap" id="sakura-diff-wrap"></div>
-
-          <div id="sakura-overflow-wrap"></div>
         </div>
       </div>
 
@@ -553,7 +537,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
             <div class="chart-note">ゴリラ・剣士・宇宙・育成・鬼教官などのフィクション系ストーリーを選択中の仲間</div>
             <div class="bar-list" id="chart-story"></div>
             <div class="chart-comment">
-              <div class="chart-comment-face">🥦</div>
+              <div class="chart-comment-face"><img src="./niyaburo-girl.png" alt="ニヤブロちゃん" style="width:40px;height:40px;object-fit:contain;border-radius:50%;background:linear-gradient(135deg,#f0ffe8,#ffe8f5);border:1.5px solid var(--line);padding:2px;"></div>
               <div class="chart-comment-bubble">受験剣士多いねー！<br>デフォルト設定のままの仲間かな？<br>ぜひ自分だけの道も探してみて🌸</div>
             </div>
           </div>
@@ -562,7 +546,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
             <div class="chart-note">簿記・宅建・FPなど実際の資格取得を目指してコツサク中の仲間</div>
             <div class="bar-list" id="chart-license"></div>
             <div class="chart-comment license-comment">
-              <div class="chart-comment-face">🦍</div>
+              <div class="chart-comment-face"><img src="./uhogori-boy.png" alt="ウホゴリくん" style="width:40px;height:40px;object-fit:contain;border-radius:50%;background:linear-gradient(135deg,#e8f4ff,#e8fff0);border:1.5px solid var(--line);padding:2px;"></div>
               <div class="chart-comment-bubble">硬派な資格ストーリーを<br>選んだ冒険者もステキ…！<br>本気組、ウホ尊いです🎓</div>
             </div>
           </div>
@@ -743,7 +727,10 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     <div class="cta-panel reveal">
       <h2>今日の冒険を、<br>1マスずつ。</h2>
       <p>4人もあなたも、ニヤニヤしながらコツコツ軌跡を残して、気づいたらサクサク開花している。そんな入口です。</p>
-      <a class="btn" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">アプリを開く</a>
+      <div class="actions-cta">
+        <a class="btn" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">今すぐインストールしてはじめる</a>
+        <button class="btn light" onclick="closeToApp()" style="border:none;cursor:pointer;">インストール済みの方はこちら</button>
+      </div>
     </div>
   </section>
 
@@ -839,72 +826,80 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     ].forEach(([id,text])=>{ const el=document.getElementById(id); if(el) el.textContent=text; });
   }
 
-  // パーティクル演出
+  // パーティクル演出（中央収束型）
   function launchParticles(sakuraCount) {
     const wrap   = document.getElementById('sakura-particle-wrap');
     const ground = document.getElementById('sakura-ground');
     if(!wrap) return;
-    const groundCount = Math.min(sakuraCount, 18);
+
+    // ── 地面にふわふわ🌸を大量に並べる ──
     if(ground){
       ground.innerHTML = '';
+      const groundCount = Math.min(Math.max(sakuraCount, 40), 80); // 40〜80個
       for(let i=0; i<groundCount; i++){
         const sp = document.createElement('span');
         sp.className = 'sakura-ground-item';
         sp.textContent = '🌸';
-        sp.style.setProperty('--gd', (i*0.12)+'s');
+        // サイズをランダムに（10〜18px）
+        const sz = 10 + Math.random() * 8;
+        sp.style.setProperty('--gs', sz + 'px');
+        // ふわふわの速度・遅延をランダムに
+        sp.style.setProperty('--gf', (1.6 + Math.random() * 1.4) + 's');
+        sp.style.setProperty('--gd',  (Math.random() * 1.8) + 's');
+        // ランダムな傾き
+        sp.style.setProperty('--gr', (Math.random() * 30 - 15) + 'deg');
         ground.appendChild(sp);
       }
     }
-    const drifts    = [-30,-20,-10,0,10,20,30,-25,25,-15,15];
-    const rots      = [160,200,240,180,220,160,200,240,180,220,160];
-    const positions = [10,20,32,42,52,62,72,82,15,55,35];
-    let launched = 0;
+
+    // ── 中央に向かって上昇するパーティクル ──
+    // ラップの中心を基準に各桜がベクトルを計算
+    const wrapW = wrap.offsetWidth || 360;
+    const cx = wrapW / 2; // 中心X
+
+    function spawnParticle(i, total) {
+      const sp = document.createElement('div');
+      sp.className = 'sakura-particle';
+      sp.textContent = '🌸';
+
+      // 発射位置：横全体に分散（端ほど多めに）
+      const startX = 20 + Math.random() * (wrapW - 40);
+      const startY = 180 + Math.random() * 20; // 下から発射
+
+      // 中心に向かうベクトル（少しランダムなばらつき付き）
+      const tx = (cx - startX) * (0.6 + Math.random() * 0.6);
+      const ty = -(140 + Math.random() * 60);
+
+      sp.style.left   = startX + 'px';
+      sp.style.bottom = '0px';
+      sp.style.setProperty('--ps',    (14 + Math.random() * 10) + 'px');
+      sp.style.setProperty('--dur',   (2.2 + Math.random() * 1.0) + 's');
+      sp.style.setProperty('--delay', (i * 0.08 + Math.random() * 0.1) + 's');
+      sp.style.setProperty('--tx',    tx + 'px');
+      sp.style.setProperty('--ty',    ty + 'px');
+      sp.style.setProperty('--rot',   (Math.random() * 360 - 180) + 'deg');
+      wrap.appendChild(sp);
+      setTimeout(()=>sp.remove(), (3.4 + i * 0.08) * 1000);
+    }
+
+    // カウントアップ中：波状に発射（0.8秒ごとに20個）
+    let waveIdx = 0;
     function launchWave() {
-      for(let i=0; i<12; i++){
-        const idx = (launched+i) % drifts.length;
-        const sp = document.createElement('div');
-        sp.className = 'sakura-particle';
-        sp.textContent = '🌸';
-        sp.style.left   = positions[idx]+(Math.random()*8-4)+'%';
-        sp.style.bottom = '8px';
-        sp.style.setProperty('--dur',   (2.0+Math.random()*0.8)+'s');
-        sp.style.setProperty('--delay', (i*0.14)+'s');
-        sp.style.setProperty('--drift', (drifts[idx]+Math.random()*10-5)+'px');
-        sp.style.setProperty('--rot',   rots[idx]+'deg');
-        wrap.appendChild(sp);
-        setTimeout(()=>sp.remove(), (2.8+i*0.14)*1000);
-      }
-      launched += 12;
+      for(let i=0; i<20; i++) spawnParticle(i + waveIdx * 20, 20);
+      waveIdx++;
     }
     launchWave();
-    const waveIv = setInterval(launchWave, 1400);
+    const waveIv = setInterval(launchWave, 800);
+
+    // カウントアップ完了（約2.2秒）後に大バースト→その後ゆっくり継続
     setTimeout(()=>{
       clearInterval(waveIv);
-      for(let i=0; i<20; i++){
-        setTimeout(()=>{
-          const idx = i % drifts.length;
-          const sp = document.createElement('div');
-          sp.className = 'sakura-particle'; sp.textContent = '🌸';
-          sp.style.left = (5+Math.random()*85)+'%'; sp.style.bottom = '8px';
-          sp.style.setProperty('--dur',   (1.8+Math.random()*0.6)+'s');
-          sp.style.setProperty('--delay', '0s');
-          sp.style.setProperty('--drift', (drifts[idx]+Math.random()*20-10)+'px');
-          sp.style.setProperty('--rot',   rots[idx]+'deg');
-          wrap.appendChild(sp);
-          setTimeout(()=>sp.remove(), 2600);
-        }, i*60);
-      }
+      // 最終バースト
+      for(let i=0; i<40; i++) setTimeout(()=>spawnParticle(i, 40), i * 30);
+      // 以降ゆっくり
       setInterval(()=>{
-        const sp = document.createElement('div');
-        sp.className = 'sakura-particle'; sp.textContent = '🌸';
-        sp.style.left = (5+Math.random()*85)+'%'; sp.style.bottom = '8px';
-        sp.style.setProperty('--dur',   (2.2+Math.random()*0.8)+'s');
-        sp.style.setProperty('--delay', '0s');
-        sp.style.setProperty('--drift', (Math.random()*40-20)+'px');
-        sp.style.setProperty('--rot',   (150+Math.random()*100)+'deg');
-        wrap.appendChild(sp);
-        setTimeout(()=>sp.remove(), 3200);
-      }, 2800);
+        for(let i=0; i<6; i++) setTimeout(()=>spawnParticle(i, 6), i * 120);
+      }, 3000);
     }, 2400);
   }
 
@@ -971,19 +966,32 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       updateTicker(totalHours.toLocaleString(), avgDaily, avgStreak);
       setCharLevels(docs);
 
+      // 🌸 みんなの軌跡：-20時間から実値へカウントアップ→完了後に点滅
       const valHoursNum = document.getElementById('val-hours-num');
-      if(valHoursNum) countUp(valHoursNum, totalHours, '', 2200);
+      const startHours  = Math.max(0, totalHours - 20);
+      const countDur    = 2400; // 2.4秒でカウントアップ
+      if(valHoursNum){
+        valHoursNum.textContent = startHours;
+        const startTime = performance.now();
+        function tickHours(now) {
+          const p    = Math.min((now - startTime) / countDur, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          const cur  = Math.round(startHours + (totalHours - startHours) * ease);
+          valHoursNum.textContent = cur.toLocaleString();
+          if(p < 1){
+            requestAnimationFrame(tickHours);
+          } else {
+            valHoursNum.textContent = totalHours.toLocaleString();
+            // カウントアップ完了→点滅スタート
+            valHoursNum.classList.add('blink');
+          }
+        }
+        requestAnimationFrame(tickHours);
+      }
 
       showDiff(sakuraCount);
       saveSnapshot(sakuraCount);
       launchParticles(sakuraCount);
-
-      const ovWrap = document.getElementById('sakura-overflow-wrap');
-      if(ovWrap){
-        ovWrap.innerHTML = sakuraCount>200
-          ? `<div class="sakura-live-badge"><span class="sakura-live-dot"></span>＋ほかにも ${(sakuraCount-200).toLocaleString()} 個分の軌跡があります</div>`
-          : '';
-      }
 
       const valAvg    = document.getElementById('val-avg');
       const valStreak = document.getElementById('val-streak');
