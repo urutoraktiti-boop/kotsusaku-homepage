@@ -294,7 +294,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   border-radius:14px 14px 14px 4px;padding:5px 10px;
   font-size:.68rem;font-weight:800;color:var(--ink);white-space:nowrap;
   box-shadow:3px 3px 0 rgba(23,32,51,.1);pointer-events:none;
-  animation:bubblePop .3s cubic-bezier(.34,1.56,.64,1) both;z-index:10;line-height:1.5;
+  animation:bubblePop .3s cubic-bezier(.34,1.56,.64,1) both;z-index:20;line-height:1.5;
 }
 @keyframes bubblePop{from{transform:scale(0) translateY(4px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
 
@@ -1498,14 +1498,18 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
           function scheduleMeganeFreeze(){
             const wait = 5000 + Math.random() * 7000;
             setTimeout(()=>{
-              if(!megane.frozen && megane.x > 40){
+              const bw2 = band.offsetWidth;
+              const center = bw2 / 2;
+              // 画面中央付近（中央±25%の範囲）でのみフリーズ
+              if(!megane.frozen && !megane.reversed &&
+                 megane.x > center * 0.5 && megane.x < center * 1.5){
                 megane.frozen = true;
                 megane.el.classList.remove('runner-bounce');
                 megane.el.classList.add('runner-shake');
                 const bubble = document.createElement('div');
                 bubble.className = 'runner-bubble';
                 bubble.textContent = ['フリーズっぺ〜！','なんでっぺ！','動けないっぺ！'][Math.floor(Math.random()*3)];
-                bubble.style.left = Math.max(4, megane.x-10)+'px';
+                bubble.style.left = Math.max(4, Math.min(megane.x-10, bw2-140))+'px';
                 bubble.style.top = '4px';
                 band.appendChild(bubble);
                 setTimeout(()=>bubble.remove(), 1400);
@@ -1522,16 +1526,19 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
           }
           scheduleMeganeFreeze();
 
-          // 🥸専用：逆走（8〜15秒に1回）
+          // 🥸専用：逆走（8〜15秒に1回）・画面右端からスタート
           function scheduleMeganeReverse(){
             const wait = 8000 + Math.random() * 7000;
             setTimeout(()=>{
               if(!megane.frozen && !megane.reversed){
+                const bw2 = band.offsetWidth;
+                // 画面右端にテレポートして逆走スタート
+                megane.x = bw2 + 60;
                 megane.reversed = true;
                 const bubble = document.createElement('div');
                 bubble.className = 'runner-bubble';
                 bubble.textContent = ['逆走っぺ〜！','こっちっぺ！','反対っぺ！'][Math.floor(Math.random()*3)];
-                bubble.style.left = Math.max(4, megane.x-10)+'px';
+                bubble.style.left = Math.max(4, Math.min(bw2-140, bw2-60))+'px';
                 bubble.style.top = '4px';
                 band.appendChild(bubble);
                 setTimeout(()=>bubble.remove(), 1400);
