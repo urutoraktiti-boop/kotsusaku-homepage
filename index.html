@@ -264,7 +264,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   background:linear-gradient(90deg,var(--mint),var(--cream),var(--rose),var(--blue));
   background-size:400% 100%;animation:bandShift 8s ease infinite;
   border-top:1px solid rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.7);
-  clip-path:none;
+  z-index:10;
+  isolation:isolate;
 }
 @keyframes bandShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .runner-track{position:absolute;inset:0;display:flex;align-items:center;}
@@ -274,6 +275,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   transform-origin:center center;
   top:50%;
   transform:translateY(-50%);
+  z-index:11;
 }
 .runner-bounce{animation:runBounce .26s ease-in-out infinite alternate;}
 @keyframes runBounce{from{transform:translateY(-50%) scaleY(1) rotate(-4deg);}to{transform:translateY(calc(-50% + 5px)) scaleY(.86) rotate(4deg);}}
