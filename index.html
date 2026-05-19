@@ -18,11 +18,13 @@ body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Seg
 
 /* ── NAV ── */
 .nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);border-bottom:1px solid rgba(220,228,240,.7);backdrop-filter:blur(20px);}
-.nav-inner{width:min(1180px,100%);margin:auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.nav-inner{width:min(1180px,100%);margin:auto;padding:10px 20px 0;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.nav-row1{width:100%;display:flex;align-items:center;justify-content:center;}
+.nav-row2{width:100%;display:flex;align-items:center;justify-content:center;padding-bottom:8px;flex-wrap:wrap;gap:4px;}
 .brand{font-size:clamp(17px,2.8vw,26px);font-weight:1000;white-space:nowrap;}
 .brand .green{color:var(--green)}.brand .pink{color:var(--pink)}
-.nav-links{display:flex;align-items:center;gap:6px}
-.nav-links a{color:#394255;text-decoration:none;font-size:13px;font-weight:950;padding:7px 11px;border-radius:999px;transition:background .15s;}
+.nav-links{display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center;}
+.nav-links a{color:#394255;text-decoration:none;font-size:13px;font-weight:950;padding:6px 11px;border-radius:999px;transition:background .15s;}
 .nav-links a:hover{background:var(--line);}
 .nav-links .primary{color:#fff;background:var(--ink);}
 .nav-links .primary:hover{background:#2a3a55;}
@@ -237,7 +239,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 }
 
 /* 差分バッジ */
-.sakura-diff-wrap{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+.sakura-diff-wrap{margin-top:10px;display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center;}
 .sakura-diff-badge{
   display:inline-flex;align-items:center;gap:6px;
   background:linear-gradient(90deg,#fff0f5,#ffe4ef);
@@ -568,7 +570,6 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
 /* ── RESPONSIVE ── */
 @media(max-width:960px){
-  .nav-links a:not(.primary){display:none}
   .hero{padding-top:36px;}
   .section-head{display:block;}
   .section-head p{margin-top:12px;}
@@ -602,18 +603,24 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
 <nav class="nav">
   <div class="nav-inner">
-    <div class="brand"><span class="green">コツコツ</span> <span class="pink">サクサク</span></div>
-    <div class="nav-links">
-      <a href="#story">物語</a>
-      <a href="#board">世界観</a>
-      <a href="#features">できること</a>
-      <a href="#license">資格の道</a>
+    <div class="nav-row1">
+      <div class="brand"><span class="green">コツコツ</span> <span class="pink">サクサク</span></div>
+    </div>
+    <div class="nav-row2">
+      <div class="nav-links">
+        <a href="#story">物語</a>
+        <a href="#board">世界観</a>
+        <a href="#features">できること</a>
+        <a href="#license">資格の道</a>
+      </div>
     </div>
   </div>
 </nav>
 
-<!-- NAV直下ランナー帯（新規追加） -->
-<div class="runner-band" data-runner="🥦 🌸 🦍 🥸" data-speed="2.0"></div>
+<!-- NAV直下ランナー帯（新規追加）・上方向はみ出し用に余白を設ける -->
+<div style="padding-top:32px;position:relative;z-index:10;">
+  <div class="runner-band" data-runner="🥦 🌸 🦍 🥸" data-speed="2.0"></div>
+</div>
 
 <main>
 
