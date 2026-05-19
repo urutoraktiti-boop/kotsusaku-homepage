@@ -1188,6 +1188,15 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     ['t-license-details','t-license-details2','t2-license-details','t2-license-details2'].forEach(id=>{
       const el = document.getElementById(id); if(el) el.innerHTML = licenseHTML;
     });
+
+    // データ挿入後にティッカーアニメーションをリセット（幅が変わるため）
+    ['ticker1-inner','ticker2-inner'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.style.animation = 'none';
+      el.offsetHeight; // reflow強制
+      el.style.animation = '';
+    });
   }
 
   // パーティクル演出（中央収束型）
