@@ -260,26 +260,31 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
 /* ── ランナー帯 ── */
 .runner-band{
-  position:relative;overflow:hidden;height:72px;
+  position:relative;overflow:visible;height:72px;
   background:linear-gradient(90deg,var(--mint),var(--cream),var(--rose),var(--blue));
   background-size:400% 100%;animation:bandShift 8s ease infinite;
   border-top:1px solid rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.7);
+  clip-path:none;
 }
 @keyframes bandShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .runner-track{position:absolute;inset:0;display:flex;align-items:center;}
 .runner-char{
   position:absolute;font-size:2.2rem;white-space:nowrap;
   filter:drop-shadow(2px 2px 0 rgba(255,255,255,.8));
-  transform-origin:center bottom;
+  transform-origin:center center;
+  top:50%;
+  transform:translateY(-50%);
 }
 .runner-bounce{animation:runBounce .26s ease-in-out infinite alternate;}
-@keyframes runBounce{from{transform:scaleY(1) translateY(0) rotate(-4deg);}to{transform:scaleY(.86) translateY(5px) rotate(4deg);}}
+@keyframes runBounce{from{transform:translateY(-50%) scaleY(1) rotate(-4deg);}to{transform:translateY(calc(-50% + 5px)) scaleY(.86) rotate(4deg);}}
 .runner-stumble{animation:runStumble .5s ease-in-out forwards;}
-@keyframes runStumble{0%{transform:rotate(0);}30%{transform:rotate(30deg) translateY(8px);}60%{transform:rotate(-12deg);}100%{transform:rotate(0);}}
+@keyframes runStumble{0%{transform:translateY(-50%) rotate(0);}30%{transform:translateY(calc(-50% + 8px)) rotate(30deg);}60%{transform:translateY(-50%) rotate(-12deg);}100%{transform:translateY(-50%) rotate(0);}}
 .runner-jump{animation:runJump .55s cubic-bezier(.4,0,.2,1) forwards;}
-@keyframes runJump{0%{transform:translateY(0);}40%{transform:translateY(-24px) rotate(-10deg);}100%{transform:translateY(0);}}
+@keyframes runJump{0%{transform:translateY(-50%);}40%{transform:translateY(calc(-50% - 24px)) rotate(-10deg);}100%{transform:translateY(-50%);}}
 .runner-spin{animation:runSpin .5s linear forwards;}
-@keyframes runSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes runSpin{from{transform:translateY(-50%) rotate(0deg);}to{transform:translateY(-50%) rotate(360deg);}}
+.runner-shake{animation:runShake .15s ease-in-out infinite;}
+@keyframes runShake{0%,100%{transform:translateY(-50%) rotate(-8deg);}50%{transform:translateY(-50%) rotate(8deg);}}
 .runner-bubble{
   position:absolute;background:#fff;border:2px solid var(--ink);
   border-radius:14px 14px 14px 4px;padding:5px 10px;
@@ -605,22 +610,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   </div>
 </nav>
 
-<!-- ライブティッカー -->
-<div class="ticker-wrap" aria-hidden="true">
-  <div class="ticker-inner" id="ticker1-inner">
-    <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t-hours">…</span></div>
-    <div class="ticker-item">⚔️ メインストーリー選択中の仲間 <span class="ticker-val" id="t-main-pct">…</span></div>
-    <div class="ticker-item">🌸 資格ストーリー選択中の仲間 <span class="ticker-val" id="t-license-pct">…</span></div>
-    <div id="t-story-details"></div>
-    <div id="t-license-details"></div>
-    <!-- ループ用2周目 -->
-    <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t-hours2">…</span></div>
-    <div class="ticker-item">⚔️ メインストーリー選択中の仲間 <span class="ticker-val" id="t-main-pct2">…</span></div>
-    <div class="ticker-item">🌸 資格ストーリー選択中の仲間 <span class="ticker-val" id="t-license-pct2">…</span></div>
-    <div id="t-story-details2"></div>
-    <div id="t-license-details2"></div>
-  </div>
-</div>
+<!-- NAV直下ランナー帯（新規追加） -->
+<div class="runner-band" data-runner="🥦 🌸 🦍 🥸" data-speed="2.0"></div>
 
 <main>
 
@@ -631,7 +622,6 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       <div class="hero-inner">
         <div class="eyebrow">コツコツ・軌跡から、サクサク・開花へ</div>
         <h1><span class="g">コツコツ軌跡。</span><br>今日の冒険を、<br>1マスずつ。</h1>
-        <p class="lead">ニヤブロも、ウホゴリも。今日の10分、コツサク中。</p>
         <div class="actions">
           <a class="btn" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">今すぐインストールしてはじめる</a>
           <button class="btn light" onclick="closeToApp()">インストール済みの方はこちら</button>
@@ -639,6 +629,23 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       </div>
     </div>
   </section>
+
+  <!-- ライブティッカー（STATSの直上に移動） -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker-inner" id="ticker1-inner">
+      <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t-hours">…</span></div>
+      <div class="ticker-item">⚔️ メインストーリー選択中の仲間 <span class="ticker-val" id="t-main-pct">…</span></div>
+      <div class="ticker-item">🌸 資格ストーリー選択中の仲間 <span class="ticker-val" id="t-license-pct">…</span></div>
+      <div id="t-story-details"></div>
+      <div id="t-license-details"></div>
+      <!-- ループ用2周目 -->
+      <div class="ticker-item"><span class="ticker-live"><span class="ticker-live-dot"></span>LIVE</span>🌸 みんなの総学習時間 <span class="ticker-val" id="t-hours2">…</span></div>
+      <div class="ticker-item">⚔️ メインストーリー選択中の仲間 <span class="ticker-val" id="t-main-pct2">…</span></div>
+      <div class="ticker-item">🌸 資格ストーリー選択中の仲間 <span class="ticker-val" id="t-license-pct2">…</span></div>
+      <div id="t-story-details2"></div>
+      <div id="t-license-details2"></div>
+    </div>
+  </div>
 
   <!-- ══ STATS（ヒーロー直下・トップインパクト） ══ -->
   <section class="section" id="stats" style="padding-top:0;">
@@ -825,6 +832,11 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       <div id="t2-story-details2"></div>
       <div id="t2-license-details2"></div>
     </div>
+  </div>
+
+  <!-- キャラカルーセル直上のリードテキスト -->
+  <div class="wrap" style="padding:28px 20px 0;text-align:center;">
+    <p class="lead">ニヤブロも、ウホゴリも。今日の10分、コツサク中。</p>
   </div>
 
   <!-- キャラ カルーセル（STATSの後） -->
@@ -1394,89 +1406,165 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     document.querySelectorAll('.runner-band').forEach(band=>{
       const chars = (band.dataset.runner||'🥦 🌸 🦍 🥸').split(' ').filter(Boolean);
       const baseSpeed = parseFloat(band.dataset.speed||'2') * 100;
-      // キャラごとにサイズ・速度をランダムに設定
+
+      // サイズ生成：通常は1.2〜3.5rem、まれに4〜8rem（ダイナミック）
+      function randSize() {
+        return Math.random() < 0.15
+          ? 4.0 + Math.random() * 4.0   // 15%の確率でダイナミック（4〜8rem）
+          : 1.2 + Math.random() * 2.3;  // 通常（1.2〜3.5rem）
+      }
+
       const runners = chars.map((emoji,i)=>{
         const el = document.createElement('div');
         el.className = 'runner-char runner-bounce';
         el.textContent = emoji;
-        // ランダムサイズ（1.2rem〜3.5rem）
-        const sz = 1.2 + Math.random() * 2.3;
+        const sz = randSize();
         el.style.fontSize = sz + 'rem';
         band.appendChild(el);
-        // 個別スピード（baseSpeedの0.5〜1.8倍）
         const spd = baseSpeed * (0.5 + Math.random() * 1.3);
-        return {el, emoji, x: 9999, speed: spd, size: sz};
+        // 🥸専用フラグ
+        return {el, emoji, x: 9999, speed: spd, size: sz,
+          frozen: false, reversed: false};
       });
+
       const events = ['stumble','jump','spin','bubble','grow','shrink'];
+
+      // コメント（全体的に多め＋🥸はっぺ系ギャグ）
       const bubbleTexts = {
-        '🥦':['ニヤニヤ〜！','コツコツ〜！','なんだこれ！','ぶろっこりー！','うおおお！','10分！'],
-        '🌸':['サクサク〜✨','10分！10分！','軌跡残すよ〜！','満開間近〜！','ぽわわ〜','咲いた！'],
-        '🦍':['ウホウホ！','伝説ゴリへ！','コツサクだ！','ウホ…強くなる！','ウホウホウホ！！','筋肉〜！'],
-        '🥸':['うーん🤔','資格の道も！','ステキ…！','ガチ勢もいるよ！','なるほど…','本気だ！'],
+        '🥦':['ニヤニヤ〜！','コツコツ〜！','なんだこれ！','ぶろっこりー！','うおおお！','10分！',
+               'ニヤニヤが止まらん！','また来たぞ！','軌跡残すぜ！','今日も10分！','ぐへへ〜！','満開ニヤニヤ！'],
+        '🌸':['サクサク〜✨','10分！10分！','軌跡残すよ〜！','満開間近〜！','ぽわわ〜','咲いた！',
+               'きれいに咲くよ！','コツコツ咲こ！','今日も一輪！','ふわ〜っと！','10分で一輪🌸','サクサク開花！'],
+        '🦍':['ウホウホ！','伝説ゴリへ！','コツサクだ！','ウホ…強くなる！','ウホウホウホ！！','筋肉〜！',
+               'ウホ…今日も来たぞ！','ゴリゴリいくぜ！','コツサクウホ！','ウホ！ウホ！ウホ！','伝説は近い！','ゴリ道まっしぐら！'],
+        '🥸':['カトちゃんっぺ〜！','ぺっぺっぺ〜！','メビちゃんっぺ！','コツサクっぺ！','10分っぺ〜！',
+               'なんだこれっぺ！','ウホっぺ！','サクサクっぺ〜！','ニヤニヤっぺ！','資格もっぺ！',
+               '軌跡っぺ〜！','ぺぺぺっぺ〜！','どこ行くっぺ！','止まれないっぺ！','逆走っぺ〜！',
+               'ぺ！ぺ！ぺ！','コツコツっぺ！','開花っぺ〜！','今日もっぺ！','ぺぺぺぺ〜！！'],
       };
+
       let activated = false;
       function startAnimation() {
         if(activated) return; activated = true;
         const bw = band.offsetWidth;
         runners.forEach((r,i)=>{ r.x = bw+60+i*110; });
+
         function frame() {
           const bw2 = band.offsetWidth;
           runners.forEach(r=>{
-            r.x -= r.speed/60;
-            if(r.x < -100){
-              r.x = bw2+60+Math.random()*100;
-              // 画面端で再登場時にサイズをランダムに変える
-              const newSz = 1.2 + Math.random() * 2.3;
+            if(r.frozen) return; // フリーズ中は動かない
+            const dir = r.reversed ? 1 : -1;
+            r.x += dir * r.speed / 60;
+            // 画面外に出たらリセット
+            if(r.x < -150 || r.x > bw2 + 150){
+              r.x = r.reversed ? -120 : bw2+60+Math.random()*100;
+              r.reversed = false;
+              const newSz = randSize();
               r.el.style.fontSize = newSz + 'rem';
               r.size = newSz;
-              // 速度もランダムに変える
               r.speed = baseSpeed * (0.5 + Math.random() * 1.3);
+              r.el.style.transform = 'translateY(-50%)';
               if(Math.random()<0.25) triggerEvent(r, bw2);
             }
-            r.el.style.left    = r.x+'px';
-            r.el.style.top     = '50%';
-            r.el.style.marginTop = -(r.size * 8) + 'px';
+            r.el.style.left = r.x+'px';
+            // 逆走中は左右反転
+            r.el.style.transform = r.reversed
+              ? 'translateY(-50%) scaleX(-1)'
+              : 'translateY(-50%)';
           });
           requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
+
+        // コメント頻度アップ（800ms→全キャラ対象）
         setInterval(()=>{
           const r=runners[Math.floor(Math.random()*runners.length)];
           const bw2=band.offsetWidth;
           if(r.x>20 && r.x<bw2-20) triggerEvent(r, bw2);
-        }, 1800);
+        }, 800);
+
+        // 🥸専用：フリーズ＋震え（5〜12秒に1回）
+        const megane = runners.find(r=>r.emoji==='🥸');
+        if(megane){
+          function scheduleMeganeFreeze(){
+            const wait = 5000 + Math.random() * 7000;
+            setTimeout(()=>{
+              if(!megane.frozen && megane.x > 40){
+                megane.frozen = true;
+                megane.el.classList.remove('runner-bounce');
+                megane.el.classList.add('runner-shake');
+                const bubble = document.createElement('div');
+                bubble.className = 'runner-bubble';
+                bubble.textContent = ['フリーズっぺ〜！','なんでっぺ！','動けないっぺ！'][Math.floor(Math.random()*3)];
+                bubble.style.left = Math.max(4, megane.x-10)+'px';
+                bubble.style.top = '4px';
+                band.appendChild(bubble);
+                setTimeout(()=>bubble.remove(), 1400);
+                setTimeout(()=>{
+                  megane.frozen = false;
+                  megane.el.classList.remove('runner-shake');
+                  megane.el.classList.add('runner-bounce');
+                  scheduleMeganeFreeze();
+                }, 1200 + Math.random()*800);
+              } else {
+                scheduleMeganeFreeze();
+              }
+            }, wait);
+          }
+          scheduleMeganeFreeze();
+
+          // 🥸専用：逆走（8〜15秒に1回）
+          function scheduleMeganeReverse(){
+            const wait = 8000 + Math.random() * 7000;
+            setTimeout(()=>{
+              if(!megane.frozen && !megane.reversed){
+                megane.reversed = true;
+                const bubble = document.createElement('div');
+                bubble.className = 'runner-bubble';
+                bubble.textContent = ['逆走っぺ〜！','こっちっぺ！','反対っぺ！'][Math.floor(Math.random()*3)];
+                bubble.style.left = Math.max(4, megane.x-10)+'px';
+                bubble.style.top = '4px';
+                band.appendChild(bubble);
+                setTimeout(()=>bubble.remove(), 1400);
+              }
+              scheduleMeganeReverse();
+            }, wait);
+          }
+          scheduleMeganeReverse();
+        }
       }
+
       function triggerEvent(r, bw) {
         const ev=events[Math.floor(Math.random()*events.length)];
         if(ev==='bubble'){ showBubble(r,bw); return; }
         if(ev==='grow'){
-          // 急に大きくなる
-          const big = 3.0 + Math.random()*1.2;
+          const big = 4.0 + Math.random() * 4.0; // growも最大8remまで
           r.el.style.fontSize = big+'rem';
           r.size = big;
-          setTimeout(()=>{ const s=1.2+Math.random()*2.3; r.el.style.fontSize=s+'rem'; r.size=s; },500);
+          setTimeout(()=>{ const s=randSize(); r.el.style.fontSize=s+'rem'; r.size=s; },700);
           return;
         }
         if(ev==='shrink'){
-          // 急に小さくなる
           r.el.style.fontSize='0.7rem'; r.size=0.7;
-          setTimeout(()=>{ const s=1.2+Math.random()*2.3; r.el.style.fontSize=s+'rem'; r.size=s; },500);
+          setTimeout(()=>{ const s=randSize(); r.el.style.fontSize=s+'rem'; r.size=s; },500);
           return;
         }
         r.el.classList.remove('runner-bounce','runner-stumble','runner-jump','runner-spin');
         r.el.classList.add('runner-'+ev);
         setTimeout(()=>{ r.el.classList.remove('runner-'+ev); r.el.classList.add('runner-bounce'); },600);
       }
+
       function showBubble(r, bw) {
         const texts=bubbleTexts[r.emoji]||['コツサク〜！'];
         const text=texts[Math.floor(Math.random()*texts.length)];
         const bubble=document.createElement('div');
         bubble.className='runner-bubble'; bubble.textContent=text;
-        bubble.style.left=Math.max(4,Math.min(r.x-10,bw-130))+'px';
+        bubble.style.left=Math.max(4,Math.min(r.x-10,bw-140))+'px';
         bubble.style.top='4px';
         band.appendChild(bubble);
         setTimeout(()=>bubble.remove(), 1600);
       }
+
       const obs=new IntersectionObserver(entries=>{
         entries.forEach(e=>{ if(e.isIntersecting) startAnimation(); });
       },{threshold:0.3});
