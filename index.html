@@ -1317,89 +1317,117 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       <div class="sakura-diff-note">※端末・ブラウザによって誤差があります</div>`;
   }
 
-  // メインデータ取得
+  // summaryデータをUIに反映する共通関数（フェーズ3・4）
+  function applyStats(data, loading, body) {
+    const totalMins  = data.totalStudyMin || 0;
+    const totalHours = Math.round(totalMins / 60);
+    const sakuraCount = Math.floor(totalMins / 10);
+
+    // storyCounts・licenseCountsをIDキーからラベルキーに変換
+    const rawStory   = data.storyCounts   || {};
+    const rawLicense = data.licenseCounts || {};
+
+    const storyCounts   = {};
+    const licenseCounts = {};
+
+    Object.entries(rawStory).forEach(([id, count]) => {
+      if (count <= 0) return;
+      if (FICTION_IDS.includes(id)) {
+        const label = storyLabels[id] || id;
+        storyCounts[label] = (storyCounts[label] || 0) + count;
+      } else if (LICENSE_IDS.includes(id)) {
+        const label = licenseStoryLabels[id] || id;
+        licenseCounts[label] = (licenseCounts[label] || 0) + count;
+      }
+    });
+    Object.entries(rawLicense).forEach(([lc, count]) => {
+      if (count <= 0) return;
+      if (licenseCategoryLabels[lc]) {
+        const label = licenseCategoryLabels[lc];
+        licenseCounts[label] = (licenseCounts[label] || 0) + count;
+      }
+    });
+
+    // キャラレベルバー（avgLvはsummaryに含まれていないため固定値で代替）
+    // summaryにはavgLvがないので、totalStudyMinから簡易推定
+    const estAvgLv = Math.min(100, Math.max(1, Math.round(totalMins / 600)));
+    const fakeDocs = [{ level: estAvgLv }];
+    setCharLevels(fakeDocs);
+
+    // 🌸 みんなの軌跡：カウントアップアニメーション
+    const valHoursNum = document.getElementById('val-hours-num');
+    if (valHoursNum) {
+      const startHours = Math.max(0, totalHours - 20);
+      const countDur   = 5000;
+      valHoursNum.textContent = startHours;
+      const startTime = performance.now();
+      function tickHours(now) {
+        const p    = Math.min((now - startTime) / countDur, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        const cur  = Math.round(startHours + (totalHours - startHours) * ease);
+        valHoursNum.textContent = cur.toLocaleString();
+        if (p < 1) {
+          requestAnimationFrame(tickHours);
+        } else {
+          valHoursNum.textContent = totalHours.toLocaleString();
+          valHoursNum.classList.add('blink');
+        }
+      }
+      requestAnimationFrame(tickHours);
+    }
+
+    showDiff(sakuraCount);
+    saveSnapshot(sakuraCount);
+    launchParticles(sakuraCount);
+
+    renderBar('chart-story',   storyCounts,   false);
+    renderBar('chart-license', licenseCounts, true);
+    renderSegmentBar(storyCounts, licenseCounts);
+
+    const mainTotal    = Object.values(storyCounts).reduce((s,v)=>s+v,0);
+    const licenseTotal = Object.values(licenseCounts).reduce((s,v)=>s+v,0);
+    const storyTotal   = mainTotal + licenseTotal;
+    const mainPct    = storyTotal > 0 ? Math.round(mainTotal    / storyTotal * 100) : 0;
+    const licensePct = storyTotal > 0 ? Math.round(licenseTotal / storyTotal * 100) : 0;
+    updateTicker(totalHours.toLocaleString(), mainPct, licensePct, storyCounts, licenseCounts);
+
+    if (loading) loading.style.display = 'none';
+    if (body)    body.style.display    = 'block';
+  }
+
+  // メインデータ取得（フェーズ3・4：summary1件読み取り＋onSnapshotでリアルタイム更新）
   async function loadStats() {
     const loading = document.getElementById('stats-loading');
     const errEl   = document.getElementById('stats-error');
     const body    = document.getElementById('stats-body');
-    if(!db) {
-      if(loading) loading.style.display='none';
-      if(errEl){ errEl.style.display='block'; errEl.textContent='データを取得できませんでした。'; }
+    if (!db) {
+      if (loading) loading.style.display = 'none';
+      if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データを取得できませんでした。'; }
       return;
     }
     try {
-      const snap  = await db.collection('analytics').get();
-      const docs  = snap.docs.map(d=>d.data());
-      const total = docs.length;
-      const totalMins   = docs.reduce((s,d)=>s+(d.totalStudyMin||0),0);
-      const totalHours  = Math.round(totalMins/60);
-      const avgDaily    = total>0 ? Math.round(docs.reduce((s,d)=>s+(d.avgDailyMinutes||0),0)/total) : 0;
-      const avgStreak   = total>0 ? Math.round(docs.reduce((s,d)=>s+(d.streakDays||0),0)/total) : 0;
-      const sakuraCount = Math.floor(totalMins/10);
-
-
-
-      updateTicker(totalHours.toLocaleString(), 0, 0, {}, {});
-      setCharLevels(docs);
-
-      // 🌸 みんなの軌跡：-20時間から実値へカウントアップ→完了後に点滅
-      const valHoursNum = document.getElementById('val-hours-num');
-      const startHours  = Math.max(0, totalHours - 20);
-      const countDur    = 5000; // 5秒でゆっくりカウントアップ
-      if(valHoursNum){
-        valHoursNum.textContent = startHours;
-        const startTime = performance.now();
-        function tickHours(now) {
-          const p    = Math.min((now - startTime) / countDur, 1);
-          const ease = 1 - Math.pow(1 - p, 3);
-          const cur  = Math.round(startHours + (totalHours - startHours) * ease);
-          valHoursNum.textContent = cur.toLocaleString();
-          if(p < 1){
-            requestAnimationFrame(tickHours);
-          } else {
-            valHoursNum.textContent = totalHours.toLocaleString();
-            // カウントアップ完了→点滅スタート
-            valHoursNum.classList.add('blink');
+      // onSnapshot で analytics_summary/summary の1ドキュメントをリアルタイム購読
+      // ・初回接続時：1回読み取りでUIを描画
+      // ・以降：summaryが更新されるたびに自動でUIを再描画（リアルタイム化）
+      // ・読み取りコスト：ページを開く間に1回＋更新があった時のみ（全件読み取りから激減）
+      db.collection('analytics_summary').doc('summary').onSnapshot(
+        (snap) => {
+          if (!snap.exists) {
+            if (loading) loading.style.display = 'none';
+            if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'まだデータがありません。'; }
+            return;
           }
+          applyStats(snap.data(), loading, body);
+        },
+        (e) => {
+          if (loading) loading.style.display = 'none';
+          if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データの読み込みに失敗しました。'; }
+          console.warn('stats onSnapshot error:', e);
         }
-        requestAnimationFrame(tickHours);
-      }
-
-      showDiff(sakuraCount);
-      saveSnapshot(sakuraCount);
-      launchParticles(sakuraCount);
-
-
-
-      const storyCounts={}, licenseCounts={};
-      docs.forEach(d=>{
-        const s=d.storyMode||'', lc=d.licenseCategory||'';
-        if(FICTION_IDS.includes(s)){
-          const label=storyLabels[s]||s; storyCounts[label]=(storyCounts[label]||0)+1;
-        } else if(LICENSE_IDS.includes(s)){
-          const label=licenseStoryLabels[s]||s; licenseCounts[label]=(licenseCounts[label]||0)+1;
-        } else if(lc && licenseCategoryLabels[lc]){
-          const label=licenseCategoryLabels[lc]; licenseCounts[label]=(licenseCounts[label]||0)+1;
-        }
-      });
-      renderBar('chart-story',   storyCounts,   false);
-      renderBar('chart-license', licenseCounts, true);
-      renderSegmentBar(storyCounts, licenseCounts);
-
-      // ティッカーに割合を反映
-      const mainTotal    = Object.values(storyCounts).reduce((s,v)=>s+v,0);
-      const licenseTotal = Object.values(licenseCounts).reduce((s,v)=>s+v,0);
-      const storyTotal   = mainTotal + licenseTotal;
-      const mainPct    = storyTotal > 0 ? Math.round(mainTotal    / storyTotal * 100) : 0;
-      const licensePct = storyTotal > 0 ? Math.round(licenseTotal / storyTotal * 100) : 0;
-      updateTicker(totalHours.toLocaleString(), mainPct, licensePct, storyCounts, licenseCounts);
-
-      if(loading) loading.style.display='none';
-      if(body)    body.style.display='block';
-
+      );
     } catch(e) {
-      if(loading) loading.style.display='none';
-      if(errEl){ errEl.style.display='block'; errEl.textContent='データの読み込みに失敗しました。'; }
+      if (loading) loading.style.display = 'none';
+      if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データの読み込みに失敗しました。'; }
       console.warn('stats load error:', e);
     }
   }
