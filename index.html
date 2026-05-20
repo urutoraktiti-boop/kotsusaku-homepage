@@ -1342,7 +1342,12 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     });
     Object.entries(rawLicense).forEach(([lc, count]) => {
       if (count <= 0) return;
-      if (licenseCategoryLabels[lc]) {
+      if (licenseStoryLabels[lc]) {
+        // 資格ストーリーID（sharoshi, zeirishi, takken など）
+        const label = licenseStoryLabels[lc];
+        licenseCounts[label] = (licenseCounts[label] || 0) + count;
+      } else if (licenseCategoryLabels[lc]) {
+        // カテゴリキー（tax_accountant, real_estate など）
         const label = licenseCategoryLabels[lc];
         licenseCounts[label] = (licenseCounts[label] || 0) + count;
       }
