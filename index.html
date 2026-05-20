@@ -1374,13 +1374,13 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     setCharLevels(fakeDocs);
 
     // 🌸 みんなの軌跡：カウントアップアニメーション
-    const valHoursNum = document.getElementById(`'val-hours-num`');
+    const valHoursNum = document.getElementById('val-hours-num');
     if (valHoursNum) {
       const isFirst    = _statsFirstLoad;
       const countDur   = isFirst ? 30000 : 3000;
-      const startHours = isFirst ? Math.max(0, totalHours - 20) : parseInt(valHoursNum.textContent.replace(/,/g, `'`') || 0, 10);
+      const startHours = isFirst ? Math.max(0, totalHours - 20) : parseInt(valHoursNum.textContent.replace(/,/g, '') || 0, 10);
       _statsFirstLoad  = false;
-      valHoursNum.classList.remove(`'blink`');
+      valHoursNum.classList.remove('blink');
       valHoursNum.textContent = startHours;
       const startTime = performance.now();
       function tickHours(now) {
@@ -1392,7 +1392,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
           requestAnimationFrame(tickHours);
         } else {
           valHoursNum.textContent = totalHours.toLocaleString();
-          valHoursNum.classList.add(`'blink`');
+          valHoursNum.classList.add('blink');
         }
       }
       requestAnimationFrame(tickHours);
