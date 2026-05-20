@@ -268,6 +268,12 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   border-top:1px solid rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.7);
   z-index:10;
   isolation:isolate;
+  /* スクロール安定化：はみ出し分の余白を上下に確保 */
+  margin:60px 0;
+  /* GPU描画でスクロールをなめらかに */
+  will-change:transform;
+  /* レイアウトシフト防止 */
+  contain:layout style;
 }
 @keyframes bandShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .runner-track{position:absolute;inset:0;display:flex;align-items:center;}
@@ -278,6 +284,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   top:50%;
   transform:translateY(-50%);
   z-index:11;
+  will-change:transform,left;
 }
 .runner-bounce{animation:runBounce .26s ease-in-out infinite alternate;}
 @keyframes runBounce{from{transform:translateY(-50%) scaleY(1) rotate(-4deg);}to{transform:translateY(calc(-50% + 5px)) scaleY(.86) rotate(4deg);}}
@@ -617,10 +624,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   </div>
 </nav>
 
-<!-- NAV直下ランナー帯（新規追加）・上方向はみ出し用に余白を設ける -->
-<div style="padding-top:32px;position:relative;z-index:10;">
-  <div class="runner-band" data-runner="🥦 🌸 🦍 🥸" data-speed="2.0"></div>
-</div>
+<!-- NAV直下ランナー帯 -->
+<div class="runner-band" data-runner="🥦 🌸 🦍 🥸" data-speed="2.0"></div>
 
 <main>
 
