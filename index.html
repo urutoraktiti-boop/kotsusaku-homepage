@@ -1415,21 +1415,18 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   }
 
   // メインデータ取得（フェーズ3・4：summary1件読み取り＋onSnapshotでリアルタイム更新）
-  async function loadStats() {
+  // 最適化：ページが非表示（バックグラウンド・別タブ）のときは購読を停止し、
+  // 再表示時に再購読する。読み取りコストを大幅に削減。
+  let _statsUnsubscribe = null;
+
+  function _subscribeStats() {
+    if (_statsUnsubscribe) return;
     const loading = document.getElementById('stats-loading');
     const errEl   = document.getElementById('stats-error');
     const body    = document.getElementById('stats-body');
-    if (!db) {
-      if (loading) loading.style.display = 'none';
-      if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データを取得できませんでした。'; }
-      return;
-    }
+    if (!db) return;
     try {
-      // onSnapshot で analytics_summary/summary の1ドキュメントをリアルタイム購読
-      // ・初回接続時：1回読み取りでUIを描画
-      // ・以降：summaryが更新されるたびに自動でUIを再描画（リアルタイム化）
-      // ・読み取りコスト：ページを開く間に1回＋更新があった時のみ（全件読み取りから激減）
-      db.collection('analytics_summary').doc('summary').onSnapshot(
+      _statsUnsubscribe = db.collection('analytics_summary').doc('summary').onSnapshot(
         (snap) => {
           if (!snap.exists) {
             if (loading) loading.style.display = 'none';
@@ -1442,6 +1439,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
           if (loading) loading.style.display = 'none';
           if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データの読み込みに失敗しました。'; }
           console.warn('stats onSnapshot error:', e);
+          _statsUnsubscribe = null;
         }
       );
     } catch(e) {
@@ -1449,6 +1447,33 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データの読み込みに失敗しました。'; }
       console.warn('stats load error:', e);
     }
+  }
+
+  function _unsubscribeStats() {
+    if (_statsUnsubscribe) {
+      _statsUnsubscribe();
+      _statsUnsubscribe = null;
+    }
+  }
+
+  // ページの表示・非表示に応じて購読を制御
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      _unsubscribeStats(); // バックグラウンドになったら停止
+    } else {
+      _subscribeStats();   // 再表示されたら再購読
+    }
+  });
+
+  async function loadStats() {
+    const loading = document.getElementById('stats-loading');
+    const errEl   = document.getElementById('stats-error');
+    if (!db) {
+      if (loading) loading.style.display = 'none';
+      if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データを取得できませんでした。'; }
+      return;
+    }
+    _subscribeStats();
   }
 
   // インストール済みの方はこちら
