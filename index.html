@@ -1050,16 +1050,19 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 (function(){
   const db = (() => {
     try {
-      firebase.initializeApp({
-        apiKey:"AIzaSyCx3hjG_55Voipdjnn25szsMZiGPC0Hv8Y",
-        authDomain:"kotsusaku-app.firebaseapp.com",
-        projectId:"kotsusaku-app",
-        storageBucket:"kotsusaku-app.firebasestorage.app",
-        messagingSenderId:"394043383608",
-        appId:"1:394043383608:web:433cc0d00b59ec71e86bcd"
-      });
-      return firebase.firestore();
-    } catch(e){ return null; }
+      // すでに初期化済みの場合は既存アプリを再利用する
+      const app = firebase.apps.length
+        ? firebase.app()
+        : firebase.initializeApp({
+            apiKey:"AIzaSyCx3hjG_55Voipdjnn25szsMZiGPC0Hv8Y",
+            authDomain:"kotsusaku-app.firebaseapp.com",
+            projectId:"kotsusaku-app",
+            storageBucket:"kotsusaku-app.firebasestorage.app",
+            messagingSenderId:"394043383608",
+            appId:"1:394043383608:web:433cc0d00b59ec71e86bcd"
+          });
+      return app.firestore();
+    } catch(e){ console.warn('Firebase init error:', e); return null; }
   })();
 
   const storyLabels = {
