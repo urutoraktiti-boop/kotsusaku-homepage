@@ -1330,6 +1330,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
   // 初回表示フラグ（true=初回、false=2回目以降のリアルタイム更新）
   let _statsFirstLoad = true;
+  let _sakuraParticlesStarted = false;
 
   // summaryデータをUIに反映する共通関数（フェーズ3・4）
   function applyStats(data, loading, body) {
@@ -1400,7 +1401,10 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
     showDiff(sakuraCount);
     saveSnapshot(sakuraCount);
-    launchParticles(sakuraCount);
+    if (!_sakuraParticlesStarted) {
+      _sakuraParticlesStarted = true;
+      launchParticles(sakuraCount);
+    }
 
     renderBar('chart-story',   storyCounts,   false);
     renderBar('chart-license', licenseCounts, true);
@@ -1417,34 +1421,25 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     if (body)    body.style.display    = 'block';
   }
 
-  // メインデータ取得（フェーズ3・4：summary1件読み取り＋onSnapshotでリアルタイム更新）
-  // 最適化：ページが非表示（バックグラウンド・別タブ）のときは購読を停止し、
-  // 再表示時に再購読する。読み取りコストを大幅に削減。
-  let _statsUnsubscribe = null;
+  // メインデータ取得：summary 1件を60秒ごとに取得。
+  // onSnapshotの常時購読は、開きっぱなしタブ数に比例して読み取りが増えるため停止。
+  const STATS_POLL_INTERVAL_MS = 60 * 1000;
+  let _statsPollTimer = null;
 
-  function _subscribeStats() {
-    if (_statsUnsubscribe) return;
+  async function _fetchStatsOnce() {
     const loading = document.getElementById('stats-loading');
     const errEl   = document.getElementById('stats-error');
     const body    = document.getElementById('stats-body');
     if (!db) return;
     try {
-      _statsUnsubscribe = db.collection('analytics_summary').doc('summary').onSnapshot(
-        (snap) => {
-          if (!snap.exists) {
-            if (loading) loading.style.display = 'none';
-            if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'まだデータがありません。'; }
-            return;
-          }
-          applyStats(snap.data(), loading, body);
-        },
-        (e) => {
-          if (loading) loading.style.display = 'none';
-          if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データの読み込みに失敗しました。'; }
-          console.warn('stats onSnapshot error:', e);
-          _statsUnsubscribe = null;
-        }
-      );
+      const snap = await db.collection('analytics_summary').doc('summary').get();
+      if (!snap.exists) {
+        if (loading) loading.style.display = 'none';
+        if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'まだデータがありません。'; }
+        return;
+      }
+      if (errEl) errEl.style.display = 'none';
+      applyStats(snap.data(), loading, body);
     } catch(e) {
       if (loading) loading.style.display = 'none';
       if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データの読み込みに失敗しました。'; }
@@ -1452,19 +1447,25 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     }
   }
 
-  function _unsubscribeStats() {
-    if (_statsUnsubscribe) {
-      _statsUnsubscribe();
-      _statsUnsubscribe = null;
+  function _startStatsPolling() {
+    if (_statsPollTimer || document.hidden) return;
+    _fetchStatsOnce();
+    _statsPollTimer = setInterval(_fetchStatsOnce, STATS_POLL_INTERVAL_MS);
+  }
+
+  function _stopStatsPolling() {
+    if (_statsPollTimer) {
+      clearInterval(_statsPollTimer);
+      _statsPollTimer = null;
     }
   }
 
-  // ページの表示・非表示に応じて購読を制御
+  // ページの表示・非表示に応じて取得を制御
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-      _unsubscribeStats(); // バックグラウンドになったら停止
+      _stopStatsPolling();
     } else {
-      _subscribeStats();   // 再表示されたら再購読
+      _startStatsPolling();
     }
   });
 
@@ -1476,7 +1477,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データを取得できませんでした。'; }
       return;
     }
-    _subscribeStats();
+    _startStatsPolling();
   }
 
   // インストール済みの方はこちら
