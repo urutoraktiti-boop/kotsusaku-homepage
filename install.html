@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>インストール方法 | コツコツサクサク</title>
+<meta name="description" content="コツコツサクサクをホーム画面に追加する方法。iPhone・iPad・Android・PCごとに図解で分かりやすく説明します。">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NXV6WLDRFX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NXV6WLDRFX');
+</script>
+<style>
+:root{
+  --ink:#172033;--soft:#647084;--green:#35b95b;--pink:#f06a9d;
+  --sky:#60c8ff;--yellow:#ffd94f;--cream:#fff9e8;--mint:#e5ffe8;
+  --rose:#ffe6f0;--blue:#e4f6ff;--line:#e7edf5;
+  --shadow:0 22px 48px rgba(73,91,125,.12);
+  --warn:#ff6b35;--warn-bg:#fff4ef;--warn-line:#ffd4c2;
+  --red:#e53935;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;overflow-x:hidden;}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);border-bottom:1px solid rgba(220,228,240,.7);backdrop-filter:blur(20px);}
+.nav-inner{width:min(1180px,100%);margin:auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.brand{font-size:clamp(15px,2.4vw,22px);font-weight:1000;white-space:nowrap;text-decoration:none;color:var(--ink);}
+.brand .green{color:var(--green)}.brand .pink{color:var(--pink)}
+.nav-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--soft);text-decoration:none;font-size:13px;font-weight:800;padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);transition:background .15s,border-color .15s;}
+.back-btn:hover{background:var(--mint);border-color:var(--green);}
+.back-btn.primary{color:#fff;background:var(--green);border-color:var(--green);}
+.back-btn.primary:hover{background:#2ea64f;border-color:#2ea64f;}
+@media(max-width:560px){.nav-inner{align-items:flex-start;}.nav-actions{gap:6px;}.back-btn{font-size:12px;padding:6px 10px;}}
+
+/* 点滅赤丸 */
+@keyframes redPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(.7);}}
+.pulse-dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--red);flex-shrink:0;animation:redPulse 1.1s ease-in-out infinite;box-shadow:0 0 0 3px rgba(229,57,53,.25);}
+.tap-target{position:relative;display:inline-flex;align-items:center;justify-content:center;}
+.tap-target .pulse-dot{position:absolute;top:-4px;right:-4px;width:10px;height:10px;}
+.here-label{display:inline-flex;align-items:center;gap:5px;background:var(--red);color:#fff;font-size:.65rem;font-weight:1000;padding:3px 9px 3px 6px;border-radius:999px;white-space:nowrap;}
+.here-label:before{content:"\25B6";font-size:.5rem;}
+
+/* Chrome警告 */
+.chrome-warning{display:none;background:var(--warn-bg);border:2px solid var(--warn-line);border-radius:20px;padding:18px 20px;margin:20px auto;width:min(860px,calc(100% - 40px));}
+.chrome-warning.show{display:flex;align-items:flex-start;gap:14px;}
+.chrome-warning-icon{font-size:1.8rem;flex-shrink:0;margin-top:2px;}
+.chrome-warning-title{font-size:.95rem;font-weight:1000;color:var(--warn);margin-bottom:6px;}
+.chrome-warning-text{font-size:.82rem;color:var(--ink);line-height:1.75;}
+.chrome-warning-steps{margin:10px 0 0;display:flex;flex-direction:column;gap:7px;}
+.chrome-warning-step{display:flex;align-items:flex-start;gap:10px;background:#fff;border:1px solid var(--warn-line);border-radius:12px;padding:10px 14px;}
+.chrome-warning-step-num{width:22px;height:22px;border-radius:50%;background:var(--warn);color:#fff;font-size:.7rem;font-weight:1000;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.chrome-warning-step-text{font-size:.78rem;line-height:1.6;color:var(--ink);}
+.chrome-warning-step-text b{color:var(--warn);}
+
+/* HERO */
+.hero{padding:48px 20px 40px;text-align:center;background:radial-gradient(circle at 10% 10%,#fff0a8 0 8%,transparent 22%),radial-gradient(circle at 90% 12%,#ffd7e8 0 10%,transparent 24%),radial-gradient(circle at 12% 86%,#d6fff0 0 12%,transparent 28%),linear-gradient(135deg,#fffdf6 0%,#f2fbff 44%,#fff4f8 100%);}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 24px rgba(73,91,125,.08);border-radius:999px;padding:7px 14px;color:#25984b;font-size:13px;font-weight:1000;margin-bottom:16px;}
+.hero h1{font-size:clamp(28px,5vw,56px);font-weight:1000;line-height:1.1;margin-bottom:14px;}
+.hero h1 .g{color:var(--green)}.hero h1 .p{color:var(--pink)}
+.hero-sub{font-size:clamp(14px,1.8vw,17px);color:var(--soft);line-height:1.8;max-width:560px;margin:0 auto;}
+
+/* タブ */
+.tab-wrap{width:min(860px,100%);margin:40px auto 0;padding:0 20px;}
+.tab-label{font-size:.7rem;font-weight:900;color:var(--soft);letter-spacing:.1em;text-align:center;margin-bottom:12px;}
+.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.tab-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 18px;border-radius:20px;border:2px solid var(--line);background:#fff;cursor:pointer;font-family:inherit;transition:all .2s;min-width:88px;}
+.tab-btn:hover{border-color:var(--green);background:var(--mint);}
+.tab-btn.active{border-color:var(--ink);background:var(--ink);color:#fff;}
+.tab-btn .tab-icon{font-size:1.6rem;line-height:1;}
+.tab-btn .tab-name{font-size:.72rem;font-weight:1000;white-space:nowrap;}
+.tab-btn.active .tab-name{color:#fff;}
+
+/* パネル */
+.panels{width:min(860px,100%);margin:28px auto 60px;padding:0 20px;}
+.panel{display:none;}.panel.active{display:block;}
+.browser-switch{display:flex;gap:10px;margin-bottom:28px;background:var(--line);border-radius:16px;padding:5px;}
+.browser-btn{flex:1;padding:10px;border-radius:12px;border:none;background:transparent;font-family:inherit;font-size:.82rem;font-weight:900;cursor:pointer;transition:all .18s;color:var(--soft);}
+.browser-btn.active{background:#fff;color:var(--ink);box-shadow:0 4px 12px rgba(73,91,125,.12);}
+.browser-panel{display:none;}.browser-panel.active{display:block;}
+.switch-notice{background:var(--warn-bg);border:2px solid var(--warn-line);border-radius:20px;padding:20px 22px;margin-bottom:24px;}
+.switch-notice-title{font-size:.9rem;font-weight:1000;color:var(--warn);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.switch-steps{display:flex;flex-direction:column;gap:10px;}
+.switch-step{display:flex;align-items:flex-start;gap:12px;}
+.switch-step-num{width:26px;height:26px;border-radius:50%;background:var(--warn);color:#fff;font-size:.75rem;font-weight:1000;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.switch-step-body{flex:1;}
+.switch-step-title{font-size:.85rem;font-weight:900;margin-bottom:3px;}
+.switch-step-desc{font-size:.75rem;color:var(--soft);line-height:1.6;}
+.switch-step-code{display:inline-block;background:#fff;border:1px solid var(--warn-line);border-radius:8px;padding:4px 10px;font-size:.78rem;font-weight:800;color:var(--warn);margin-top:4px;word-break:break-all;}
+.version-note{font-size:.72rem;font-weight:800;color:var(--soft);margin-bottom:10px;text-align:center;}
+.version-switch{display:flex;gap:8px;margin-bottom:24px;background:var(--line);border-radius:14px;padding:4px;}
+.version-btn{flex:1;padding:9px;border-radius:10px;border:none;background:transparent;font-family:inherit;font-size:.78rem;font-weight:900;cursor:pointer;transition:all .18s;color:var(--soft);}
+.version-btn.active{background:#fff;color:var(--ink);box-shadow:0 3px 10px rgba(73,91,125,.1);}
+.version-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(90deg,var(--green),#7ee8a2);color:#fff;font-size:.6rem;font-weight:1000;padding:2px 8px;border-radius:999px;margin-left:4px;vertical-align:middle;}
+.version-panel{display:none;}.version-panel.active{display:block;}
+
+/* ステップ */
+.steps-title{font-size:1rem;font-weight:1000;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.steps-title-badge{background:var(--ink);color:#fff;font-size:.62rem;font-weight:900;padding:3px 10px;border-radius:999px;}
+.step-progress{display:flex;align-items:center;gap:6px;margin-bottom:18px;}
+.step-progress-bar{flex:1;height:4px;background:var(--line);border-radius:999px;overflow:hidden;}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#7ee8a2);border-radius:999px;transition:width .5s ease;}
+.step-progress-label{font-size:.65rem;font-weight:900;color:var(--soft);white-space:nowrap;}
+.step-list{display:flex;flex-direction:column;gap:0;margin-bottom:28px;}
+.step-wrap{display:flex;flex-direction:column;align-items:stretch;}
+.step-connector{display:flex;justify-content:flex-start;padding-left:34px;height:22px;align-items:center;}
+.step-connector-line{width:2px;height:22px;background:linear-gradient(to bottom,var(--line),var(--green));border-radius:999px;margin-left:17px;}
+.step-card{display:flex;align-items:flex-start;gap:16px;background:#fff;border:1.5px solid var(--line);border-radius:22px;padding:18px 20px;box-shadow:0 6px 20px rgba(73,91,125,.07);transition:border-color .2s,box-shadow .2s;position:relative;}
+.step-card.done{border-color:var(--green);background:linear-gradient(135deg,#f0fff4,#fff);}
+.step-num{width:36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;font-size:.9rem;font-weight:1000;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:background .3s;}
+.step-card.done .step-num{background:var(--green);}
+.step-body{flex:1;}
+.step-title{font-size:.95rem;font-weight:1000;margin-bottom:5px;line-height:1.3;}
+.step-desc{font-size:.8rem;color:var(--soft);line-height:1.7;}
+.step-desc b{color:var(--ink);}
+.step-visual{margin-top:12px;}
+.done-btn{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:8px 18px;border-radius:999px;border:2px solid var(--line);background:#fff;font-family:inherit;font-size:.78rem;font-weight:900;cursor:pointer;color:var(--soft);transition:all .2s;}
+.done-btn:hover{border-color:var(--green);color:var(--green);background:var(--mint);}
+.done-btn.checked{background:var(--green);border-color:var(--green);color:#fff;}
+.step-hint-toggle{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:.72rem;font-weight:900;color:var(--soft);cursor:pointer;border:none;background:none;font-family:inherit;padding:0;}
+.step-hint-toggle:hover{color:var(--ink);}
+.step-hint-arrow{transition:transform .2s;}
+.step-hint-toggle.open .step-hint-arrow{transform:rotate(180deg);}
+.step-hint-body{display:none;margin-top:8px;background:var(--blue);border-radius:12px;padding:10px 14px;font-size:.75rem;color:var(--soft);line-height:1.7;}
+.step-hint-body.open{display:block;}
+
+/* モックUI共通 */
+.mock-highlight{background:linear-gradient(90deg,#fff8dc,#fffef0);border:2px solid var(--yellow);border-radius:12px;padding:10px 14px;display:flex;align-items:flex-start;gap:10px;margin-top:8px;}
+.mock-highlight-icon{font-size:1.2rem;flex-shrink:0;margin-top:1px;}
+.mock-highlight-text{font-size:.75rem;font-weight:900;color:var(--ink);line-height:1.5;}
+
+/* iPhone モック */
+.ui-iphone{background:#1c1c1e;border-radius:24px;overflow:hidden;max-width:300px;border:3px solid #3a3a3c;}
+.ui-iphone-bar{background:#1c1c1e;padding:8px 14px 6px;display:flex;align-items:center;justify-content:space-between;}
+.ui-iphone-url-wrap{flex:1;background:#2c2c2e;border-radius:10px;padding:6px 10px;margin:0 6px;display:flex;align-items:center;justify-content:space-between;}
+.ui-iphone-url{font-size:.6rem;color:rgba(255,255,255,.6);}
+.ui-iphone-content{background:#f2f2f7;min-height:44px;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--soft);padding:10px;}
+.ui-iphone-toolbar{background:#fff;border-top:1px solid var(--line);padding:8px 14px;display:flex;align-items:center;justify-content:space-around;}
+.ui-toolbar-btn{font-size:.65rem;display:flex;flex-direction:column;align-items:center;gap:1px;}
+.ui-toolbar-btn span{font-size:1rem;}
+.ui-ios26-sheet{background:#f2f2f7;border-radius:16px 16px 0 0;border-top:1px solid var(--line);padding:10px 0 4px;}
+.ui-ios26-sheet-handle{width:36px;height:4px;background:#c7c7cc;border-radius:999px;margin:0 auto 10px;}
+.ui-ios26-menu-item{padding:11px 16px;display:flex;align-items:center;gap:10px;font-size:.72rem;font-weight:700;border-bottom:1px solid rgba(0,0,0,.07);background:#fff;color:var(--ink);}
+.ui-ios26-menu-item:last-child{border-bottom:none;}
+.ui-ios26-menu-item.hl{background:linear-gradient(90deg,#e8fff0,#f8fff0);color:var(--green);font-weight:1000;}
+.ui-ios26-menu-item .mi-icon{font-size:1rem;width:24px;text-align:center;}
+.ui-ios26-dots{background:#3a3a3c;border-radius:8px;padding:5px 9px;font-size:.85rem;color:#fff;font-weight:900;letter-spacing:1px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
+.ui-share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 12px;background:#f2f2f7;}
+.ui-share-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.58rem;color:var(--ink);}
+.ui-share-item-icon{width:44px;height:44px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 2px 6px rgba(0,0,0,.1);position:relative;}
+.ui-share-item.hl .ui-share-item-icon{background:linear-gradient(135deg,#e8fff0,#d0f8e0);border:2px solid var(--green);}
+.ui-share-btn-18{background:#007aff;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;position:relative;}
+
+/* PC モック */
+.ui-pc{background:#e8eaf0;border-radius:14px;overflow:hidden;max-width:400px;border:2px solid #d0d4de;}
+.ui-pc-titlebar{background:#d0d3dc;padding:7px 12px;display:flex;align-items:center;gap:8px;}
+.ui-pc-dots-wrap{display:flex;gap:5px;}
+.ui-pc-dot{width:11px;height:11px;border-radius:50%;}
+.ui-pc-urlbar{flex:1;background:#fff;border-radius:6px;padding:4px 10px;font-size:.6rem;color:var(--soft);display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.ui-pc-urlbar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+.ui-pc-menu-btn{background:#e8eaf0;border-radius:5px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--soft);font-weight:900;position:relative;}
+.ui-pc-content{background:#f8f9fb;min-height:48px;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--soft);padding:12px;}
+.ui-pc-dropdown{background:#fff;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);overflow:hidden;margin-top:6px;}
+.ui-pc-dd-item{padding:9px 14px;font-size:.7rem;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);color:var(--ink);font-weight:700;}
+.ui-pc-dd-item:last-child{border-bottom:none;}
+.ui-pc-dd-item.hl{background:linear-gradient(90deg,#e8fff0,#f8fff0);color:var(--green);font-weight:1000;}
+
+/* Android モック */
+.ui-android{background:#fff;border-radius:16px;overflow:hidden;max-width:300px;border:2px solid #dde3ee;}
+.ui-android-bar{background:#202124;padding:8px 12px;display:flex;align-items:center;gap:8px;}
+.ui-android-url{flex:1;background:rgba(255,255,255,.12);border-radius:6px;padding:4px 8px;font-size:.6rem;color:rgba(255,255,255,.75);}
+.ui-android-kebab{font-size:1rem;color:rgba(255,255,255,.8);font-weight:900;position:relative;}
+.ui-android-body{padding:10px 12px;background:#fff;}
+.ui-android-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.72rem;font-weight:700;color:var(--ink);}
+.ui-android-row:last-child{border-bottom:none;}
+.ui-android-row.hl{color:var(--green);font-weight:1000;background:linear-gradient(90deg,#e8fff0,transparent);margin:0 -12px;padding:9px 12px;}
+.ui-android-row .ri{font-size:1.1rem;width:26px;text-align:center;}
+
+/* Mac モック */
+.ui-mac{background:#f5f5f7;border-radius:12px;overflow:hidden;max-width:400px;border:2px solid #d2d2d7;}
+.ui-mac-titlebar{background:#e0e0e5;padding:7px 12px;display:flex;align-items:center;gap:8px;}
+.ui-mac-menubar{background:#3a3a3c;padding:5px 14px;display:flex;align-items:center;gap:16px;}
+.ui-mac-menu-item{font-size:.65rem;color:rgba(255,255,255,.75);font-weight:700;cursor:pointer;padding:2px 6px;border-radius:4px;}
+.ui-mac-menu-item.hl{background:rgba(255,255,255,.2);color:#fff;}
+.ui-mac-dropdown{background:#fff;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.15);overflow:hidden;margin:4px 0 4px 14px;max-width:180px;}
+.ui-mac-dd-item{padding:8px 14px;font-size:.7rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);color:var(--ink);font-weight:700;}
+.ui-mac-dd-item:last-child{border-bottom:none;}
+.ui-mac-dd-item.hl{background:var(--blue);color:#0066cc;font-weight:1000;}
+.ui-mac-content{background:#fff;min-height:40px;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--soft);padding:10px;}
+
+/* 完了バナー */
+.done-banner{background:linear-gradient(135deg,var(--mint),#e8f8ff);border:2px solid rgba(53,185,91,.3);border-radius:20px;padding:20px 22px;display:flex;align-items:center;gap:14px;margin-top:4px;}
+.done-icon{font-size:2rem;flex-shrink:0;}
+.done-title{font-size:.95rem;font-weight:1000;color:var(--green);margin-bottom:4px;}
+.done-text{font-size:.78rem;color:var(--soft);line-height:1.6;}
+
+/* 日付バー */
+.info-date-bar{width:min(860px,100%);margin:0 auto 20px;padding:0 20px;}
+.info-date-inner{display:flex;align-items:center;gap:8px;background:var(--blue);border:1px solid #c8e6f7;border-radius:12px;padding:10px 16px;font-size:.72rem;color:var(--soft);font-weight:800;}
+.info-date-icon{font-size:1rem;}
+
+/* FAQ */
+.faq-section{width:min(860px,100%);margin:0 auto 60px;padding:0 20px;}
+.faq-title{font-size:1.4rem;font-weight:1000;margin-bottom:20px;}
+.faq-list{display:flex;flex-direction:column;gap:10px;}
+.faq-item{border:1.5px solid var(--line);border-radius:18px;overflow:hidden;}
+.faq-q{width:100%;text-align:left;padding:16px 20px;background:#fff;border:none;font-family:inherit;font-size:.88rem;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--ink);transition:background .15s;}
+.faq-q:hover{background:var(--blue);}
+.faq-q-text{flex:1;}
+.faq-arrow{font-size:.8rem;transition:transform .25s;color:var(--soft);}
+.faq-item.open .faq-arrow{transform:rotate(180deg);}
+.faq-a{display:none;padding:0 20px 16px;font-size:.82rem;color:var(--soft);line-height:1.8;background:#fff;}
+.faq-item.open .faq-a{display:block;}
+
+/* CTA */
+.cta-section{padding:48px 20px 80px;text-align:center;}
+.cta-inner{background:var(--ink);border-radius:36px;padding:40px 24px;max-width:640px;margin:0 auto;position:relative;overflow:hidden;}
+.cta-inner:before{content:"";position:absolute;right:-40px;bottom:-60px;width:180px;height:180px;border-radius:50%;background:var(--green);}
+.cta-inner:after{content:"";position:absolute;left:-40px;top:-60px;width:160px;height:160px;border-radius:50%;background:var(--pink);}
+.cta-inner h2{position:relative;z-index:1;font-size:clamp(22px,4vw,38px);font-weight:1000;color:#fff;margin-bottom:12px;}
+.cta-inner p{position:relative;z-index:1;color:rgba(255,255,255,.7);font-size:.85rem;line-height:1.8;margin-bottom:24px;}
+.cta-btn{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;background:#fff;color:var(--ink);font-weight:1000;font-size:.95rem;padding:0 28px;min-height:52px;border-radius:999px;text-decoration:none;box-shadow:0 14px 28px rgba(0,0,0,.15);transition:transform .18s,box-shadow .18s;}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 20px 36px rgba(0,0,0,.2);}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+@media(max-width:600px){
+  .tabs{gap:6px;}.tab-btn{min-width:72px;padding:12px 10px;}
+  .step-card{flex-direction:column;gap:10px;}.step-num{width:30px;height:30px;font-size:.8rem;}
+  .step-connector-line{margin-left:14px;}
+}
+
+
+/* できないボタン */
+.cant-btn{display:inline-flex;align-items:center;gap:6px;margin-top:14px;margin-left:8px;padding:8px 16px;border-radius:999px;border:2px solid var(--warn-line);background:#fff;font-family:inherit;font-size:.78rem;font-weight:900;cursor:pointer;color:var(--warn);transition:all .2s;}
+.cant-btn:hover{background:var(--warn-bg);border-color:var(--warn);}
+
+/* フィードバックセクション */
+.feedback-section{width:min(860px,100%);margin:0 auto 40px;padding:0 20px;}
+.feedback-card{background:linear-gradient(135deg,#fff8f0,#fff0f8);border:2px solid var(--warn-line);border-radius:24px;padding:24px 24px 20px;}
+.feedback-title{font-size:1rem;font-weight:1000;color:var(--ink);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.feedback-sub{font-size:.78rem;color:var(--soft);line-height:1.7;margin-bottom:16px;}
+.feedback-info{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:.75rem;color:var(--soft);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.feedback-info-label{font-weight:900;color:var(--ink);}
+.feedback-info-val{color:var(--green);font-weight:900;}
+.feedback-textarea{width:100%;min-height:80px;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;font-family:inherit;font-size:.82rem;color:var(--ink);resize:vertical;outline:none;transition:border-color .2s;}
+.feedback-textarea:focus{border-color:var(--green);}
+.feedback-note{font-size:.68rem;color:var(--soft);margin:6px 0 14px;line-height:1.6;}
+.feedback-btn{display:inline-flex;align-items:center;gap:8px;background:var(--warn);color:#fff;border:none;border-radius:999px;padding:10px 24px;font-family:inherit;font-size:.82rem;font-weight:1000;cursor:pointer;transition:transform .18s,box-shadow .18s;box-shadow:0 8px 20px rgba(255,107,53,.25);}
+.feedback-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(255,107,53,.3);}
+.feedback-sent{display:none;background:var(--mint);border:2px solid rgba(53,185,91,.3);border-radius:12px;padding:12px 16px;font-size:.8rem;font-weight:800;color:var(--green);text-align:center;}
+.feedback-sent.show{display:block;}
+
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="https://urutoraktiti-boop.github.io/kotsusaku-app/"><span class="green">コツコツ</span> <span class="pink">サクサク</span></a>
+    <div class="nav-actions">
+      <a class="back-btn primary" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">← アプリに戻る</a>
+      <a class="back-btn" href="https://urutoraktiti-boop.github.io/kotsusaku-homepage/">公式ホームページへ</a>
+    </div>
+  </div>
+</nav>
+
+<div class="chrome-warning" id="chrome-warning">
+  <div class="chrome-warning-icon">&#x26A0;&#xFE0F;</div>
+  <div>
+    <div class="chrome-warning-title">今、Google Chrome で開いています</div>
+    <div class="chrome-warning-text">iPhone・iPad は <b>Safari でないとホーム画面に追加できません。</b><br>下の手順で Safari に切り替えてください。</div>
+    <div class="chrome-warning-steps">
+      <div class="chrome-warning-step"><div class="chrome-warning-step-num">1</div><div class="chrome-warning-step-text">Chrome のアドレスバーのURLを<b>長押し → コピー</b></div></div>
+      <div class="chrome-warning-step"><div class="chrome-warning-step-num">2</div><div class="chrome-warning-step-text">ホーム画面から <b>Safari（白いコンパスアイコン）</b> を開く</div></div>
+      <div class="chrome-warning-step"><div class="chrome-warning-step-num">3</div><div class="chrome-warning-step-text">Safari のアドレスバーにURLを<b>貼り付けて開く</b></div></div>
+      <div class="chrome-warning-step"><div class="chrome-warning-step-num">4</div><div class="chrome-warning-step-text">Safari で開いたら「iPhone」タブ →「Safari で開いている」を選んで手順へ</div></div>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="eyebrow">&#x1F4F2; インストール方法</div>
+  <h1><span class="g">ホーム画面に追加</span>して、<br><span class="p">アプリのように</span>使おう。</h1>
+  <p class="hero-sub">ダウンロード不要。ホーム画面に追加するだけで、起動がずっとスムーズになります。<br>端末を選んで、ステップ通りに進めるだけでOKです。</p>
+</section>
+
+<div class="tab-wrap reveal">
+  <div class="tab-label">&#x1F4F1; 使っている端末を選んでください</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('iphone',this)"><span class="tab-icon">&#x1F4F1;</span><span class="tab-name">iPhone</span></button>
+    <button class="tab-btn" onclick="switchTab('ipad',this)"><span class="tab-icon">&#x1F4DF;</span><span class="tab-name">iPad</span></button>
+    <button class="tab-btn" onclick="switchTab('android',this)"><span class="tab-icon">&#x1F916;</span><span class="tab-name">Android</span></button>
+    <button class="tab-btn" onclick="switchTab('pc',this)"><span class="tab-icon">&#x1F4BB;</span><span class="tab-name">PC・Mac</span></button>
+  </div>
+</div>
+
+<div class="panels">
+
+<!-- iPhone -->
+<div class="panel active" id="panel-iphone">
+  <div class="browser-switch">
+    <button class="browser-btn active" onclick="switchBrowser('iphone','safari',this)">&#x1F9ED; Safari で開いている</button>
+    <button class="browser-btn" onclick="switchBrowser('iphone','chrome',this)">&#x1F310; Chrome で開いている</button>
+  </div>
+  <div class="browser-panel active" id="iphone-safari">
+    <div class="version-note">お使いの iOS バージョンを選んでください</div>
+    <div class="version-switch">
+      <button class="version-btn active" onclick="switchVersion('iphone','new',this)">iOS 26 以降（最新）<span class="version-badge">推奨</span></button>
+      <button class="version-btn" onclick="switchVersion('iphone','old',this)">iOS 18 以前</button>
+    </div>
+    <!-- iOS26 -->
+    <div class="version-panel active" id="iphone-new">
+      <div class="steps-title"><span>&#x1F4F1; iPhone &times; Safari &times; iOS 26 の手順</span><span class="steps-title-badge">5ステップ</span></div>
+      <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" style="width:0%" id="fill-iphone-new"></div></div><div class="step-progress-label" id="label-iphone-new">0 / 5 完了</div></div>
+      <div class="step-list">
+        <div class="step-wrap"><div class="step-card reveal" id="sc-in-1"><div class="step-num">1</div><div class="step-body"><div class="step-title">Safari でアプリページを開く</div><div class="step-desc">コツコツサクサクのアプリを <b>Safari</b> で開いてください。</div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F310;</span><div class="mock-highlight-text">URL：<b>urutoraktiti-boop.github.io/kotsusaku-app/</b></div></div><button class="done-btn" onclick="markDone('sc-in-1','iphone-new',5)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('iphone-new')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-in-2"><div class="step-num">2</div><div class="step-body"><div class="step-title">画面下の「…」をタップ</div><div class="step-desc">iOS 26 では画面<b>下部にある「…（3点）」ボタン</b>をタップします。</div><div class="step-visual"><div class="ui-iphone"><div class="ui-iphone-bar"><div class="ui-iphone-url-wrap"><span class="ui-iphone-url">kotsusaku-app/</span></div></div><div class="ui-iphone-content">&#x2190; アプリ画面 &#x2192;</div><div class="ui-iphone-toolbar"><div class="ui-toolbar-btn"><span>&#x25C1;</span></div><div class="ui-toolbar-btn"><span>&#x25B7;</span></div><div class="ui-toolbar-btn"><span>&#x25A1;</span></div><div class="ui-toolbar-btn"><span>&#x1F4DA;</span></div><div class="ui-toolbar-btn"><div class="tap-target"><div class="ui-ios26-dots">…</div><span class="pulse-dot"></span></div></div></div></div><div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span class="pulse-dot"></span><span class="here-label">ここをタップ</span><span style="font-size:.72rem;color:var(--soft);">右下の「…」ボタン</span></div></div><button class="step-hint-toggle" onclick="toggleHint(this)"><span>&#x1F4A1; 見つからない場合は</span><span class="step-hint-arrow">&#x25BC;</span></button><div class="step-hint-body">アドレスバーを長押しするとメニューが出て「共有」を選べる場合もあります。</div><button class="done-btn" onclick="markDone('sc-in-2','iphone-new',5)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('iphone-new')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-in-3"><div class="step-num">3</div><div class="step-body"><div class="step-title">「共有」をタップ</div><div class="step-desc">メニューが開いたら<b>「共有」</b>をタップします。</div><div class="step-visual"><div class="ui-iphone"><div class="ui-ios26-sheet"><div class="ui-ios26-sheet-handle"></div><div class="ui-ios26-menu-item"><span class="mi-icon">&#x1F516;</span>ブックマークを追加</div><div class="ui-ios26-menu-item hl" style="position:relative;"><span class="mi-icon">&#x2197;&#xFE0F;</span><b>共有</b><span class="pulse-dot" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);"></span></div><div class="ui-ios26-menu-item"><span class="mi-icon">&#x1F4CB;</span>URLをコピー</div></div></div><div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span class="pulse-dot"></span><span class="here-label">ここをタップ</span><span style="font-size:.72rem;color:var(--soft);">「共有」を選ぶ</span></div></div><button class="done-btn" onclick="markDone('sc-in-3','iphone-new',5)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('iphone-new')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-in-4"><div class="step-num">4</div><div class="step-body"><div class="step-title">スクロールして「ホーム画面に追加」をタップ</div><div class="step-desc">共有シートが開いたらアイコン一覧を<b>上にスクロール</b>して<b>「ホーム画面に追加」</b>を探してタップします。</div><div class="step-visual"><div class="ui-iphone" style="max-width:300px;"><div class="ui-share-grid"><div class="ui-share-item"><div class="ui-share-item-icon">&#x2709;&#xFE0F;</div><span>メール</span></div><div class="ui-share-item"><div class="ui-share-item-icon">&#x1F4AC;</div><span>メッセージ</span></div><div class="ui-share-item hl"><div class="ui-share-item-icon">&#x2795;<span class="pulse-dot" style="position:absolute;top:-3px;right:-3px;"></span></div><span style="font-weight:900;color:var(--green);">ホーム画面</span></div><div class="ui-share-item"><div class="ui-share-item-icon">&#x1F4CB;</div><span>コピー</span></div></div></div><div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span class="pulse-dot"></span><span class="here-label">ここをタップ</span><span style="font-size:.72rem;color:var(--soft);">「ホーム画面に追加」</span></div></div><button class="step-hint-toggle" onclick="toggleHint(this)"><span>&#x1F4A1; 見つからない場合は</span><span class="step-hint-arrow">&#x25BC;</span></button><div class="step-hint-body">リスト最下部の<b>「アクションを編集」</b>をタップして「ホーム画面に追加」をオンにすると表示されます。</div><button class="done-btn" onclick="markDone('sc-in-4','iphone-new',5)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('iphone-new')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-in-5"><div class="step-num">5</div><div class="step-body"><div class="step-title">名前を確認して「追加」をタップ</div><div class="step-desc">アプリ名が「コツコツサクサク」になっているか確認して右上の<b>「追加」</b>をタップすれば完了です。「Webアプリとして開く」はオンのままにしておくとよりアプリらしく動作します。</div><button class="done-btn" onclick="markDone('sc-in-5','iphone-new',5)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('iphone-new')"><span>&#x1F6AB;</span> できない</button></div></div></div>
+      </div>
+      <div class="done-banner reveal"><div class="done-icon">&#x1F389;</div><div><div class="done-title">ホーム画面に追加完了！</div><div class="done-text">ホーム画面のアイコンをタップするだけでアプリのように起動できます。</div></div></div>
+    </div>
+    <!-- iOS18 -->
+    <div class="version-panel" id="iphone-old">
+      <div class="steps-title"><span>&#x1F4F1; iPhone &times; Safari &times; iOS 18以前 の手順</span><span class="steps-title-badge">4ステップ</span></div>
+      <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" style="width:0%" id="fill-iphone-old"></div></div><div class="step-progress-label" id="label-iphone-old">0 / 4 完了</div></div>
+      <div class="step-list">
+        <div class="step-wrap"><div class="step-card reveal" id="sc-io-1"><div class="step-num">1</div><div class="step-body"><div class="step-title">Safari でアプリページを開く</div><div class="step-desc">コツコツサクサクのアプリを <b>Safari</b> で開いてください。</div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F310;</span><div class="mock-highlight-text">URL：<b>urutoraktiti-boop.github.io/kotsusaku-app/</b></div></div><button class="done-btn" onclick="markDone('sc-io-1','iphone-old',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('iphone-old')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-io-2"><div class="step-num">2</div><div class="step-body"><div class="step-title">画面下部の「共有ボタン」をタップ</div><div class="step-desc">画面<b>下のツールバー中央</b>にある、四角から上に矢印が出たアイコンをタップします。</div><div class="step-visual"><div class="ui-iphone"><div class="ui-iphone-content">&#x2190; アプリ画面 &#x2192;</div><div class="ui-iphone-toolbar"><div class="ui-toolbar-btn"><span>&#x25C1;</span></div><div class="ui-toolbar-btn"><span>&#x25B7;</span></div><div class="ui-toolbar-btn"><div class="tap-target"><div class="ui-share-btn-18">&#x2B06;</div><span class="pulse-dot"></span></div></div><div class="ui-toolbar-btn"><span>&#x1F4DA;</span></div><div class="ui-toolbar-btn"><span>&#x25A1;</span></div></div></div><div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span class="pulse-dot"></span><span class="here-label">ここをタップ</span><span style="font-size:.72rem;color:var(--soft);">中央の共有ボタン（&#x2B06;）</span></div></div><button class="done-btn" onclick="markDone('sc-io-2','iphone-old',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('iphone-old')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-io-3"><div class="step-num">3</div><div class="step-body"><div class="step-title">「ホーム画面に追加」をタップ</div><div class="step-desc">下から開いたメニューを<b>上にスクロール</b>して<b>「ホーム画面に追加」</b>をタップします。</div><div class="step-visual"><div class="ui-iphone" style="max-width:300px;"><div style="background:#f2f2f7;padding:10px 0;"><div class="ui-ios26-menu-item" style="background:#fff;"><span class="mi-icon">&#x2709;&#xFE0F;</span>メール</div><div class="ui-ios26-menu-item hl" style="position:relative;"><span class="mi-icon">&#x2795;</span><b>ホーム画面に追加</b><span class="pulse-dot" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);"></span></div><div class="ui-ios26-menu-item" style="background:#fff;"><span class="mi-icon">&#x1F516;</span>ブックマークを追加</div></div></div><div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span class="pulse-dot"></span><span class="here-label">ここをタップ</span><span style="font-size:.72rem;color:var(--soft);">下にスクロールすると見つかります</span></div></div><button class="step-hint-toggle" onclick="toggleHint(this)"><span>&#x1F4A1; 見つからない場合は</span><span class="step-hint-arrow">&#x25BC;</span></button><div class="step-hint-body">リスト最下部の<b>「アクションを編集」</b>をタップして「ホーム画面に追加」をオンにすると表示されます。</div><button class="done-btn" onclick="markDone('sc-io-3','iphone-old',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('iphone-old')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-io-4"><div class="step-num">4</div><div class="step-body"><div class="step-title">名前を確認して「追加」をタップ</div><div class="step-desc">名前が「コツコツサクサク」であることを確認し右上の<b>「追加」</b>をタップすれば完了です。</div><button class="done-btn" onclick="markDone('sc-io-4','iphone-old',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('iphone-old')"><span>&#x1F6AB;</span> できない</button></div></div></div>
+      </div>
+      <div class="done-banner reveal"><div class="done-icon">&#x1F389;</div><div><div class="done-title">ホーム画面に追加完了！</div><div class="done-text">ホーム画面のアイコンをタップするだけで起動できます。</div></div></div>
+    </div>
+  </div>
+  <div class="browser-panel" id="iphone-chrome">
+    <div class="switch-notice">
+      <div class="switch-notice-title">&#x26A0;&#xFE0F; iPhone の Chrome からはホーム画面追加ができません</div>
+      <p style="font-size:.8rem;color:var(--soft);margin-bottom:14px;line-height:1.7;">Apple の仕様上、iPhone・iPad では <b>Safari のみ</b>でホーム画面への追加が可能です。</p>
+      <div class="switch-steps">
+        <div class="switch-step"><div class="switch-step-num">1</div><div class="switch-step-body"><div class="switch-step-title">URLをコピー</div><div class="switch-step-desc">Chrome のアドレスバーを<b>長押し → コピー</b></div><div class="switch-step-code">urutoraktiti-boop.github.io/kotsusaku-app/</div></div></div>
+        <div class="switch-step"><div class="switch-step-num">2</div><div class="switch-step-body"><div class="switch-step-title">Safari を開く</div><div class="switch-step-desc">ホーム画面から <b>Safari（白いコンパスアイコン）</b> を開く</div></div></div>
+        <div class="switch-step"><div class="switch-step-num">3</div><div class="switch-step-body"><div class="switch-step-title">URLを貼り付けて開く</div><div class="switch-step-desc">Safari のアドレスバーに長押し → <b>ペースト</b> して開く</div></div></div>
+        <div class="switch-step"><div class="switch-step-num">4</div><div class="switch-step-body"><div class="switch-step-title">「Safari で開いている」タブへ</div><div class="switch-step-desc">このページに戻り「&#x1F9ED; Safari で開いている」を選んで手順を進めてください。</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- iPad -->
+<div class="panel" id="panel-ipad">
+  <div class="browser-switch">
+    <button class="browser-btn active" onclick="switchBrowser('ipad','safari',this)">&#x1F9ED; Safari で開いている</button>
+    <button class="browser-btn" onclick="switchBrowser('ipad','chrome',this)">&#x1F310; Chrome で開いている</button>
+  </div>
+  <div class="browser-panel active" id="ipad-safari">
+    <div class="version-note">お使いの iPadOS バージョンを選んでください</div>
+    <div class="version-switch">
+      <button class="version-btn active" onclick="switchVersion('ipad','new',this)">iPadOS 26 以降（最新）<span class="version-badge">推奨</span></button>
+      <button class="version-btn" onclick="switchVersion('ipad','old',this)">iPadOS 18 以前</button>
+    </div>
+    <div class="version-panel active" id="ipad-new">
+      <div class="steps-title"><span>&#x1F4DF; iPad &times; Safari &times; iPadOS 26 の手順</span><span class="steps-title-badge">4ステップ</span></div>
+      <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" style="width:0%" id="fill-ipad-new"></div></div><div class="step-progress-label" id="label-ipad-new">0 / 4 完了</div></div>
+      <div class="step-list">
+        <div class="step-wrap"><div class="step-card reveal" id="sc-ipn-1"><div class="step-num">1</div><div class="step-body"><div class="step-title">Safari でアプリページを開く</div><div class="step-desc">コツコツサクサクのアプリを Safari で開いてください。</div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F310;</span><div class="mock-highlight-text">URL：<b>urutoraktiti-boop.github.io/kotsusaku-app/</b></div></div><button class="done-btn" onclick="markDone('sc-ipn-1','ipad-new',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('ipad-new')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-ipn-2"><div class="step-num">2</div><div class="step-body"><div class="step-title">アドレスバー付近の「…」または共有アイコンをタップ</div><div class="step-desc">iPad では画面<b>上部のアドレスバー付近</b>にボタンがあります（iPhoneとは位置が異なります）。<b>「…」</b>または<b>&#x2197; アイコン</b>をタップしてください。</div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F4A1;</span><div class="mock-highlight-text">iPadは画面が広いためボタンが上部にあります。iPhoneとは位置が異なります。</div></div><button class="done-btn" onclick="markDone('sc-ipn-2','ipad-new',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('ipad-new')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-ipn-3"><div class="step-num">3</div><div class="step-body"><div class="step-title">「共有」→「ホーム画面に追加」をタップ</div><div class="step-desc">メニューから<b>「共有」</b>を選び、次の画面で<b>「ホーム画面に追加」</b>をタップします。</div><button class="done-btn" onclick="markDone('sc-ipn-3','ipad-new',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('ipad-new')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-ipn-4"><div class="step-num">4</div><div class="step-body"><div class="step-title">名前を確認して「追加」をタップ</div><div class="step-desc">名前を確認して<b>「追加」</b>をタップすれば完了です。</div><button class="done-btn" onclick="markDone('sc-ipn-4','ipad-new',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('ipad-new')"><span>&#x1F6AB;</span> できない</button></div></div></div>
+      </div>
+      <div class="done-banner reveal"><div class="done-icon">&#x1F389;</div><div><div class="done-title">ホーム画面に追加完了！</div><div class="done-text">ホーム画面のアイコンからアプリのように起動できます。</div></div></div>
+    </div>
+    <div class="version-panel" id="ipad-old">
+      <div class="steps-title"><span>&#x1F4DF; iPad &times; Safari &times; iPadOS 18以前 の手順</span><span class="steps-title-badge">4ステップ</span></div>
+      <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" style="width:0%" id="fill-ipad-old"></div></div><div class="step-progress-label" id="label-ipad-old">0 / 4 完了</div></div>
+      <div class="step-list">
+        <div class="step-wrap"><div class="step-card reveal" id="sc-ipo-1"><div class="step-num">1</div><div class="step-body"><div class="step-title">Safari でアプリページを開く</div><div class="step-desc">コツコツサクサクのアプリを Safari で開いてください。</div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F310;</span><div class="mock-highlight-text">URL：<b>urutoraktiti-boop.github.io/kotsusaku-app/</b></div></div><button class="done-btn" onclick="markDone('sc-ipo-1','ipad-old',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('ipad-old')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-ipo-2"><div class="step-num">2</div><div class="step-body"><div class="step-title">アドレスバー右側の共有ボタンをタップ</div><div class="step-desc">画面<b>上部アドレスバーの右側</b>にある共有アイコンをタップします。</div><button class="done-btn" onclick="markDone('sc-ipo-2','ipad-old',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('ipad-old')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-ipo-3"><div class="step-num">3</div><div class="step-body"><div class="step-title">「ホーム画面に追加」をタップ</div><div class="step-desc">共有シートから<b>「ホーム画面に追加」</b>を選びます。リストを下にスクロールすると見つかります。</div><button class="done-btn" onclick="markDone('sc-ipo-3','ipad-old',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('ipad-old')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+        <div class="step-wrap"><div class="step-card reveal" id="sc-ipo-4"><div class="step-num">4</div><div class="step-body"><div class="step-title">「追加」をタップして完了</div><div class="step-desc">名前を確認して<b>「追加」</b>をタップすれば完了です。</div><button class="done-btn" onclick="markDone('sc-ipo-4','ipad-old',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('ipad-old')"><span>&#x1F6AB;</span> できない</button></div></div></div>
+      </div>
+      <div class="done-banner reveal"><div class="done-icon">&#x1F389;</div><div><div class="done-title">ホーム画面に追加完了！</div><div class="done-text">ホーム画面のアイコンからアプリのように起動できます。</div></div></div>
+    </div>
+  </div>
+  <div class="browser-panel" id="ipad-chrome">
+    <div class="switch-notice">
+      <div class="switch-notice-title">&#x26A0;&#xFE0F; iPad の Chrome からはホーム画面追加ができません</div>
+      <p style="font-size:.8rem;color:var(--soft);margin-bottom:14px;line-height:1.7;">iPad も <b>Safari のみ</b>でホーム画面への追加が可能です。</p>
+      <div class="switch-steps">
+        <div class="switch-step"><div class="switch-step-num">1</div><div class="switch-step-body"><div class="switch-step-title">URLをコピー</div><div class="switch-step-desc">Chrome のアドレスバーを<b>長押し → コピー</b></div><div class="switch-step-code">urutoraktiti-boop.github.io/kotsusaku-app/</div></div></div>
+        <div class="switch-step"><div class="switch-step-num">2</div><div class="switch-step-body"><div class="switch-step-title">Safari を開く</div><div class="switch-step-desc">Dock またはホーム画面から <b>Safari</b> を開く</div></div></div>
+        <div class="switch-step"><div class="switch-step-num">3</div><div class="switch-step-body"><div class="switch-step-title">URLを貼り付けて開き手順を進める</div><div class="switch-step-desc">Safari で開いたら「&#x1F9ED; Safari で開いている」の手順へ</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Android -->
+<div class="panel" id="panel-android">
+  <div class="steps-title"><span>&#x1F916; Android &times; Chrome の手順</span><span class="steps-title-badge">3ステップ</span></div>
+  <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" style="width:0%" id="fill-android"></div></div><div class="step-progress-label" id="label-android">0 / 3 完了</div></div>
+  <div class="step-list">
+    <div class="step-wrap"><div class="step-card reveal" id="sc-and-1"><div class="step-num">1</div><div class="step-body"><div class="step-title">Chrome でアプリページを開く</div><div class="step-desc">Chrome でコツコツサクサクのアプリページを開いてください。</div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F310;</span><div class="mock-highlight-text">URL：<b>urutoraktiti-boop.github.io/kotsusaku-app/</b></div></div><button class="done-btn" onclick="markDone('sc-and-1','android',3)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('android')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+    <div class="step-wrap"><div class="step-card reveal" id="sc-and-2"><div class="step-num">2</div><div class="step-body"><div class="step-title">右上の「&#x22EE;（3点メニュー）」をタップ</div><div class="step-desc">画面<b>右上の縦3点アイコン（&#x22EE;）</b>をタップしてメニューを開きます。</div><div class="step-visual"><div class="ui-android" style="max-width:300px;"><div class="ui-android-bar"><div class="ui-android-url">kotsusaku-app/</div><div class="tap-target"><div class="ui-android-kebab">&#x22EE;</div><span class="pulse-dot"></span></div></div><div class="ui-android-body"><div class="ui-android-row"><span class="ri">&#x1F516;</span>ブックマーク</div><div class="ui-android-row hl" style="position:relative;"><span class="ri">&#x1F4F2;</span><b>ホーム画面に追加</b><span class="pulse-dot" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);"></span></div><div class="ui-android-row"><span class="ri">&#x1F4CB;</span>URLをコピー</div></div></div><div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span class="pulse-dot"></span><span class="here-label">ここをタップ</span><span style="font-size:.72rem;color:var(--soft);">右上「&#x22EE;」→「ホーム画面に追加」</span></div></div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F4A1;</span><div class="mock-highlight-text">「インストール」と表示される場合もあります。どちらも同じです。</div></div><button class="done-btn" onclick="markDone('sc-and-2','android',3)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('android')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+    <div class="step-wrap"><div class="step-card reveal" id="sc-and-3"><div class="step-num">3</div><div class="step-body"><div class="step-title">「追加」または「インストール」をタップ</div><div class="step-desc">確認ダイアログで<b>「追加」または「インストール」</b>をタップすれば完了です。</div><button class="done-btn" onclick="markDone('sc-and-3','android',3)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('android')"><span>&#x1F6AB;</span> できない</button></div></div></div>
+  </div>
+  <div class="done-banner reveal"><div class="done-icon">&#x1F389;</div><div><div class="done-title">ホーム画面に追加完了！</div><div class="done-text">ホーム画面またはアプリドロワーのアイコンから起動できます。</div></div></div>
+</div>
+
+<!-- PC -->
+<div class="panel" id="panel-pc">
+  <div class="browser-switch">
+    <button class="browser-btn active" onclick="switchBrowser('pc','chrome',this)">&#x1F310; Chrome</button>
+    <button class="browser-btn" onclick="switchBrowser('pc','edge',this)">&#x1F537; Edge</button>
+    <button class="browser-btn" onclick="switchBrowser('pc','safari',this)">&#x1F9ED; Safari（Mac）</button>
+  </div>
+  <div class="browser-panel active" id="pc-chrome">
+    <div class="steps-title"><span>&#x1F4BB; PC &times; Chrome の手順</span><span class="steps-title-badge">3ステップ</span></div>
+    <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" style="width:0%" id="fill-pc-chrome"></div></div><div class="step-progress-label" id="label-pc-chrome">0 / 3 完了</div></div>
+    <div class="step-list">
+      <div class="step-wrap"><div class="step-card reveal" id="sc-pcc-1"><div class="step-num">1</div><div class="step-body"><div class="step-title">Chrome でアプリページを開く</div><div class="step-desc">Chrome でコツコツサクサクのアプリページを開いてください。</div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F310;</span><div class="mock-highlight-text">URL：<b>urutoraktiti-boop.github.io/kotsusaku-app/</b></div></div><button class="done-btn" onclick="markDone('sc-pcc-1','pc-chrome',3)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('pc-chrome')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+      <div class="step-wrap"><div class="step-card reveal" id="sc-pcc-2"><div class="step-num">2</div><div class="step-body"><div class="step-title">右上「&#x22EE;」&#x2192;「キャスト、保存、共有」&#x2192;「ページをアプリとしてインストール」</div><div class="step-desc">Chrome 右上の<b>「&#x22EE;（3点メニュー）」</b>をクリック &#x2192; <b>「キャスト、保存、共有」</b> &#x2192; <b>「ページをアプリとしてインストール」</b>の順に選択します。</div><div class="step-visual"><div class="ui-pc"><div class="ui-pc-titlebar"><div class="ui-pc-dots-wrap"><div class="ui-pc-dot" style="background:#ff5f56;"></div><div class="ui-pc-dot" style="background:#ffbd2e;"></div><div class="ui-pc-dot" style="background:#27c93f;"></div></div><div class="ui-pc-urlbar"><span>urutoraktiti-boop.github.io/kotsusaku-app/</span><div class="tap-target"><div class="ui-pc-menu-btn">&#x22EE;</div><span class="pulse-dot"></span></div></div></div><div class="ui-pc-dropdown"><div class="ui-pc-dd-item"><span>&#x1F516;</span>ブックマークに追加</div><div class="ui-pc-dd-item" style="position:relative;"><span>&#x1F4E1;</span>キャスト、保存、共有<span style="margin-left:auto;font-size:.7rem;color:var(--soft);">&#x25B6;</span><span class="pulse-dot" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);"></span></div><div class="ui-pc-dd-item"><span>&#x2699;&#xFE0F;</span>設定</div></div></div><div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span class="pulse-dot"></span><span class="here-label">STEP1：ここをクリック</span><span style="font-size:.72rem;color:var(--soft);">右上「&#x22EE;」→「キャスト、保存、共有」</span></div><div class="ui-pc" style="margin-top:12px;"><div class="ui-pc-dropdown"><div class="ui-pc-dd-item"><span>&#x1F4E1;</span>キャスト...</div><div class="ui-pc-dd-item hl" style="position:relative;"><span>&#x1F4F2;</span><b>ページをアプリとしてインストール</b><span class="pulse-dot" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);"></span></div><div class="ui-pc-dd-item"><span>&#x1F517;</span>リンクをコピー</div></div></div><div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span class="pulse-dot"></span><span class="here-label">STEP2：ここをクリック</span><span style="font-size:.72rem;color:var(--soft);">「ページをアプリとしてインストール」</span></div></div><button class="step-hint-toggle" onclick="toggleHint(this)"><span>&#x1F4A1; アドレスバーにアイコンが出ている場合は</span><span class="step-hint-arrow">&#x25BC;</span></button><div class="step-hint-body">一部のサイトではアドレスバー右端にインストールアイコンが直接表示されます。その場合はそちらをクリックするだけでもインストールできます。</div><button class="done-btn" onclick="markDone('sc-pcc-2','pc-chrome',3)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('pc-chrome')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+      <div class="step-wrap"><div class="step-card reveal" id="sc-pcc-3"><div class="step-num">3</div><div class="step-body"><div class="step-title">「インストール」をクリック</div><div class="step-desc">確認ダイアログで<b>「インストール」</b>をクリックすれば完了です。デスクトップやタスクバーにアイコンが追加されます。</div><button class="done-btn" onclick="markDone('sc-pcc-3','pc-chrome',3)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('pc-chrome')"><span>&#x1F6AB;</span> できない</button></div></div></div>
+    </div>
+    <div class="done-banner reveal"><div class="done-icon">&#x1F389;</div><div><div class="done-title">インストール完了！</div><div class="done-text">デスクトップやタスクバーからアプリのように起動できます。</div></div></div>
+  </div>
+  <div class="browser-panel" id="pc-edge">
+    <div class="steps-title"><span>&#x1F4BB; PC &times; Edge の手順</span><span class="steps-title-badge">3ステップ</span></div>
+    <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" style="width:0%" id="fill-pc-edge"></div></div><div class="step-progress-label" id="label-pc-edge">0 / 3 完了</div></div>
+    <div class="step-list">
+      <div class="step-wrap"><div class="step-card reveal" id="sc-pce-1"><div class="step-num">1</div><div class="step-body"><div class="step-title">Edge でアプリページを開く</div><div class="step-desc">Edge でコツコツサクサクのアプリページを開いてください。</div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F310;</span><div class="mock-highlight-text">URL：<b>urutoraktiti-boop.github.io/kotsusaku-app/</b></div></div><button class="done-btn" onclick="markDone('sc-pce-1','pc-edge',3)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('pc-edge')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+      <div class="step-wrap"><div class="step-card reveal" id="sc-pce-2"><div class="step-num">2</div><div class="step-body"><div class="step-title">右上「…」&#x2192;「その他のツール」&#x2192;「アプリ」&#x2192;「このサイトをアプリとしてインストール」</div><div class="step-desc">Edge 右上の<b>「…（3点メニュー）」</b>をクリック &#x2192; <b>「その他のツール」</b> &#x2192; <b>「アプリ」</b> &#x2192; <b>「このサイトをアプリとしてインストール」</b>を選択します。</div><div class="step-visual"><div class="ui-pc"><div class="ui-pc-titlebar"><div class="ui-pc-dots-wrap"><div class="ui-pc-dot" style="background:#ff5f56;"></div><div class="ui-pc-dot" style="background:#ffbd2e;"></div><div class="ui-pc-dot" style="background:#27c93f;"></div></div><div class="ui-pc-urlbar"><span>urutoraktiti-boop.github.io/kotsusaku-app/</span><div class="tap-target"><div class="ui-pc-menu-btn">…</div><span class="pulse-dot"></span></div></div></div><div class="ui-pc-dropdown"><div class="ui-pc-dd-item"><span>&#x2605;</span>お気に入りに追加</div><div class="ui-pc-dd-item"><span>&#x1F527;</span>その他のツール <span style="margin-left:auto;font-size:.7rem;color:var(--soft);">&#x25B6;</span></div><div class="ui-pc-dd-item hl" style="padding-left:28px;position:relative;"><span>&#x1F4F2;</span>このサイトをアプリとしてインストール<span class="pulse-dot" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);"></span></div></div></div><div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span class="pulse-dot"></span><span class="here-label">ここをクリック</span><span style="font-size:.72rem;color:var(--soft);">「このサイトをアプリとしてインストール」</span></div></div><button class="done-btn" onclick="markDone('sc-pce-2','pc-edge',3)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('pc-edge')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+      <div class="step-wrap"><div class="step-card reveal" id="sc-pce-3"><div class="step-num">3</div><div class="step-body"><div class="step-title">「インストール」をクリック</div><div class="step-desc">確認ダイアログで<b>「インストール」</b>をクリックすれば完了です。</div><button class="done-btn" onclick="markDone('sc-pce-3','pc-edge',3)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('pc-edge')"><span>&#x1F6AB;</span> できない</button></div></div></div>
+    </div>
+    <div class="done-banner reveal"><div class="done-icon">&#x1F389;</div><div><div class="done-title">インストール完了！</div><div class="done-text">デスクトップやタスクバーからアプリのように起動できます。</div></div></div>
+  </div>
+  <div class="browser-panel" id="pc-safari">
+    <div class="steps-title"><span>&#x1F4BB; Mac &times; Safari の手順</span><span class="steps-title-badge">4ステップ</span></div>
+    <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" style="width:0%" id="fill-pc-safari"></div></div><div class="step-progress-label" id="label-pc-safari">0 / 4 完了</div></div>
+    <div class="step-list">
+      <div class="step-wrap"><div class="step-card reveal" id="sc-pcs-1"><div class="step-num">1</div><div class="step-body"><div class="step-title">Safari でアプリページを開く</div><div class="step-desc">Mac の Safari でコツコツサクサクのアプリページを開いてください。<br><small style="color:#e53935;font-weight:800;">※ macOS Sonoma（2023年）以降が必要です。</small></div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F310;</span><div class="mock-highlight-text">URL：<b>urutoraktiti-boop.github.io/kotsusaku-app/</b></div></div><button class="done-btn" onclick="markDone('sc-pcs-1','pc-safari',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('pc-safari')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+      <div class="step-wrap"><div class="step-card reveal" id="sc-pcs-2"><div class="step-num">2</div><div class="step-body"><div class="step-title">画面上部メニューバーの「ファイル」をクリック</div><div class="step-desc">Mac 画面の一番上にある<b>「ファイル」</b>をクリックします。</div><div class="step-visual"><div class="ui-mac"><div class="ui-mac-titlebar"><div class="ui-mac-dots-wrap"><div class="ui-pc-dot" style="background:#ff5f56;"></div><div class="ui-pc-dot" style="background:#ffbd2e;"></div><div class="ui-pc-dot" style="background:#27c93f;"></div></div></div><div class="ui-mac-menubar"><span class="ui-mac-menu-item">Safari</span><span class="ui-mac-menu-item hl" style="position:relative;">ファイル<span class="pulse-dot" style="position:absolute;top:-4px;right:-4px;"></span></span><span class="ui-mac-menu-item">編集</span><span class="ui-mac-menu-item">表示</span></div><div class="ui-mac-dropdown"><div class="ui-mac-dd-item">新規ウインドウ</div><div class="ui-mac-dd-item hl" style="position:relative;">Dock に追加<span class="pulse-dot" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);"></span></div><div class="ui-mac-dd-item">閉じる</div></div><div class="ui-mac-content">&#x2190; Safari のページ &#x2192;</div></div><div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span class="pulse-dot"></span><span class="here-label">ここをクリック</span><span style="font-size:.72rem;color:var(--soft);">「ファイル」&#x2192;「Dock に追加」</span></div></div><button class="done-btn" onclick="markDone('sc-pcs-2','pc-safari',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('pc-safari')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+      <div class="step-wrap"><div class="step-card reveal" id="sc-pcs-3"><div class="step-num">3</div><div class="step-body"><div class="step-title">「Dock に追加」を選択</div><div class="step-desc">メニューから<b>「Dock に追加」</b>を選択します。</div><div class="mock-highlight" style="margin-top:10px;"><span class="mock-highlight-icon">&#x1F4A1;</span><div class="mock-highlight-text">「ホーム画面に追加」ではなく<b>「Dock に追加」</b>が Mac での正式な表記です。</div></div><button class="done-btn" onclick="markDone('sc-pcs-3','pc-safari',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('pc-safari')"><span>&#x1F6AB;</span> できない</button></div></div><div class="step-connector"><div class="step-connector-line"></div></div></div>
+      <div class="step-wrap"><div class="step-card reveal" id="sc-pcs-4"><div class="step-num">4</div><div class="step-body"><div class="step-title">名前を確認して「追加」をクリック</div><div class="step-desc">確認ダイアログで名前を確認して<b>「追加」</b>をクリックすれば完了です。Dock・Launchpad・Spotlight から起動できるようになります。</div><button class="done-btn" onclick="markDone('sc-pcs-4','pc-safari',4)"><span>&#x2611;&#xFE0F;</span> できた！</button>
+              <button class="cant-btn" onclick="cantDo('pc-safari')"><span>&#x1F6AB;</span> できない</button></div></div></div>
+    </div>
+    <div class="done-banner reveal"><div class="done-icon">&#x1F389;</div><div><div class="done-title">Dock に追加完了！</div><div class="done-text">Mac の Dock・Launchpad からアプリのように起動できます。</div></div></div>
+  </div>
+</div>
+
+</div>
+
+<!-- フィードバックセクション -->
+<div class="feedback-section reveal">
+  <div class="feedback-card">
+    <div class="feedback-title">&#x1F4AC; この画面を見てもわからなかった方へ</div>
+    <div class="feedback-sub">困っている状況を教えてください。運営が確認して、ページの改善に役立てます。<br>個人情報はご記入いただかないようお願いします。</div>
+    <div class="feedback-info">
+      <span>&#x1F4CB;</span>
+      <span class="feedback-info-label">選択中の端末・ブラウザ：</span>
+      <span class="feedback-info-val" id="feedback-device-label">iPhone / Safari</span>
+      <span style="font-size:.68rem;color:var(--soft);margin-left:4px;">（上のタブ選択に連動します）</span>
+    </div>
+    <textarea class="feedback-textarea" id="feedback-text" placeholder="例：「ホーム画面に追加」が見つかりませんでした。共有ボタンを押してもリストに出てきません。"></textarea>
+    <div class="feedback-note">&#x26A0;&#xFE0F; 返信はできません。改善の参考にさせていただきます。<br>&#x1F4CC; フォームが開いたら、入力した内容が自動でコピーされています。「どのような状況でしたか？」欄に貼り付けてご送信ください。</div>
+    <button class="feedback-btn" onclick="openFeedbackForm()">&#x1F4E8; Googleフォームで送信する</button>
+    <div class="feedback-sent" id="feedback-sent">&#x2705; フォームを開きました！端末・ブラウザ情報と入力内容が自動でセットされています。そのまま送信してください。</div>
+  </div>
+</div>
+
+<div class="info-date-bar">
+  <div class="info-date-inner"><span class="info-date-icon">&#x1F4C5;</span><span>2026年5月中旬現在の情報です。OSやブラウザのアップデートにより手順が変わる場合があります。</span></div>
+</div>
+
+<div class="faq-section reveal">
+  <div class="faq-title">&#x1F4AC; よくある質問</div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">「ホーム画面に追加」がメニューに見当たりません</span><span class="faq-arrow">&#x25BC;</span></button><div class="faq-a">共有メニューを開いた後、リストを<b>下にスクロール</b>すると見つかることが多いです。プライベートブラウズ（シークレット）モードでは表示されません。iOS 26以降は「…&#x2192;共有」の2段階が必要です。リスト最下部の<b>「アクションを編集」</b>からオンにすることもできます。</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">普通のアプリと何が違うの？</span><span class="faq-arrow">&#x25BC;</span></button><div class="faq-a">App Store / Google Play からダウンロードするアプリと異なり、<b>ストレージをほぼ使いません</b>。ホーム画面のアイコンからすぐ起動でき、データはクラウドに保存されます。アップデートも自動で常に最新版が使えます。</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">インストールしたら削除できますか？</span><span class="faq-arrow">&#x25BC;</span></button><div class="faq-a">はい、普通のアプリと同じようにアイコンを長押し&#x2192;「削除」で取り除けます。削除してもクラウドのデータはなくなりません。再インストールするとデータが戻ります。</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">オフラインでも使えますか？</span><span class="faq-arrow">&#x25BC;</span></button><div class="faq-a">基本的な画面表示はオフラインでも可能ですが、学習記録の保存や同期にはインターネット接続が必要です。</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">iOS のバージョンが 26 か 18以前かわかりません</span><span class="faq-arrow">&#x25BC;</span></button><div class="faq-a">iPhone の<b>「設定」&#x2192;「一般」&#x2192;「情報」</b>から確認できます。「ソフトウェアバージョン」が <b>26.x.x</b> なら iOS 26以降、<b>18.x.x</b> なら iOS 18以前です。わからない場合は「iOS 26以降」の手順を先に試してみてください。</div></div>
+  </div>
+</div>
+
+<div class="cta-section">
+  <div class="cta-inner reveal">
+    <h2>さあ、コツコツはじめよう。</h2>
+    <p>ホーム画面に追加したら、まずは今日の10分を1マス刻んでみよう。</p>
+    <a class="cta-btn" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">アプリを開く &#x1F966;</a>
+  </div>
+</div>
+
+<script>
+var currentDevice='iphone';
+var currentBrowser='safari';
+function switchTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+  currentDevice=id;
+  updateFeedbackInfo();
+  initReveal();
+}
+var deviceLabels={'iphone':'iPhone','ipad':'iPad','android':'Android','pc':'PC・Mac'};
+var browserLabels={'safari':'Safari','chrome':'Google Chrome','edge':'Edge'};
+function updateFeedbackInfo(){
+  var el=document.getElementById('feedback-device-label');
+  if(!el)return;
+  var d=deviceLabels[currentDevice]||currentDevice;
+  var b=browserLabels[currentBrowser]||currentBrowser;
+  el.textContent=d+' / '+b;
+}
+function openFeedbackForm(){
+  var text=document.getElementById('feedback-text').value.trim();
+  var d=deviceLabels[currentDevice]||currentDevice;
+  var b=browserLabels[currentBrowser]||currentBrowser;
+  // GAイベント
+  if(typeof gtag!=='undefined'){
+    gtag('event','feedback_submit',{
+      'device':currentDevice,
+      'browser':currentBrowser,
+      'has_text': text.length>0 ? 'yes':'no'
+    });
+  }
+  // エントリーIDを使ってURLパラメータで自動入力
+  var base='https://docs.google.com/forms/d/e/1FAIpQLSecZF8-b8kRl_dI5lfZ-E1zncYiUptH7BUex5RdoQkfjFI_jA/viewform';
+  var params = '?usp=pp_url'
+    + '&entry.1383304453=' + encodeURIComponent(d)
+    + '&entry.1517046778=' + encodeURIComponent(b)
+    + '&entry.2126463799=' + encodeURIComponent(text);
+  window.open(base+params,'_blank');
+  document.getElementById('feedback-sent').classList.add('show');
+}
+
+
+function cantDo(groupId){
+  // GAイベント
+  if(typeof gtag!=='undefined'){
+    gtag('event','install_step_cant_do',{
+      'device':currentDevice,'browser':currentBrowser,'step_group':groupId
+    });
+  }
+  // フィードバックセクションへスクロール
+  var target=document.querySelector('.feedback-section');
+  if(target){
+    target.scrollIntoView({behavior:'smooth',block:'start'});
+    // テキストエリアにフォーカス
+    setTimeout(function(){
+      var ta=document.getElementById('feedback-text');
+      if(ta)ta.focus();
+    },600);
+  }
+}
+
+initReveal();
+function switchBrowser(device,browser,btn){
+  var panel=document.getElementById('panel-'+device);
+  panel.querySelectorAll('.browser-btn').forEach(function(b){b.classList.remove('active');});
+  panel.querySelectorAll('.browser-panel').forEach(function(p){p.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById(device+'-'+browser).classList.add('active');
+  currentBrowser=browser;
+  updateFeedbackInfo();
+  initReveal();
+}
+function switchVersion(device,ver,btn){
+  var panel=document.getElementById(device+'-safari');
+  panel.querySelectorAll('.version-btn').forEach(function(b){b.classList.remove('active');});
+  panel.querySelectorAll('.version-panel').forEach(function(p){p.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById(device+'-'+ver).classList.add('active');
+  initReveal();
+}
+var doneMap={};
+function markDone(cardId,groupId,total){
+  var card=document.getElementById(cardId);
+  if(!card)return;
+  var btn=card.querySelector('.done-btn');
+  if(!btn)return;
+  if(!doneMap[groupId])doneMap[groupId]=[];
+  var idx=doneMap[groupId].indexOf(cardId);
+  if(idx>=0){
+    // すでに完了済み → 取り消し（トグル）
+    doneMap[groupId].splice(idx,1);
+    card.classList.remove('done');
+    btn.classList.remove('checked');
+    btn.innerHTML='<span>&#x2611;&#xFE0F;</span> できた！';
+  } else {
+    // 未完了 → 完了にする
+    doneMap[groupId].push(cardId);
+    card.classList.add('done');
+    btn.classList.add('checked');
+    btn.innerHTML='<span>&#x2705;</span> できました！';
+    // GAイベント
+    var stepNum=cardId.split('-').pop();
+    if(typeof gtag!=='undefined'){
+      gtag('event','install_step_complete',{
+        'device':currentDevice,'browser':currentBrowser,
+        'step_group':groupId,'step_number':parseInt(stepNum)||doneMap[groupId].length,
+        'steps_total':total
+      });
+    }
+  }
+  var count=doneMap[groupId].length;
+  var fillEl=document.getElementById('fill-'+groupId);
+  var labelEl=document.getElementById('label-'+groupId);
+  if(fillEl)fillEl.style.width=Math.round(count/total*100)+'%';
+  if(labelEl)labelEl.textContent=count+' / '+total+' 完了';
+  // 全ステップ完了時
+  if(count===total){
+    if(typeof gtag!=='undefined'){
+      gtag('event','install_all_steps_complete',{
+        'device':currentDevice,'browser':currentBrowser,'step_group':groupId
+      });
+    }
+  }
+}
+function toggleHint(btn){
+  btn.classList.toggle('open');
+  var body=btn.nextElementSibling;
+  if(body)body.classList.toggle('open');
+}
+function toggleFaq(btn){
+  btn.closest('.faq-item').classList.toggle('open');
+}
+function initReveal(){
+  requestAnimationFrame(function(){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+    },{threshold:.08});
+    document.querySelectorAll('.reveal:not(.in)').forEach(function(el){obs.observe(el);});
+  });
+}
+initReveal();
+(function(){
+  var ua=navigator.userAgent;
+  var isIOS=/iPhone|iPad|iPod/.test(ua);
+  var isChrome=/CriOS/.test(ua);
+  if(isIOS&&isChrome){
+    document.getElementById('chrome-warning').classList.add('show');
+    var iphoneBtn=document.querySelector('.tab-btn');
+    if(iphoneBtn)switchTab('iphone',iphoneBtn);
+    setTimeout(function(){
+      var chromeBtns=document.querySelectorAll('#panel-iphone .browser-btn');
+      if(chromeBtns[1])switchBrowser('iphone','chrome',chromeBtns[1]);
+    },100);
+  }
+})();
+</script>
+</body>
+</html>
