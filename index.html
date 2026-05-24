@@ -36,6 +36,13 @@ body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Seg
 .nav-links a:hover{background:var(--line);}
 .nav-links .primary{color:#fff;background:var(--ink);}
 .nav-links .primary:hover{background:#2a3a55;}
+.nav-links .nav-new-green{color:#fff!important;background:var(--green)!important;}
+.nav-links .nav-new-green:hover{background:#2ea64f!important;}
+.nav-links .nav-new-pink{color:#fff!important;background:var(--pink)!important;}
+.nav-links .nav-new-pink:hover{background:#d95888!important;}
+@keyframes navPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
+.nav-new-badge{position:absolute;top:-5px;right:-3px;display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,.28);color:#fff;font-size:8px;font-weight:1000;padding:1px 5px 1px 4px;border-radius:999px;letter-spacing:.04em;line-height:1.5;border:1px solid rgba(255,255,255,.4);pointer-events:none;}
+.nav-new-dot{width:6px;height:6px;border-radius:50%;background:#fff;flex-shrink:0;animation:navPulse 1.4s ease-in-out infinite;}
 
 /* ── TICKER ── */
 .ticker-wrap{background:var(--ink);overflow:hidden;padding:9px 0;}
@@ -630,8 +637,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         <a href="#board">世界観</a>
         <a href="#features">できること</a>
         <a href="#license">資格の道</a>
-        <a href="./manual.html">使い方</a>
-        <a href="./install.html">追加方法</a>
+        <a href="./manual.html" class="nav-new-green" style="position:relative;">📖 使い方<span class="nav-new-badge"><span class="nav-new-dot"></span>NEW</span></a>
+        <a href="./install.html" class="nav-new-pink" style="position:relative;">📲 追加方法<span class="nav-new-badge"><span class="nav-new-dot"></span>NEW</span></a>
       </div>
     </div>
   </div>
