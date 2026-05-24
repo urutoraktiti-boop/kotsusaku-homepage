@@ -41,8 +41,9 @@ body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Seg
 .nav-links .nav-new-pink{color:#fff!important;background:var(--pink)!important;}
 .nav-links .nav-new-pink:hover{background:#d95888!important;}
 @keyframes navPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
-.nav-new-badge{position:absolute;top:-5px;right:-3px;display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,.28);color:#fff;font-size:8px;font-weight:1000;padding:1px 5px 1px 4px;border-radius:999px;letter-spacing:.04em;line-height:1.5;border:1px solid rgba(255,255,255,.4);pointer-events:none;}
-.nav-new-dot{width:6px;height:6px;border-radius:50%;background:#fff;flex-shrink:0;animation:navPulse 1.4s ease-in-out infinite;}
+.nav-new-badge{position:absolute;top:-5px;right:-3px;display:inline-flex;align-items:center;gap:3px;background:#172033;color:#fff;font-size:8px;font-weight:1000;padding:1px 5px 1px 4px;border-radius:999px;letter-spacing:.04em;line-height:1.5;pointer-events:none;}
+.nav-new-dot-g{width:6px;height:6px;border-radius:50%;background:#35b95b;flex-shrink:0;animation:navPulse 1.4s ease-in-out infinite;}
+.nav-new-dot-p{width:6px;height:6px;border-radius:50%;background:#f06a9d;flex-shrink:0;animation:navPulse 1.4s ease-in-out infinite;}
 
 /* ── TICKER ── */
 .ticker-wrap{background:var(--ink);overflow:hidden;padding:9px 0;}
@@ -622,6 +623,26 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   .counter-item:last-child{border-bottom:none;}
   .stats-grid{grid-template-columns:1fr;}
 }
+/* ── ニヤニヤボタン ── */
+.niya-wrap{text-align:center;padding:28px 0 8px;}
+.niya-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pink),#e05090);color:#fff;border:none;border-radius:999px;padding:10px 24px;font-size:14px;font-weight:1000;cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .15s;box-shadow:0 8px 24px rgba(240,106,157,.32);}
+.niya-btn:hover{transform:scale(1.06);box-shadow:0 12px 32px rgba(240,106,157,.42);}
+.niya-btn:active{transform:scale(.97);}
+.niya-btn.g{background:linear-gradient(135deg,var(--green),#2ea64f);box-shadow:0 8px 24px rgba(53,185,91,.32);}
+.niya-btn.g:hover{box-shadow:0 12px 32px rgba(53,185,91,.42);}
+.niya-btn.b{background:linear-gradient(135deg,#4f8ef7,#2563eb);box-shadow:0 8px 24px rgba(79,142,247,.32);}
+.niya-btn.b:hover{box-shadow:0 12px 32px rgba(79,142,247,.42);}
+.niya-btn.y{background:linear-gradient(135deg,#f59e0b,#d97706);box-shadow:0 8px 24px rgba(245,158,11,.32);}
+.niya-btn.y:hover{box-shadow:0 12px 32px rgba(245,158,11,.42);}
+.niya-sub{font-size:12px;color:var(--soft);margin-top:8px;}
+/* ── 降ってくるアイコン ── */
+@keyframes niyaFall{0%{opacity:1;transform:translateY(0) rotate(0deg) translateX(0)}30%{opacity:1}100%{opacity:0;transform:translateY(106vh) rotate(var(--spin)) translateX(var(--drift))}}
+.niyal{position:fixed;top:-30px;pointer-events:none;z-index:9999;font-size:var(--sz,20px);animation:niyaFall var(--dur,3s) ease-in forwards;}
+@keyframes niyaRise{0%{opacity:0;transform:translateY(0) rotate(0deg) translateX(0)}8%{opacity:1}100%{opacity:0;transform:translateY(var(--rise)) rotate(var(--spin)) translateX(var(--drift))}}
+.niyar{position:fixed;bottom:-30px;pointer-events:none;z-index:9999;font-size:var(--sz,20px);animation:niyaRise var(--dur,2.6s) cubic-bezier(.2,.8,.4,1) forwards;}
+/* ── トースト ── */
+.niya-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:14px;font-weight:800;padding:12px 24px;border-radius:16px;z-index:10000;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.22);}
+.niya-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
@@ -637,8 +658,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         <a href="#board">世界観</a>
         <a href="#features">できること</a>
         <a href="#license">資格の道</a>
-        <a href="./manual.html" class="nav-new-green" style="position:relative;">📖 使い方<span class="nav-new-badge"><span class="nav-new-dot"></span>NEW</span></a>
-        <a href="./install.html" class="nav-new-pink" style="position:relative;">📲 追加方法<span class="nav-new-badge"><span class="nav-new-dot"></span>NEW</span></a>
+        <a href="./manual.html" class="nav-new-green" style="position:relative;">📖 使い方<span class="nav-new-badge"><span class="nav-new-dot-g"></span>NEW</span></a>
+        <a href="./install.html" class="nav-new-pink" style="position:relative;">📲 追加方法<span class="nav-new-badge"><span class="nav-new-dot-p"></span>NEW</span></a>
       </div>
     </div>
   </div>
@@ -936,6 +957,10 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         <div class="scene reveal reveal-delay-3" data-step="03"><img class="mini-photo" src="./uhogori-boy.png" alt="ウホゴリくん"><h3>星が増える</h3><p>ウホゴリくんは星を見てニヤリ。30分でひとつ、進んだ景色が見える。</p></div>
         <div class="scene reveal reveal-delay-4" data-step="04"><img class="mini-photo" src="./uhogori-girl.png" alt="ウホゴリちゃん"><h3>明日もちょっと進む</h3><p>ウホゴリちゃんはバッジを眺めて、明日の冒険を楽しみにする。</p></div>
       </div>
+      <div class="niya-wrap">
+        <button class="niya-btn g" onclick="niyaLaunchUp()">🥸 ニヤニヤしてみる</button>
+        <div class="niya-sub">（押してみてください）</div>
+      </div>
     </div>
   </section>
 
@@ -962,6 +987,12 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         <div class="scroll-hint">スワイプして全部見る <span class="scroll-hint-arrow">→</span></div>
       </div>
     </div>
+    <div class="wrap">
+      <div class="niya-wrap">
+        <button class="niya-btn" onclick="niyaLaunch()">🦍 ゴリラを召喚する</button>
+        <div class="niya-sub">（ゴリ多めでお届けします）</div>
+      </div>
+    </div>
   </section>
 
   <!-- ランナー帯③ -->
@@ -978,6 +1009,10 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         <div class="feature reveal reveal-delay-1"><h3>10分を<br>タップで残す</h3><p>マスを押すだけ。それが今日の軌跡になる。</p><img class="mini-photo" src="./niyaburo-girl.png" alt="ニヤブロちゃん"></div>
         <div class="feature reveal reveal-delay-2"><h3>星が増えて<br>サクサク感</h3><p>30分でひとつ。積み重なる星が、続けた証になる。</p><div class="mini-face peek pink" style="position:absolute;right:18px;bottom:-18px;z-index:1;">★</div></div>
         <div class="feature reveal reveal-delay-3"><h3>My Crazyを<br>つくれる</h3><p>今日だけの特訓枠。自分で名前をつけて、1マス刻む。</p><img class="mini-photo" src="./uhogori-girl.png" alt="ウホゴリちゃん"></div>
+      </div>
+      <div class="niya-wrap">
+        <button class="niya-btn b" onclick="niyaLaunch()">🌸 桜吹雪を起こす</button>
+        <div class="niya-sub">（大中小特大でお届けします）</div>
       </div>
     </div>
   </section>
@@ -999,6 +1034,10 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
           <span class="chip">🏛️ 公務員</span><span class="chip">💼 中小企業診断士</span>
           <span class="chip">🔍 公認会計士</span>
         </div>
+      </div>
+      <div class="niya-wrap">
+        <button class="niya-btn y" onclick="niyaLaunchUp()">🥸 ニヤニヤしてみる</button>
+        <div class="niya-sub">（どれが降ってくるかはランダムです）</div>
       </div>
     </div>
   </section>
@@ -1735,6 +1774,86 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   initRunners();
   initReveal();
   loadStats();
+})();
+</script>
+<!-- ニヤニヤ演出 -->
+<div class="niya-toast" id="niya-toast"></div>
+<script>
+(function(){
+  var SETS = [
+    {icons:['🥦','🥦','🥦','🥦','🥦','🥦','✨','🌱'],        count:26, msg:'🥦🥦🥦 ブロッコリー大発生！！'},
+    {icons:['🦍','🦍','🦍','🦍','🦍','🍌','💪','🦍'],        count:28, msg:'🦍 ゴリゴリゴリ！！ゴリ！！'},
+    {icons:['🥸','🥸','🥸','🥸','🥸','😏','😎','🥸'],        count:24, msg:'ニヤニヤ……待て。😏'},
+    {icons:['🌸','🌸','🌸','🌸','🌸','💮','🌺','🌸'],        count:30, msg:'🌸 満開！コツコツ達成！'},
+    {icons:['🌸','🥦','🦍','🥸','⚔️','🚀','🐉','✨','🏅','👑'], count:32, msg:'😏 収拾がつかなくなった……'},
+  ];
+  var SIZES = [14,20,28,44];
+  var WEIGHTS = [3,4,2,1];
+
+  function randSize(){
+    var total=WEIGHTS.reduce(function(a,b){return a+b;},0);
+    var r=Math.random()*total;
+    for(var i=0;i<SIZES.length;i++){r-=WEIGHTS[i];if(r<=0)return SIZES[i];}
+    return SIZES[1];
+  }
+
+  function showToast(msg){
+    var t=document.getElementById('niya-toast');
+    if(!t)return;
+    t.textContent=msg;
+    t.classList.add('show');
+    clearTimeout(t._tid);
+    t._tid=setTimeout(function(){t.classList.remove('show');},2800);
+  }
+
+  window.niyaLaunch=function(){
+    var set=SETS[Math.floor(Math.random()*SETS.length)];
+    for(var i=0;i<set.count;i++){
+      (function(idx){
+        setTimeout(function(){
+          var el=document.createElement('div');
+          el.className='niyal';
+          el.textContent=set.icons[Math.floor(Math.random()*set.icons.length)];
+          var sz=randSize();
+          var dur=2.2+Math.random()*2.2;
+          var spin=(Math.random()>.5?1:-1)*(120+Math.random()*360)+'deg';
+          var drift=(Math.random()-.5)*220+'px';
+          el.style.cssText='left:'+Math.random()*100+'vw;--sz:'+sz+'px;--dur:'+dur+'s;--spin:'+spin+';--drift:'+drift;
+          document.body.appendChild(el);
+          setTimeout(function(){el.remove();},dur*1000+300);
+        },idx*75);
+      })(i);
+    }
+    showToast(set.msg);
+  };
+
+  /* 🥸 下→斜め上 専用 */
+  var NIYA_ICONS = ['🥸','🥸','🥸','🥸','🥸','😏','😎','🥸'];
+  var NIYA_MSGS  = ['ニヤニヤ……待て。😏','🥸🥸🥸 ニヤニヤ大発生！！','😏 ニヤニヤ、止まらない。'];
+  window.niyaLaunchUp=function(){
+    var count=26;
+    var msg=NIYA_MSGS[Math.floor(Math.random()*NIYA_MSGS.length)];
+    for(var i=0;i<count;i++){
+      (function(idx){
+        setTimeout(function(){
+          var el=document.createElement('div');
+          el.className='niyar';
+          el.textContent=NIYA_ICONS[Math.floor(Math.random()*NIYA_ICONS.length)];
+          var sz=randSize();
+          var dur=1.8+Math.random()*1.6;
+          /* 斜め上：riseは上方向（マイナス）、driftで左右に散らす */
+          var riseH = 60 + Math.random()*50; /* 画面の60〜110%上まで */
+          var rise  = '-' + riseH + 'vh';
+          var drift = (Math.random()-.5)*280+'px'; /* 左右にランダムに広がる */
+          var spin  = (Math.random()>.5?1:-1)*(90+Math.random()*270)+'deg';
+          el.style.cssText='left:'+Math.random()*100+'vw;--sz:'+sz+'px;--dur:'+dur+'s;--rise:'+rise+';--drift:'+drift+';--spin:'+spin;
+          document.body.appendChild(el);
+          setTimeout(function(){el.remove();},dur*1000+300);
+        },idx*70);
+      })(i);
+    }
+    showToast(msg);
+  };
 })();
 </script>
 </body>

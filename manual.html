@@ -175,10 +175,21 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 .niya-trigger{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pink),#e05090);color:#fff;border:none;border-radius:999px;padding:10px 22px;font-size:14px;font-weight:1000;cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .15s;box-shadow:0 8px 24px rgba(240,106,157,.35);}
 .niya-trigger:hover{transform:scale(1.06);box-shadow:0 12px 32px rgba(240,106,157,.4);}
 .niya-trigger:active{transform:scale(.97);}
+.niya-trigger.green{background:linear-gradient(135deg,var(--green),#2ea64f);box-shadow:0 8px 24px rgba(53,185,91,.35);}
+.niya-trigger.green:hover{box-shadow:0 12px 32px rgba(53,185,91,.4);}
+.niya-trigger.blue{background:linear-gradient(135deg,#4f8ef7,#2563eb);box-shadow:0 8px 24px rgba(79,142,247,.35);}
+.niya-trigger.blue:hover{box-shadow:0 12px 32px rgba(79,142,247,.4);}
+.niya-trigger.yellow{background:linear-gradient(135deg,#f59e0b,#d97706);box-shadow:0 8px 24px rgba(245,158,11,.35);}
+.niya-trigger.yellow:hover{box-shadow:0 12px 32px rgba(245,158,11,.4);}
+.niya-trigger.purple{background:linear-gradient(135deg,#a78bfa,#7c3aed);box-shadow:0 8px 24px rgba(167,139,250,.35);}
+.niya-trigger.purple:hover{box-shadow:0 12px 32px rgba(167,139,250,.4);}
+.niya-sub{margin-top:10px;font-size:12px;color:var(--soft);}
 
 /* ── ペタル演出 ── */
 @keyframes petalFall{0%{opacity:1;transform:translateY(0) rotate(0deg) translateX(0)}30%{opacity:1}100%{opacity:0;transform:translateY(105vh) rotate(var(--spin)) translateX(var(--drift))}}
 .falling-petal{position:fixed;top:-24px;pointer-events:none;z-index:9999;font-size:var(--sz,18px);animation:petalFall var(--dur,3.2s) ease-in forwards;}
+@keyframes niyaRise{0%{opacity:0;transform:translateY(0) rotate(0deg) translateX(0)}8%{opacity:1}100%{opacity:0;transform:translateY(var(--rise)) rotate(var(--spin)) translateX(var(--drift))}}
+.rising-petal{position:fixed;bottom:-30px;pointer-events:none;z-index:9999;font-size:var(--sz,18px);animation:niyaRise var(--dur,2.6s) cubic-bezier(.2,.8,.4,1) forwards;}
 
 /* ── ポップアップトースト ── */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:14px;font-weight:800;padding:12px 24px;border-radius:16px;z-index:9998;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;text-align:center;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.25);}
@@ -582,6 +593,10 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
     <div class="niya-box reveal">
       <p>「コツコツやれば大丈夫」——気づいたら、これが口癖になってた。</p>
       <div class="niya-source">— 🥦 正体不明育成記より</div>
+      <div style="margin-top:16px;">
+        <button class="niya-trigger green" onclick="launch('broccoli')">🥦 ブロッコリーを召喚する</button>
+        <div class="niya-sub">（押してみてください）</div>
+      </div>
     </div>
   </div>
 </section>
@@ -654,6 +669,10 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
     <div class="niya-box reveal">
       <p>「10周目。あなたはもう、伝説そのものです。チャチャ！！10周！！人類史上最高のコツコツ！！ニヤニヤ！！」</p>
       <div class="niya-source">— 🥦 正体不明育成記 10周目より</div>
+      <div style="margin-top:16px;">
+        <button class="niya-trigger" onclick="launch('gorilla')">🦍 ゴリラを大量召喚する</button>
+        <div class="niya-sub">（ゴリ多めでお届けします）</div>
+      </div>
     </div>
   </div>
 </section>
@@ -687,6 +706,10 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
     <div class="niya-box reveal">
       <p>「ニヤニヤ、待て。」</p>
       <div class="niya-source">— Lv100「伝説のコツサク」の到達メッセージ</div>
+      <div style="margin-top:16px;">
+        <button class="niya-trigger yellow" onclick="launchUp('niya')">🥸 ニヤニヤを解放する</button>
+        <div class="niya-sub">（待てない人はこちら）</div>
+      </div>
     </div>
 
     <div class="feature-list reveal">
@@ -734,6 +757,10 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 
     <div class="niya-box reveal">
       <p>🥦モードで100日連続するとバッジの名前が「何か生えてきた」になります。気のせいじゃないと思います。</p>
+      <div style="margin-top:16px;">
+        <button class="niya-trigger purple" onclick="launch('sakura')">🌸 桜吹雪を起こす</button>
+        <div class="niya-sub">（大中小特大でお届けします）</div>
+      </div>
     </div>
   </div>
 </section>
@@ -935,6 +962,10 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 
     <div class="niya-box reveal">
       <p>フォレストテーマはLv2、オーシャン・サンセットはLv4・5から解放されます。上を目指す理由が、増えます。</p>
+      <div style="margin-top:16px;">
+        <button class="niya-trigger blue" onclick="launch('all')">🎆 全部まとめて降らせる</button>
+        <div class="niya-sub">（収拾がつかなくなります）</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1097,11 +1128,9 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
       </div>
     </div>
 
-    <div style="margin-top:40px;" class="reveal">
-      <button class="niya-trigger" onclick="launchPetals()">
-        😏 ニヤニヤしてみる
-      </button>
-      <div style="margin-top:12px;font-size:13px;color:var(--soft);">（押してみてください）</div>
+    <div style="margin-top:40px;">
+      <button class="niya-trigger" onclick="launch('mix')">😏 ニヤニヤしてみる（ミックス）</button>
+      <div class="niya-sub">（どれが降ってくるかはお楽しみ）</div>
     </div>
   </div>
 </section>
@@ -1144,26 +1173,94 @@ function toggleFaq(btn){
   }
 })();
 
-/* ── ペタル演出 ── */
-function launchPetals(){
-  const petals=['🌸','🌸','🌸','🥦','✨','🌸','🌸'];
-  const count=22;
+/* ── 演出セット定義 ── */
+const LAUNCH_SETS = {
+  broccoli: {
+    icons: ['🥦','🥦','🥦','🥦','🥦','🥦','🥦','🥦','✨','🌱'],
+    count: 28, toast: '🥦🥦🥦 ブロッコリー大発生！！'
+  },
+  gorilla: {
+    icons: ['🦍','🦍','🦍','🦍','🦍','🦍','🦍','🍌','🦍','💪','🦍','🦍'],
+    count: 30, toast: '🦍 ゴリゴリゴリ！！ゴリ！！'
+  },
+  niya: {
+    icons: ['🥸','🥸','🥸','🥸','🥸','🥸','😏','🥸','🥸','😎','🥸'],
+    count: 26, toast: 'ニヤニヤ……待て。😏'
+  },
+  sakura: {
+    icons: ['🌸','🌸','🌸','🌸','🌸','🌸','🌸','🌸','💮','🌺','🌸'],
+    count: 32, toast: '🌸 満開！目標達成演出！'
+  },
+  all: {
+    icons: ['🌸','🥦','🦍','🥸','⚔️','🚀','🐉','✨','🏅','👑','💥','🎆','⭐','🌸','🥦'],
+    count: 36, toast: '😏 収拾がつかなくなった……'
+  },
+  mix: {
+    icons: ['🌸','🥦','🦍','🥸','😏','✨','🏅','👑','⭐','🎉','💥','🌸','🥦','🦍'],
+    count: 24, toast: 'ニヤニヤ……😏'
+  }
+};
+
+/* ── サイズテーブル（大中小特大） ── */
+const SIZES = [14, 20, 28, 42];
+const SIZE_WEIGHTS = [3, 4, 2, 1]; // 出現頻度の重み（小多め）
+
+function weightedSize() {
+  const total = SIZE_WEIGHTS.reduce((a,b)=>a+b,0);
+  let r = Math.random() * total;
+  for(let i=0;i<SIZES.length;i++){
+    r -= SIZE_WEIGHTS[i];
+    if(r<=0) return SIZES[i];
+  }
+  return SIZES[1];
+}
+
+/* ── 演出起動 ── */
+function launch(type){
+  const set = LAUNCH_SETS[type] || LAUNCH_SETS.mix;
+  const count = set.count;
   for(let i=0;i<count;i++){
     setTimeout(()=>{
-      const el=document.createElement('div');
-      el.className='falling-petal';
-      const emoji=petals[Math.floor(Math.random()*petals.length)];
-      el.textContent=emoji;
-      const sz=14+Math.random()*14;
-      const dur=2.4+Math.random()*1.8;
-      const spin=(Math.random()>.5?1:-1)*(180+Math.random()*360)+'deg';
-      const drift=(Math.random()-.5)*180+'px';
-      el.style.cssText=`left:${Math.random()*100}vw;--sz:${sz}px;--dur:${dur}s;--spin:${spin};--drift:${drift}`;
+      const el = document.createElement('div');
+      el.className = 'falling-petal';
+      const emoji = set.icons[Math.floor(Math.random()*set.icons.length)];
+      el.textContent = emoji;
+      const sz  = weightedSize();
+      const dur = 2.2 + Math.random()*2.2;
+      const spin = (Math.random()>.5?1:-1)*(120+Math.random()*360)+'deg';
+      const drift = (Math.random()-.5)*220+'px';
+      el.style.cssText = `left:${Math.random()*100}vw;--sz:${sz}px;--dur:${dur}s;--spin:${spin};--drift:${drift}`;
       document.body.appendChild(el);
-      setTimeout(()=>el.remove(),dur*1000+200);
-    },i*90);
+      setTimeout(()=>el.remove(), dur*1000+300);
+    }, i * 75);
   }
-  showToast('ニヤニヤ……😏');
+  showToast(set.toast);
+}
+
+/* ── 後方互換（旧launchPetals） ── */
+function launchPetals(){ launch('mix'); }
+
+/* 🥸 下→斜め上 専用 */
+function launchUp(type){
+  const set = LAUNCH_SETS[type] || LAUNCH_SETS.niya;
+  const count = set.count;
+  for(let i=0; i<count; i++){
+    setTimeout(()=>{
+      const el = document.createElement('div');
+      el.className = 'rising-petal';
+      el.textContent = set.icons[Math.floor(Math.random()*set.icons.length)];
+      const sz   = weightedSize();
+      const dur  = 1.8 + Math.random()*1.6;
+      const riseH = 60 + Math.random()*55;
+      const rise  = '-' + riseH + 'vh';
+      const drift = (Math.random()-.5)*280+'px';
+      const spin  = (Math.random()>.5?1:-1)*(90+Math.random()*270)+'deg';
+      el.style.cssText = `left:${Math.random()*100}vw;--sz:${sz}px;--dur:${dur}s;--rise:${rise};--drift:${drift};--spin:${spin}`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(), dur*1000+300);
+    }, i*70);
+  }
+  showToast(set.toast);
 }
 
 /* ── トースト ── */
