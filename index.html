@@ -194,6 +194,11 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 }
 .sakura-sublabel{font-size:.72rem;color:var(--soft);text-align:center;margin-bottom:0;}
 .sakura-hero{display:flex;align-items:flex-end;justify-content:center;gap:6px;margin:4px 0 4px;flex-wrap:nowrap;}
+/* ゴリラ両脇 */
+.gorilla-flank{flex-shrink:0;align-self:flex-end;pointer-events:none;object-fit:contain;object-position:bottom;height:clamp(56px,14vw,180px);}
+.gorilla-flank.left{transform:scaleX(-1);margin-right:-60px;}
+.gorilla-flank.right{margin-left:-60px;}
+@media(max-width:599px){.gorilla-flank{height:clamp(40px,11vw,56px);}.gorilla-flank.left{margin-right:-30px;}.gorilla-flank.right{margin-left:-30px;}}
 .sakura-big-num{
   font-size:clamp(56px,14vw,180px);
   font-weight:1000;line-height:.9;
@@ -669,6 +674,14 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 /* ── トースト ── */
 .niya-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:14px;font-weight:800;padding:12px 24px;border-radius:16px;z-index:10000;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.22);}
 .niya-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* ===== ゴリラ演出 ===== */
+#gorilla-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+.gorilla-btn-wrap{display:flex;justify-content:center;margin-top:16px;}
+.gorilla-btn{padding:10px 28px;background:linear-gradient(135deg,#f06a9d,#fb7ab5);color:#fff;border:none;border-radius:99px;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 4px 14px rgba(240,106,157,.35);transition:transform .1s,box-shadow .1s;letter-spacing:.03em;display:none;}
+.gorilla-btn:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(240,106,157,.45);}
+.gorilla-btn:active{transform:scale(.96);box-shadow:none;}
+.gorilla-btn:disabled{opacity:.5;cursor:default;transform:none;}
+#gorilla-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;display:none;}
 /* ===== 絵文字足跡エフェクト ===== */
 .paw-trail{position:fixed;z-index:9999;width:28px;height:28px;pointer-events:none;background:var(--paw-icon) center/contain no-repeat;opacity:0.28;transform:translate(-50%,-50%) rotate(var(--paw-rotation)) scale(0.72);animation:900ms ease-out forwards paw-fade;}
 @keyframes paw-fade{from{opacity:0.28;transform:translate(-50%,-50%) rotate(var(--paw-rotation)) scale(0.72);}to{opacity:0;transform:translate(-50%,-50%) rotate(var(--paw-rotation)) scale(1);}}
@@ -743,9 +756,13 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         <div class="sakura-card reveal" style="margin-top:0;border-radius:0 0 24px 24px;border-top:none;">
           <div class="sakura-title">🌸 みんなの軌跡 🌸</div>
           <!-- 数字（タイトルのすぐ下） -->
-          <div class="sakura-hero" style="position:relative;z-index:2;pointer-events:none;margin:8px 0 0;">
-            <span class="sakura-big-num" id="val-hours-num">0</span>
-            <span class="sakura-big-suffix">時間</span>
+          <div class="sakura-hero" style="position:relative;z-index:2;margin:8px 0 0;">
+            <canvas id="gorilla-canvas"></canvas>
+            <span class="sakura-big-num" id="val-hours-num" style="pointer-events:none;">0</span>
+            <span class="sakura-big-suffix" style="pointer-events:none;">時間</span>
+          </div>
+          <div class="gorilla-btn-wrap">
+            <button class="gorilla-btn" id="gorilla-btn" onclick="gorillaRandomTrigger()">🦍 ゴリ軌跡ゴリ 🦍</button>
           </div>
           <!-- 桜パーティクルエリア -->
           <div class="sakura-particle-wrap" id="sakura-particle-wrap">
@@ -1503,6 +1520,11 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
     if (loading) loading.style.display = 'none';
     if (body)    body.style.display    = 'block';
+
+    // ── ゴリラ演出：1000時間トリガー ──
+    if (totalHours >= 1000) {
+      gorillaUnlock(totalHours);
+    }
   }
 
   // メインデータ取得：summary 1件を60秒ごとに取得。
@@ -1878,6 +1900,194 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   loadStats();
 })();
 
+// ===== ゴリラ演出 =====
+(() => {
+  const DUR = 10, SIZE = 0.8, COUNT = 5;
+  let _unlocked = false;
+  let _celebDone = false;
+  let _rafA = null;
+  let _stA = null;
+
+  // 動画（1つだけ）
+  const vid = document.createElement('video');
+  vid.src = 'gorilla-dance.webm';
+  vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
+  vid.style.display = 'none';
+  document.body.appendChild(vid);
+  vid.play();
+
+  // canvas・ボタン参照
+  const canvasA = document.getElementById('gorilla-canvas');
+  const btn     = document.getElementById('gorilla-btn');
+  const overlay = document.getElementById('gorilla-overlay');
+
+  // canvasリサイズ
+  function resizeA() {
+    if (!canvasA.parentElement) return;
+    canvasA.width  = canvasA.parentElement.offsetWidth;
+    canvasA.height = canvasA.parentElement.offsetHeight;
+  }
+  window.addEventListener('resize', resizeA);
+
+  // A：常時5体ループ
+  function drawA(ts) {
+    if (!_stA) _stA = ts;
+    const elapsed = (ts - _stA) / 1000;
+    resizeA();
+    const ctx = canvasA.getContext('2d');
+    ctx.clearRect(0, 0, canvasA.width, canvasA.height);
+    const h = canvasA.height * SIZE;
+    const asp = vid.videoWidth && vid.videoHeight ? vid.videoWidth / vid.videoHeight : 1;
+    const w = h * asp;
+    const travel = canvasA.width + w * 1.4;
+    for (let i = 0; i < COUNT; i++) {
+      const t = (((elapsed + (i / COUNT) * DUR) % DUR)) / DUR;
+      const x = canvasA.width + w * 0.2 - t * travel;
+      ctx.save();
+      ctx.translate(x, canvasA.height);
+      ctx.scale(-1, 1);
+      ctx.drawImage(vid, -w/2, -h, w, h);
+      ctx.restore();
+    }
+    _rafA = requestAnimationFrame(drawA);
+  }
+
+  // 1000時間到達時に呼ばれる
+  window.gorillaUnlock = function(totalHours) {
+    if (!_unlocked) {
+      _unlocked = true;
+      resizeA();
+      _rafA = requestAnimationFrame(drawA);
+      btn.style.display = 'block';
+    }
+    // 初回到達祝福演出（1度だけ）
+    if (!_celebDone && totalHours >= 1000) {
+      _celebDone = true;
+      setTimeout(() => gorillaB2(() => {}), 800);
+    }
+  };
+
+  // ランダム演出
+  let _busy = false;
+  window.gorillaRandomTrigger = function() {
+    if (_busy) return;
+    _busy = true;
+    btn.disabled = true;
+    const patterns = [gorillaB1, gorillaB2, gorillaB3];
+    patterns[Math.floor(Math.random() * patterns.length)](() => {
+      _busy = false;
+      btn.disabled = false;
+    });
+  };
+
+  // B①：素早く横断
+  function gorillaB1(done) {
+    const c = document.createElement('canvas');
+    c.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:3;';
+    canvasA.parentElement.appendChild(c);
+    c.width = canvasA.width; c.height = canvasA.height;
+    const ctx = c.getContext('2d');
+    const h = c.height * SIZE;
+    const asp = vid.videoWidth && vid.videoHeight ? vid.videoWidth / vid.videoHeight : 1;
+    const w = h * asp;
+    const travel = c.width + w * 1.4;
+    const fd = 2.5;
+    let st = null;
+    (function draw(ts) {
+      if (!st) st = ts;
+      const e = (ts - st) / 1000;
+      ctx.clearRect(0, 0, c.width, c.height);
+      let allDone = true;
+      for (let i = 0; i < 5; i++) {
+        const t = Math.min((e - i * 0.25) / fd, 1);
+        if (t < 0) { allDone = false; continue; }
+        if (t < 1) allDone = false;
+        ctx.save();
+        ctx.translate(c.width + w * 0.2 - t * travel, c.height);
+        ctx.scale(-1, 1);
+        ctx.drawImage(vid, -w/2, -h, w, h);
+        ctx.restore();
+      }
+      if (!allDone) requestAnimationFrame(draw);
+      else { c.remove(); done(); }
+    })(performance.now());
+    void 0;
+  }
+
+  // B②：画面中央に登場（祝福演出兼用）
+  function gorillaB2(done) {
+    overlay.style.display = 'block';
+    overlay.width = window.innerWidth;
+    overlay.height = window.innerHeight;
+    const ctx = overlay.getContext('2d');
+    const total = 4;
+    let st = null;
+    (function draw(ts) {
+      if (!st) st = ts;
+      const e = (ts - st) / 1000;
+      ctx.clearRect(0, 0, overlay.width, overlay.height);
+      let alpha = e < 0.3 ? e / 0.3 : e > total - 0.5 ? (total - e) / 0.5 : 1;
+      alpha = Math.max(0, Math.min(1, alpha));
+      const h = overlay.height * 0.7;
+      const asp = vid.videoWidth && vid.videoHeight ? vid.videoWidth / vid.videoHeight : 1;
+      const w = h * asp;
+      ctx.fillStyle = `rgba(0,0,0,${alpha * 0.5})`;
+      ctx.fillRect(0, 0, overlay.width, overlay.height);
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.translate(overlay.width / 2, overlay.height / 2 + h / 2);
+      ctx.scale(-1, 1);
+      ctx.drawImage(vid, -w/2, -h, w, h);
+      ctx.restore();
+      if (e < total) requestAnimationFrame(draw);
+      else { ctx.clearRect(0, 0, overlay.width, overlay.height); overlay.style.display = 'none'; done(); }
+    })(performance.now());
+    void 0;
+  }
+
+  // B③：降ってくる
+  function gorillaB3(done) {
+    overlay.style.display = 'block';
+    overlay.width = window.innerWidth;
+    overlay.height = window.innerHeight;
+    const ctx = overlay.getContext('2d');
+    const total = 4;
+    const h = overlay.height * 0.28;
+    const asp = vid.videoWidth && vid.videoHeight ? vid.videoWidth / vid.videoHeight : 1;
+    const w = h * asp;
+    const gs = Array.from({length: 8}, () => ({
+      x: Math.random() * (overlay.width + w) - w / 2,
+      delay: Math.random() * 1.5,
+      speed: 0.28 + Math.random() * 0.28,
+      flip: Math.random() > 0.5 ? 1 : -1,
+    }));
+    let st = null;
+    (function draw(ts) {
+      if (!st) st = ts;
+      const e = (ts - st) / 1000;
+      ctx.clearRect(0, 0, overlay.width, overlay.height);
+      let any = false;
+      for (const g of gs) {
+        const t = e - g.delay;
+        if (t < 0) { any = true; continue; }
+        const y = -h + t * overlay.height * g.speed;
+        if (y < overlay.height + h) any = true;
+        let alpha = y > overlay.height * 0.7 ? 1 - (y - overlay.height * 0.7) / (overlay.height * 0.3 + h) : 1;
+        alpha = Math.max(0, Math.min(1, alpha));
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.translate(g.x, y + h);
+        ctx.scale(g.flip, 1);
+        ctx.drawImage(vid, -w/2, -h, w, h);
+        ctx.restore();
+      }
+      if (e < total || any) requestAnimationFrame(draw);
+      else { ctx.clearRect(0, 0, overlay.width, overlay.height); overlay.style.display = 'none'; done(); }
+    })(performance.now());
+    void 0;
+  }
+})();
+
 // ===== 絵文字足跡エフェクト（カオス版）=====
 (() => {
   if (window.matchMedia("(pointer: coarse)").matches) return;
@@ -1998,5 +2208,6 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   };
 })();
 </script>
+<canvas id="gorilla-overlay"></canvas>
 </body>
 </html>
