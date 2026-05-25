@@ -1535,7 +1535,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 
     // ── ゴリラ演出：10000時間トリガー（600,000分以上で解除）──
     if (totalMins >= 600000) {
-      gorillaUnlock(totalHours);
+      if (window.gorillaUnlock) window.gorillaUnlock(totalHours);
     } else {
       // 10000時間未満：テロップを表示
       if (window.gorillaShowTeaser) window.gorillaShowTeaser();
@@ -1915,202 +1915,250 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   loadStats();
 })();
 
-// ===== ゴリラ演出 =====
-(() => {
-  const DUR = 10, SIZE = 0.8, COUNT = 5;
-  let _unlocked = false;
-  let _celebDone = false;
-  let _rafA = null;
-  let _stA = null;
+// ===== ゴリラ演出（リライト版・IIFE廃止）=====
+// 全関数をグローバルスコープに配置し、スコープ問題を根本から解消
+// 動画は canplaythrough を待ってから初期化を進めるキュー方式
 
-  // 動画（1つだけ）
-  const vid = document.createElement('video');
-  vid.src = 'gorilla-dance.webm';
-  vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
-  vid.style.display = 'none';
-  document.body.appendChild(vid);
-  vid.play();
+// --- 設定 ---
+var GORILLA_DUR = 10;        // 常時ループ1周（秒）
+var GORILLA_SIZE = 0.8;      // canvas高さに対するゴリラの相対サイズ
+var GORILLA_COUNT = 5;       // 常時ループの体数
 
-  // canvas・ボタン参照
-  const canvasA = document.getElementById('gorilla-canvas');
-  const btn     = document.getElementById('gorilla-btn');
-  const overlay = document.getElementById('gorilla-overlay');
+// --- 状態 ---
+var _gorillaUnlocked = false;
+var _gorillaBusy = false;
+var _gorillaPendingTotalHours = null;  // video読み込み前に呼ばれた場合のキュー
+var _gorillaPendingTeaser = false;     // 同上（テロップ表示）
+var _gorillaVideoReady = false;
+var _gorillaRafA = null;
+var _gorillaStA = null;
 
-  // canvasリサイズ
-  function resizeA() {
-    if (!canvasA.parentElement) return;
-    canvasA.width  = canvasA.parentElement.offsetWidth;
-    canvasA.height = canvasA.parentElement.offsetHeight;
+// --- 動画要素（即時作成）---
+var _gorillaVid = document.createElement('video');
+_gorillaVid.src = 'gorilla-dance.webm';
+_gorillaVid.muted = true;
+_gorillaVid.loop = true;
+_gorillaVid.playsInline = true;
+_gorillaVid.autoplay = true;
+_gorillaVid.preload = 'auto';
+_gorillaVid.style.display = 'none';
+document.body.appendChild(_gorillaVid);
+
+// 読み込み完了を待ってキュー処理
+_gorillaVid.addEventListener('canplaythrough', function() {
+  _gorillaVideoReady = true;
+  try { _gorillaVid.play(); } catch(e) { console.warn('[gorilla] play failed:', e); }
+  // 待機中の呼び出しを処理
+  if (_gorillaPendingTotalHours !== null) {
+    var h = _gorillaPendingTotalHours;
+    _gorillaPendingTotalHours = null;
+    gorillaUnlock(h);
+  } else if (_gorillaPendingTeaser) {
+    _gorillaPendingTeaser = false;
+    gorillaShowTeaser();
   }
-  window.addEventListener('resize', resizeA);
+}, { once: true });
 
-  // A：常時5体ループ
-  function drawA(ts) {
-    if (!_stA) _stA = ts;
-    const elapsed = (ts - _stA) / 1000;
-    resizeA();
-    const ctx = canvasA.getContext('2d');
-    ctx.clearRect(0, 0, canvasA.width, canvasA.height);
-    const h = canvasA.height * SIZE;
-    const asp = vid.videoWidth && vid.videoHeight ? vid.videoWidth / vid.videoHeight : 1;
-    const w = h * asp;
-    const travel = canvasA.width + w * 1.4;
-    for (let i = 0; i < COUNT; i++) {
-      const t = (((elapsed + (i / COUNT) * DUR) % DUR)) / DUR;
-      const x = canvasA.width + w * 0.2 - t * travel;
-      ctx.save();
-      ctx.translate(x, canvasA.height);
-      ctx.scale(-1, 1);
-      ctx.drawImage(vid, -w/2, -h, w, h);
-      ctx.restore();
-    }
-    _rafA = requestAnimationFrame(drawA);
+_gorillaVid.addEventListener('error', function(e) {
+  console.error('[gorilla] video load error:', e, _gorillaVid.error);
+});
+
+// 早めにロード試行（一部ブラウザはautoplayだけだとloadしない）
+try { _gorillaVid.load(); } catch(e) {}
+
+// --- canvas リサイズ ---
+function gorillaResizeA() {
+  var canvasA = document.getElementById('gorilla-canvas');
+  if (!canvasA || !canvasA.parentElement) return;
+  canvasA.width  = canvasA.parentElement.offsetWidth;
+  canvasA.height = canvasA.parentElement.offsetHeight;
+}
+window.addEventListener('resize', gorillaResizeA);
+
+// --- A：常時5体ループ ---
+function gorillaDrawA(ts) {
+  var canvasA = document.getElementById('gorilla-canvas');
+  if (!canvasA) { _gorillaRafA = requestAnimationFrame(gorillaDrawA); return; }
+  if (_gorillaVid.readyState < 2 || !_gorillaVid.videoWidth) {
+    _gorillaRafA = requestAnimationFrame(gorillaDrawA);
+    return;
   }
+  if (!_gorillaStA) _gorillaStA = ts;
+  var elapsed = (ts - _gorillaStA) / 1000;
+  gorillaResizeA();
+  var ctx = canvasA.getContext('2d');
+  ctx.clearRect(0, 0, canvasA.width, canvasA.height);
+  var h = canvasA.height * GORILLA_SIZE;
+  var asp = _gorillaVid.videoWidth / _gorillaVid.videoHeight;
+  var w = h * asp;
+  var travel = canvasA.width + w * 1.4;
+  for (var i = 0; i < GORILLA_COUNT; i++) {
+    var t = (((elapsed + (i / GORILLA_COUNT) * GORILLA_DUR) % GORILLA_DUR)) / GORILLA_DUR;
+    var x = canvasA.width + w * 0.2 - t * travel;
+    ctx.save();
+    ctx.translate(x, canvasA.height);
+    ctx.scale(-1, 1);
+    try { ctx.drawImage(_gorillaVid, -w/2, -h, w, h); } catch(e) {}
+    ctx.restore();
+  }
+  _gorillaRafA = requestAnimationFrame(gorillaDrawA);
+}
 
-  // 10000時間到達時に呼ばれる
-  // テロップ表示（ページ読み込み時に呼ぶ）
-  window.gorillaShowTeaser = function() {
-    const teaser = document.getElementById('gorilla-teaser');
-    if (teaser) teaser.style.display = 'block';
-  };
+// --- テロップ表示（10000時間未満）---
+function gorillaShowTeaser() {
+  if (!_gorillaVideoReady) {
+    _gorillaPendingTeaser = true;
+    return;
+  }
+  var teaser = document.getElementById('gorilla-teaser');
+  if (teaser) teaser.style.display = 'block';
+  // ボタンと常時ループは隠す
+  var btn = document.getElementById('gorilla-btn');
+  if (btn) btn.style.display = 'none';
+  if (_gorillaRafA) { cancelAnimationFrame(_gorillaRafA); _gorillaRafA = null; _gorillaStA = null; }
+  var canvasA = document.getElementById('gorilla-canvas');
+  if (canvasA) {
+    var ctx = canvasA.getContext('2d');
+    if (ctx) ctx.clearRect(0, 0, canvasA.width, canvasA.height);
+  }
+  _gorillaUnlocked = false;
+}
 
-  window.gorillaUnlock = function(totalHours) {
-    // テロップを隠してボタンを表示
-    const teaser = document.getElementById('gorilla-teaser');
-    if (teaser) teaser.style.display = 'none';
-    if (!_unlocked) {
-      _unlocked = true;
-      resizeA();
-      _rafA = requestAnimationFrame(drawA);
-      btn.style.display = 'block';
-    }
-    // 初回到達祝福演出（1度だけ）
-    if (!_celebDone) {
-      _celebDone = true;
-      setTimeout(() => gorillaB2(() => {}), 800);
-    }
-  };
+// --- 10000時間到達時 ---
+function gorillaUnlock(totalHours) {
+  if (!_gorillaVideoReady) {
+    _gorillaPendingTotalHours = totalHours;
+    return;
+  }
+  // テロップを隠してボタンを表示
+  var teaser = document.getElementById('gorilla-teaser');
+  if (teaser) teaser.style.display = 'none';
+  var btn = document.getElementById('gorilla-btn');
+  if (btn) btn.style.display = 'block';
+  if (!_gorillaUnlocked) {
+    _gorillaUnlocked = true;
+    gorillaResizeA();
+    if (_gorillaRafA) cancelAnimationFrame(_gorillaRafA);
+    _gorillaStA = null;
+    _gorillaRafA = requestAnimationFrame(gorillaDrawA);
+  }
+  // 祝福演出（毎セッション1回・到達時に必ず出す仕様）
+  setTimeout(function() { gorillaB2(function(){}); }, 800);
+}
 
-  // ランダム演出
-  let _busy = false;
-  window.gorillaRandomTrigger = function() {
-    if (_busy) return;
-    _busy = true;
-    btn.disabled = true;
-    const patterns = [gorillaB1, gorillaB2, gorillaB3];
-    patterns[Math.floor(Math.random() * patterns.length)](() => {
-      _busy = false;
-      btn.disabled = false;
+// --- ランダム演出トリガー ---
+function gorillaRandomTrigger() {
+  if (_gorillaBusy) return;
+  if (!_gorillaVideoReady) { console.warn('[gorilla] video not ready'); return; }
+  _gorillaBusy = true;
+  var btn = document.getElementById('gorilla-btn');
+  if (btn) btn.disabled = true;
+  var patterns = [gorillaB2, gorillaB3];
+  var pick = patterns[Math.floor(Math.random() * patterns.length)];
+  pick(function() {
+    _gorillaBusy = false;
+    if (btn) btn.disabled = false;
+  });
+}
+
+// --- B②：画面中央に登場・暗転（祝福演出兼用）---
+// 動画の長さ分（_gorillaVid.duration 秒）表示する。
+// 動画長が取れない場合は安全側のフォールバック（13.5秒）。
+function gorillaB2(done) {
+  var overlay = document.getElementById('gorilla-overlay');
+  if (!overlay) { done && done(); return; }
+  overlay.style.display = 'block';
+  overlay.width = window.innerWidth;
+  overlay.height = window.innerHeight;
+  var ctx = overlay.getContext('2d');
+  // 動画の実長を使う（取得できなければ13.5秒）
+  var vidDur = (_gorillaVid && isFinite(_gorillaVid.duration) && _gorillaVid.duration > 0)
+               ? _gorillaVid.duration : 13.5;
+  var FADE_IN = 0.5;
+  var FADE_OUT = 0.8;
+  // 動画長より短くならないように。フェード分の余裕を確保。
+  var total = Math.max(vidDur, FADE_IN + FADE_OUT + 1);
+  // 演出開始時に動画を頭出し（毎回ちゃんと最初から見える）
+  try { _gorillaVid.currentTime = 0; } catch(e) {}
+  var st = null;
+  function draw(ts) {
+    if (!st) st = ts;
+    var e = (ts - st) / 1000;
+    ctx.clearRect(0, 0, overlay.width, overlay.height);
+    var alpha;
+    if (e < FADE_IN)              alpha = e / FADE_IN;
+    else if (e > total - FADE_OUT) alpha = (total - e) / FADE_OUT;
+    else                           alpha = 1;
+    alpha = Math.max(0, Math.min(1, alpha));
+    var h = overlay.height * 0.7;
+    var asp = _gorillaVid.videoWidth / _gorillaVid.videoHeight;
+    var w = h * asp;
+    ctx.fillStyle = 'rgba(0,0,0,' + (alpha * 0.5) + ')';
+    ctx.fillRect(0, 0, overlay.width, overlay.height);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(overlay.width / 2, overlay.height / 2 + h / 2);
+    ctx.scale(-1, 1);
+    try { ctx.drawImage(_gorillaVid, -w/2, -h, w, h); } catch(err) {}
+    ctx.restore();
+    if (e < total) requestAnimationFrame(draw);
+    else { ctx.clearRect(0, 0, overlay.width, overlay.height); overlay.style.display = 'none'; done && done(); }
+  }
+  requestAnimationFrame(draw);
+}
+
+// --- B③：8体が降ってくる（ゆっくりめ・約8秒）---
+function gorillaB3(done) {
+  var overlay = document.getElementById('gorilla-overlay');
+  if (!overlay) { done && done(); return; }
+  overlay.style.display = 'block';
+  overlay.width = window.innerWidth;
+  overlay.height = window.innerHeight;
+  var ctx = overlay.getContext('2d');
+  var total = 8;
+  var h = overlay.height * 0.28;
+  var asp = _gorillaVid.videoWidth / _gorillaVid.videoHeight;
+  var w = h * asp;
+  var gs = [];
+  for (var k = 0; k < 8; k++) {
+    gs.push({
+      x: Math.random() * (overlay.width + w) - w / 2,
+      delay: Math.random() * 3.0,
+      speed: 0.14 + Math.random() * 0.14,
+      flip: Math.random() > 0.5 ? 1 : -1,
     });
-  };
-
-  // B①：素早く横断
-  function gorillaB1(done) {
-    const c = document.createElement('canvas');
-    c.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:3;';
-    canvasA.parentElement.appendChild(c);
-    c.width = canvasA.width; c.height = canvasA.height;
-    const ctx = c.getContext('2d');
-    const h = c.height * SIZE;
-    const asp = vid.videoWidth && vid.videoHeight ? vid.videoWidth / vid.videoHeight : 1;
-    const w = h * asp;
-    const travel = c.width + w * 1.4;
-    const fd = 2.5;
-    let st = null;
-    (function draw(ts) {
-      if (!st) st = ts;
-      const e = (ts - st) / 1000;
-      ctx.clearRect(0, 0, c.width, c.height);
-      let allDone = true;
-      for (let i = 0; i < 5; i++) {
-        const t = Math.min((e - i * 0.25) / fd, 1);
-        if (t < 0) { allDone = false; continue; }
-        if (t < 1) allDone = false;
-        ctx.save();
-        ctx.translate(c.width + w * 0.2 - t * travel, c.height);
-        ctx.scale(-1, 1);
-        ctx.drawImage(vid, -w/2, -h, w, h);
-        ctx.restore();
-      }
-      if (!allDone) requestAnimationFrame(draw);
-      else { c.remove(); done(); }
-    })(performance.now());
-    void 0;
   }
-
-  // B②：画面中央に登場（祝福演出兼用）
-  function gorillaB2(done) {
-    overlay.style.display = 'block';
-    overlay.width = window.innerWidth;
-    overlay.height = window.innerHeight;
-    const ctx = overlay.getContext('2d');
-    const total = 4;
-    let st = null;
-    (function draw(ts) {
-      if (!st) st = ts;
-      const e = (ts - st) / 1000;
-      ctx.clearRect(0, 0, overlay.width, overlay.height);
-      let alpha = e < 0.3 ? e / 0.3 : e > total - 0.5 ? (total - e) / 0.5 : 1;
+  var st = null;
+  function draw(ts) {
+    if (!st) st = ts;
+    var e = (ts - st) / 1000;
+    ctx.clearRect(0, 0, overlay.width, overlay.height);
+    var any = false;
+    for (var i = 0; i < gs.length; i++) {
+      var g = gs[i];
+      var t = e - g.delay;
+      if (t < 0) { any = true; continue; }
+      var y = -h + t * overlay.height * g.speed;
+      if (y < overlay.height + h) any = true;
+      var alpha = y > overlay.height * 0.7 ? 1 - (y - overlay.height * 0.7) / (overlay.height * 0.3 + h) : 1;
       alpha = Math.max(0, Math.min(1, alpha));
-      const h = overlay.height * 0.7;
-      const asp = vid.videoWidth && vid.videoHeight ? vid.videoWidth / vid.videoHeight : 1;
-      const w = h * asp;
-      ctx.fillStyle = `rgba(0,0,0,${alpha * 0.5})`;
-      ctx.fillRect(0, 0, overlay.width, overlay.height);
       ctx.save();
       ctx.globalAlpha = alpha;
-      ctx.translate(overlay.width / 2, overlay.height / 2 + h / 2);
-      ctx.scale(-1, 1);
-      ctx.drawImage(vid, -w/2, -h, w, h);
+      ctx.translate(g.x, y + h);
+      ctx.scale(g.flip, 1);
+      try { ctx.drawImage(_gorillaVid, -w/2, -h, w, h); } catch(err) {}
       ctx.restore();
-      if (e < total) requestAnimationFrame(draw);
-      else { ctx.clearRect(0, 0, overlay.width, overlay.height); overlay.style.display = 'none'; done(); }
-    })(performance.now());
-    void 0;
+    }
+    if (e < total || any) requestAnimationFrame(draw);
+    else { ctx.clearRect(0, 0, overlay.width, overlay.height); overlay.style.display = 'none'; done && done(); }
   }
+  requestAnimationFrame(draw);
+}
 
-  // B③：降ってくる
-  function gorillaB3(done) {
-    overlay.style.display = 'block';
-    overlay.width = window.innerWidth;
-    overlay.height = window.innerHeight;
-    const ctx = overlay.getContext('2d');
-    const total = 4;
-    const h = overlay.height * 0.28;
-    const asp = vid.videoWidth && vid.videoHeight ? vid.videoWidth / vid.videoHeight : 1;
-    const w = h * asp;
-    const gs = Array.from({length: 8}, () => ({
-      x: Math.random() * (overlay.width + w) - w / 2,
-      delay: Math.random() * 1.5,
-      speed: 0.28 + Math.random() * 0.28,
-      flip: Math.random() > 0.5 ? 1 : -1,
-    }));
-    let st = null;
-    (function draw(ts) {
-      if (!st) st = ts;
-      const e = (ts - st) / 1000;
-      ctx.clearRect(0, 0, overlay.width, overlay.height);
-      let any = false;
-      for (const g of gs) {
-        const t = e - g.delay;
-        if (t < 0) { any = true; continue; }
-        const y = -h + t * overlay.height * g.speed;
-        if (y < overlay.height + h) any = true;
-        let alpha = y > overlay.height * 0.7 ? 1 - (y - overlay.height * 0.7) / (overlay.height * 0.3 + h) : 1;
-        alpha = Math.max(0, Math.min(1, alpha));
-        ctx.save();
-        ctx.globalAlpha = alpha;
-        ctx.translate(g.x, y + h);
-        ctx.scale(g.flip, 1);
-        ctx.drawImage(vid, -w/2, -h, w, h);
-        ctx.restore();
-      }
-      if (e < total || any) requestAnimationFrame(draw);
-      else { ctx.clearRect(0, 0, overlay.width, overlay.height); overlay.style.display = 'none'; done(); }
-    })(performance.now());
-    void 0;
-  }
-})();
+// applyStats / ボタン onclick から呼ばれるため window に公開
+window.gorillaShowTeaser = gorillaShowTeaser;
+window.gorillaUnlock = gorillaUnlock;
+window.gorillaRandomTrigger = gorillaRandomTrigger;
 
 // ===== 絵文字足跡エフェクト（カオス版）=====
 (() => {
@@ -2232,6 +2280,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
   };
 })();
 </script>
+
 <canvas id="gorilla-overlay"></canvas>
 </body>
 </html>
