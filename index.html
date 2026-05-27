@@ -687,6 +687,19 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 .gorilla-btn:active{transform:scale(.96);box-shadow:none;}
 .gorilla-btn:disabled{opacity:.5;cursor:default;transform:none;}
 #gorilla-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;display:none;}
+/* ===== uemak ランナー帯 ===== */
+.uemak-band-header{display:none;background:#0d1828;padding:5px 16px 4px;text-align:center;font-size:10px;font-weight:900;color:rgba(255,255,255,.38);letter-spacing:.13em;border-top:1px solid rgba(255,255,255,.05);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.uemak-runner-band{display:none;position:relative;overflow:visible;height:88px;background:linear-gradient(135deg,#0f1c2e 0%,#172033 50%,#1a2640 100%);border-bottom:2px solid rgba(255,255,255,.06);}
+.uemak-shooting-star{position:absolute;height:2px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:uemakShootStar linear infinite;width:80px;top:var(--t);animation-duration:var(--d);animation-delay:var(--dl);}
+@keyframes uemakShootStar{from{left:110%;opacity:1;}to{left:-20%;opacity:0;}}
+.uemak-char{position:absolute;top:50%;pointer-events:none;will-change:left;animation:uemakFly 2.8s ease-in-out infinite;}
+.uemak-char img{height:74px;width:auto;display:block;mix-blend-mode:screen;filter:drop-shadow(0 2px 14px rgba(96,200,255,.35)) drop-shadow(0 0 22px rgba(255,120,50,.2));}
+@keyframes uemakFly{0%,100%{transform:translateY(-50%) rotate(-3deg);}33%{transform:translateY(calc(-50% - 6px)) rotate(-5deg);}66%{transform:translateY(calc(-50% + 3px)) rotate(-1deg);}}
+.uemak-cape-trail{position:absolute;height:3px;border-radius:999px;background:linear-gradient(90deg,rgba(210,55,25,.55),transparent);pointer-events:none;animation:uemakCapeTrail 2.8s ease-in-out infinite;}
+@keyframes uemakCapeTrail{0%,100%{width:42px;opacity:.55;}50%{width:68px;opacity:.2;}}
+.uemak-band-end-label{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.18);font-size:9px;font-weight:800;letter-spacing:.1em;pointer-events:none;text-align:right;line-height:1.8;}
+.uemak-bubble{position:absolute;background:#fff;border:2.5px solid var(--ink);border-radius:18px 18px 18px 4px;padding:7px 14px;font-size:12px;font-weight:900;color:var(--ink);white-space:nowrap;box-shadow:4px 4px 0 rgba(23,32,51,.15);pointer-events:none;z-index:20;top:7px;animation:uemakBubblePop .35s cubic-bezier(.34,1.56,.64,1) both;line-height:1.5;}
+@keyframes uemakBubblePop{from{transform:scale(0) translateY(6px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
 /* ===== 絵文字足跡エフェクト ===== */
 .paw-trail{position:fixed;z-index:9999;width:28px;height:28px;pointer-events:none;background:var(--paw-icon) center/contain no-repeat;opacity:0.28;transform:translate(-50%,-50%) rotate(var(--paw-rotation)) scale(0.72);animation:900ms ease-out forwards paw-fade;}
 @keyframes paw-fade{from{opacity:0.28;transform:translate(-50%,-50%) rotate(var(--paw-rotation)) scale(0.72);}to{opacity:0;transform:translate(-50%,-50%) rotate(var(--paw-rotation)) scale(1);}}
@@ -772,8 +785,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
           <!-- 10000時間未満テロップ -->
           <div class="gorilla-teaser" id="gorilla-teaser">
             <div class="gorilla-teaser-inner">
-              <span>10000時間で🦍ゴリ召喚ゴリ🦍。。。。</span>
-              <span>10000時間で🦍ゴリ召喚ゴリ🦍。。。。</span>
+              <span>10,000時間で🦍ゴリ召喚ゴリ🦍。。。。</span>
+              <span>10,000時間で🦍ゴリ召喚ゴリ🦍。。。。</span>
             </div>
           </div>
           <!-- 桜パーティクルエリア -->
@@ -790,8 +803,22 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         </div>
       </div>
 
-
-      <!-- ══ セグメントバー：メイン vs 資格 ══ -->
+      <!-- ══ uemak ランナー帯ヘッダー（10,000時間到達後に出現） ══ -->
+      <div class="uemak-band-header" id="uemakBandHeader">
+        ✦ C-TEAM UEMAK ✦ &nbsp;｜&nbsp; 謎の組織が応援中 &nbsp;｜&nbsp;
+        C_uemak（なりすまし!? Cチーム・コツコツ✏️サクサク🌸運営責任者）
+      </div>
+      <!-- ══ uemak ランナー帯本体（10,000時間到達後に出現） ══ -->
+      <div class="uemak-runner-band" id="uemakBand">
+        <div class="uemak-shooting-star" style="--t:18%;--d:3.2s;--dl:0s;"></div>
+        <div class="uemak-shooting-star" style="--t:52%;--d:4.3s;--dl:1.5s;"></div>
+        <div class="uemak-shooting-star" style="--t:74%;--d:2.9s;--dl:2.9s;"></div>
+        <div class="uemak-char" id="uemakChar">
+          <img src="uemak.png" alt="C_uemak 運営責任者">
+        </div>
+        <div class="uemak-cape-trail" id="uemakCapeTrail"></div>
+        <div class="uemak-band-end-label">✦ C-TEAM UEMAK ✦<br>なりすまし!? Cチーム</div>
+      </div>
       <div class="wrap" style="padding-top:28px;">
         <div class="segment-bar-card reveal">
           <div class="segment-bar-title">⚔️ vs 🌸 — ストーリーを選んだ冒険者たちの内訳</div>
@@ -1533,11 +1560,12 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     if (loading) loading.style.display = 'none';
     if (body)    body.style.display    = 'block';
 
-    // ── ゴリラ演出：10000時間トリガー（600,000分以上で解除）──
+    // ── ゴリラ演出：10,000時間トリガー（600,000分以上で解除）──
+    // B②祝福演出は10,000時間〜11,000時間未満（600,000分〜660,000分未満）の間のみ毎セッション発動
     if (totalMins >= 600000) {
-      if (window.gorillaUnlock) window.gorillaUnlock(totalHours);
+      if (window.gorillaUnlock) window.gorillaUnlock(totalHours, totalMins);
     } else {
-      // 10000時間未満：テロップを表示
+      // 10,000時間未満：テロップを表示
       if (window.gorillaShowTeaser) window.gorillaShowTeaser();
     }
   }
@@ -1681,10 +1709,14 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
           bub.className = 'niya-btn-bubble';
           bub.textContent = niyaBubbleMsgs[Math.floor(Math.random()*niyaBubbleMsgs.length)];
           const bw2 = band.offsetWidth;
-          bub.style.left = Math.max(4, Math.min(niyaBtn.x - 10, bw2 - 160)) + 'px';
-          bub.style.top = '4px';
+          const niyaClickOffset = BUBBLE_OFFSET_NORMAL;
+          bub.style.left = (niyaBtn.x + niyaClickOffset) + 'px';
+          bub.style.top = Math.max(-28, band.offsetHeight/2 - 48) + 'px';
           band.appendChild(bub);
-          setTimeout(()=>bub.remove(), 2000);
+          niyaBtn.bubble = bub;
+          niyaBtn.bubbleOffset = niyaClickOffset;
+          niyaBtn.bubbleSize = 1;
+          setTimeout(()=>{ bub.remove(); if(niyaBtn.bubble===bub) niyaBtn.bubble=null; }, 2000);
         });
       }
 
@@ -1732,13 +1764,18 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
               // 通常：右→左方向へ移動
               r.x -= r.speed / 60;
               if(r.x < -150){
-                r.x = bw2 + 60 + Math.random()*100;
-                if(!r.isBtn){
-                  const newSz = randSize();
-                  r.el.style.fontSize = newSz + 'rem';
-                  r.size = newSz;
+                // 🥸の逆走フラグチェック：左端通過時に逆走開始
+                if(r._reverseCheck) r._reverseCheck(bw2);
+                if(!r.reversed){
+                  // 逆走しない場合は通常リセット
+                  r.x = bw2 + 60 + Math.random()*100;
+                  if(!r.isBtn){
+                    const newSz = randSize();
+                    r.el.style.fontSize = newSz + 'rem';
+                    r.size = newSz;
+                  }
+                  r.speed = baseSpeed * (0.5 + Math.random() * 1.3);
                 }
-                r.speed = baseSpeed * (0.5 + Math.random() * 1.3);
               }
             }
             r.el.style.left = r.x + 'px';
@@ -1747,6 +1784,28 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
               r.el.style.transform = r.reversed
                 ? 'translateY(-50%) scaleX(-1)'
                 : 'translateY(-50%)';
+            }
+            // ── 吹き出しをキャラに追従させる（left・top・fontSize・borderRadius） ──
+            if(r.bubble && r.bubble.parentNode){
+              const offset = r.bubbleOffset !== undefined ? r.bubbleOffset
+                           : (r.reversed ? BUBBLE_OFFSET_REVERSE : BUBBLE_OFFSET_NORMAL);
+              // クランプなし：アイコンと完全連動
+              r.bubble.style.left = (r.x + offset) + 'px';
+              if(r.size !== r.bubbleSize){
+                const charPx = r.size * 16;
+                const bh = band.offsetHeight;
+                const charTop = bh/2 - charPx/2;
+                r.bubble.style.top = Math.max(-28, charTop - 32) + 'px';
+                r.bubble.style.fontSize = Math.max(0.55, Math.min(r.size * 0.38, 1.6)) + 'rem';
+                r.bubbleSize = r.size;
+              }
+              // 逆走状態が変化した場合にborderRadiusも更新
+              if(r.reversed !== r.bubbleReversed){
+                r.bubble.style.borderRadius = r.reversed
+                  ? '14px 14px 4px 14px'
+                  : '14px 14px 14px 4px';
+                r.bubbleReversed = r.reversed;
+              }
             }
           });
           requestAnimationFrame(frame);
@@ -1777,10 +1836,16 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
                 const bubble = document.createElement('div');
                 bubble.className = 'runner-bubble';
                 bubble.textContent = ['フリーズっぺ〜！','なんでっぺ！','動けないっぺ！'][Math.floor(Math.random()*3)];
-                bubble.style.left = Math.max(4, Math.min(megane.x-10, bw2-140))+'px';
-                bubble.style.top = '4px';
+                const freezeOffset = BUBBLE_OFFSET_NORMAL;
+                bubble.style.left = (megane.x + freezeOffset) + 'px';
+                const cpx3 = megane.size*16, bh3=band.offsetHeight;
+                bubble.style.top = Math.max(-28, bh3/2 - cpx3/2 - 32) + 'px';
+                bubble.style.fontSize = Math.max(0.55, Math.min(megane.size*0.38,1.6))+'rem';
                 band.appendChild(bubble);
-                setTimeout(()=>bubble.remove(), 1400);
+                megane.bubble = bubble;
+                megane.bubbleOffset = freezeOffset;
+                megane.bubbleSize = megane.size;
+                setTimeout(()=>{ bubble.remove(); if(megane.bubble===bubble) megane.bubble=null; }, 1400);
                 setTimeout(()=>{
                   megane.frozen = false;
                   megane.el.classList.remove('runner-shake');
@@ -1794,53 +1859,76 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
           }
           scheduleMeganeFreeze();
 
-          // 🥸専用：逆走（8〜15秒に1回）・画面右端からスタートして左に流れる
+          // 🥸専用：逆走フラグ（次に左端を通過したら逆走する）
+          var _meganeNextReverse = false;
+
           function scheduleMeganeReverse(){
             const wait = 8000 + Math.random() * 7000;
             setTimeout(()=>{
+              // 逆走中・フリーズ中でなければ「次の左端通過時に逆走」フラグを立てる
               if(!megane.frozen && !megane.reversed){
-                const bw2 = band.offsetWidth;
-                // 画面左端からスタートして右方向へ逆走
-                megane.x = -80;
-                megane.reversed = true;
-                // 左端付近に吹き出しを表示
-                const bubble = document.createElement('div');
-                bubble.className = 'runner-bubble';
-                bubble.textContent = ['逆走っぺ〜！','こっちっぺ！','反対っぺ！'][Math.floor(Math.random()*3)];
-                bubble.style.left = '4px';
-                bubble.style.top = '4px';
-                band.appendChild(bubble);
-                setTimeout(()=>bubble.remove(), 1400);
-                // 右端を通過したらreversedを解除
-                const checkReverse = setInterval(()=>{
-                  if(megane.x > bw2 + 100){
-                    megane.reversed = false;
-                    clearInterval(checkReverse);
-                  }
-                }, 100);
+                _meganeNextReverse = true;
               }
-              scheduleMeganeReverse();
+              // 次のスケジュールは逆走完了後にcheckReverseから呼ぶ
+              // （フラグが立てられなかった場合のみここで再試行）
+              if(!_meganeNextReverse) scheduleMeganeReverse();
             }, wait);
           }
           scheduleMeganeReverse();
+
+          // frameループ内で左端通過時に逆走フラグをチェックする処理を追加
+          // → frameループのリセット処理を拡張（下記 _meganeReverseCheck を参照）
+          megane._reverseCheck = function(bw2){
+            if(!_meganeNextReverse) return;
+            _meganeNextReverse = false;
+            megane.reversed = true;
+            // 逆走開始時の吹き出し
+            const bubble = document.createElement('div');
+            bubble.className = 'runner-bubble';
+            bubble.textContent = ['逆走っぺ〜！','こっちっぺ！','反対っぺ！'][Math.floor(Math.random()*3)];
+            const revOffset = BUBBLE_OFFSET_REVERSE;
+            bubble.style.left = (megane.x + revOffset) + 'px';
+            const cpx4 = megane.size*16, bh4=band.offsetHeight;
+            bubble.style.top = Math.max(-28, bh4/2 - cpx4/2 - 32) + 'px';
+            bubble.style.fontSize = Math.max(0.55, Math.min(megane.size*0.38,1.6))+'rem';
+            band.appendChild(bubble);
+            megane.bubble = bubble;
+            megane.bubbleOffset = revOffset;
+            megane.bubbleSize = megane.size;
+            setTimeout(()=>{ bubble.remove(); if(megane.bubble===bubble) megane.bubble=null; }, 1400);
+            // 右端を通過したらreversedを解除し次をスケジュール
+            const checkReverse = setInterval(()=>{
+              if(megane.x > bw2 + 100){
+                megane.reversed = false;
+                clearInterval(checkReverse);
+                scheduleMeganeReverse();
+              }
+            }, 100);
+          };
         }
       }
 
       function triggerEvent(r, bw) {
+        // 逆走中・フリーズ中はイベント発火しない
+        if(r.reversed || r.frozen) return;
         const ev=events[Math.floor(Math.random()*events.length)];
         // ニヤボタン専用処理
         if(r.isBtn){
           if(ev==='bubble'){
-            // 流れ中の吹き出し
+            // 流れ中の吹き出し（キャラ追従）
             const existing = band.querySelectorAll('.niya-btn-bubble');
             existing.forEach(e=>e.remove());
             const bub=document.createElement('div');
             bub.className='niya-btn-bubble';
             bub.textContent=niyaBubbleMsgs[Math.floor(Math.random()*niyaBubbleMsgs.length)];
-            bub.style.left=Math.max(4,Math.min(r.x-10,bw-160))+'px';
-            bub.style.top='4px';
+            const niyaFlowOffset = BUBBLE_OFFSET_NORMAL;
+            bub.style.left = (r.x + niyaFlowOffset) + 'px';
+            bub.style.top = Math.max(-28, band.offsetHeight/2 - 48) + 'px';
             band.appendChild(bub);
-            setTimeout(()=>bub.remove(),1800);
+            r.bubble = bub;
+            r.bubbleOffset = niyaFlowOffset;
+            r.bubbleSize = 1;
+            setTimeout(()=>{ bub.remove(); if(r.bubble===bub) r.bubble=null; },1800);
             return;
           }
           // ジャンプ・回転・stumble はボタンにも適用
@@ -1872,15 +1960,36 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
         setTimeout(()=>{ r.el.classList.remove('runner-'+ev); r.el.classList.add('runner-bounce'); },600);
       }
 
+      // 吹き出し水平オフセット（キャラ幅の倍率）
+      // 通常走行（右→左）：正の値＝キャラより右にずらす（斜め右上）
+      // 逆走（左→右）：負の値＝キャラより左にずらす（斜め左上）
+      const BUBBLE_OFFSET_NORMAL  =  48; // px：通常時の右オフセット
+      const BUBBLE_OFFSET_REVERSE = -48; // px：逆走時の左オフセット
+
       function showBubble(r, bw) {
         const texts=bubbleTexts[r.emoji]||['コツサク〜！'];
         const text=texts[Math.floor(Math.random()*texts.length)];
         const bubble=document.createElement('div');
         bubble.className='runner-bubble'; bubble.textContent=text;
-        bubble.style.left=Math.max(4,Math.min(r.x-10,bw-140))+'px';
-        bubble.style.top='4px';
+        // 進行方向に応じてオフセット・吹き出し形状を切替
+        const offset = r.reversed ? BUBBLE_OFFSET_REVERSE : BUBBLE_OFFSET_NORMAL;
+        // クランプなし：アイコンと完全連動（端で一緒に出現・消滅）
+        bubble.style.left = (r.x + offset) + 'px';
+        const charPx = r.size * 16;
+        const bh = band.offsetHeight;
+        const charTop = bh/2 - charPx/2;
+        bubble.style.top = Math.max(-28, charTop - 32) + 'px';
+        bubble.style.fontSize = Math.max(0.55, Math.min(r.size * 0.38, 1.6)) + 'rem';
+        // 逆走（左→右）：右下が角（しっぽが右下）、通常（右→左）：左下が角（しっぽが左下）
+        bubble.style.borderRadius = r.reversed
+          ? '14px 14px 4px 14px'   // 逆走：右下が角
+          : '14px 14px 14px 4px';  // 通常：左下が角
         band.appendChild(bubble);
-        setTimeout(()=>bubble.remove(), 1600);
+        r.bubble = bubble;
+        r.bubbleOffset = offset;
+        r.bubbleSize = r.size;
+        r.bubbleReversed = r.reversed; // 形状変化追跡用
+        setTimeout(()=>{ bubble.remove(); if(r.bubble===bubble) r.bubble=null; }, 1600);
       }
 
       const obs=new IntersectionObserver(entries=>{
@@ -1928,6 +2037,7 @@ var GORILLA_COUNT = 5;       // 常時ループの体数
 var _gorillaUnlocked = false;
 var _gorillaBusy = false;
 var _gorillaPendingTotalHours = null;  // video読み込み前に呼ばれた場合のキュー
+var _gorillaPendingTotalMins  = null;  // 同上（totalMins保持用）
 var _gorillaPendingTeaser = false;     // 同上（テロップ表示）
 var _gorillaVideoReady = false;
 var _gorillaRafA = null;
@@ -1951,8 +2061,10 @@ _gorillaVid.addEventListener('canplaythrough', function() {
   // 待機中の呼び出しを処理
   if (_gorillaPendingTotalHours !== null) {
     var h = _gorillaPendingTotalHours;
+    var m = _gorillaPendingTotalMins;
     _gorillaPendingTotalHours = null;
-    gorillaUnlock(h);
+    _gorillaPendingTotalMins  = null;
+    gorillaUnlock(h, m);
   } else if (_gorillaPendingTeaser) {
     _gorillaPendingTeaser = false;
     gorillaShowTeaser();
@@ -2025,9 +2137,10 @@ function gorillaShowTeaser() {
 }
 
 // --- 10000時間到達時 ---
-function gorillaUnlock(totalHours) {
+function gorillaUnlock(totalHours, totalMins) {
   if (!_gorillaVideoReady) {
     _gorillaPendingTotalHours = totalHours;
+    _gorillaPendingTotalMins  = totalMins;
     return;
   }
   // テロップを隠してボタンを表示
@@ -2042,8 +2155,14 @@ function gorillaUnlock(totalHours) {
     _gorillaStA = null;
     _gorillaRafA = requestAnimationFrame(gorillaDrawA);
   }
-  // 祝福演出（毎セッション1回・到達時に必ず出す仕様）
-  setTimeout(function() { gorillaB2(function(){}); }, 800);
+  // B②祝福演出：10,000時間〜11,000時間未満（毎セッション1回）
+  // 11,000時間以降はB②を出さない（ゴリラボタンで手動起動可能）
+  var mins = totalMins || (totalHours * 60);
+  if (mins < 660000) {
+    setTimeout(function() { gorillaB2(function(){}); }, 800);
+  }
+  // ══ uemakランナー：10,000時間到達後は毎回出現 ══
+  setTimeout(function() { if (window.showUemakRunner) window.showUemakRunner(); }, 800);
 }
 
 // --- ランダム演出トリガー ---
@@ -2159,6 +2278,123 @@ function gorillaB3(done) {
 window.gorillaShowTeaser = gorillaShowTeaser;
 window.gorillaUnlock = gorillaUnlock;
 window.gorillaRandomTrigger = gorillaRandomTrigger;
+
+// ===== uemak ランナー帯 =====
+(function() {
+  var UEMAK_BUBBLES = [
+    '🦸 みんな頑張れ！',
+    '💪 その一歩が伝説になる！',
+    '🚀 諦めなければ必ず届く！',
+    '⭐ お前ならできる、信じてる！',
+    '🏆 続けること自体が才能だ！',
+    '🔥 諦めるな！',
+    '🎯 目標まで、一緒に走るぞ！',
+    '😊 しんどい日も来てくれてありがとう',
+    '🌸 今日できた分で十分！',
+    '🤝 一人じゃないぞ、一緒にいるから',
+    '💙 無理しなくていい、ただ続けよう',
+    '🌙 休んだって、また来ればいい',
+    '😌 焦らなくていい、コツコツでいい',
+    '👏 毎日来てること、ちゃんと見てるぞ！',
+    '✨ 軌跡が積み上がってる、すごいぞ！',
+    '🥦 コツコツ仲間、最高だぞ！',
+    '🌟 その努力、絶対に報われる！',
+    '📈 着実に伸びてる、間違いない！',
+    '💌 Cチームはいつも見守ってる',
+    '🌈 今日の軌跡、ちゃんと残してくれ！',
+    '🌟 みんなで成し遂げる！',
+    '🥸 ツンツンだっぺ🥸',
+  ];
+  var UEMAK_SPEEDS = [0.5, 1.0, 2.0]; // ゆっくり / 通常 / 爆速
+  var UEMAK_BUBBLE_OFFSET_X = 120;  // 右にずらすpx（斜め右上）
+
+  var _uemakRunning   = false;
+  var _uemakX         = 9999;
+  var _uemakSpeedIdx  = 1;
+
+  function _uemakSpd() {
+    return 180 * UEMAK_SPEEDS[_uemakSpeedIdx] / 60;
+  }
+
+  function _uemakFrame() {
+    if (!_uemakRunning) return;
+    var band    = document.getElementById('uemakBand');
+    var charEl  = document.getElementById('uemakChar');
+    var trailEl = document.getElementById('uemakCapeTrail');
+    if (!band || !charEl) return;
+    var bw = band.offsetWidth;
+    _uemakX -= _uemakSpd();
+    if (_uemakX < -360) {
+      _uemakX = bw + 90;
+      _uemakSpeedIdx = Math.floor(Math.random() * UEMAK_SPEEDS.length);
+    }
+    charEl.style.left = _uemakX + 'px';
+    if (trailEl) {
+      trailEl.style.left = (_uemakX + 82) + 'px';
+      trailEl.style.top  = '54%';
+    }
+    // ── 吹き出しをuemakに追従させる（斜め右上） ──
+    var bub = band.querySelector('.uemak-bubble');
+    if (bub) {
+      // クランプなし：アイコンと完全連動
+      bub.style.left = (_uemakX + UEMAK_BUBBLE_OFFSET_X) + 'px';
+    }
+    requestAnimationFrame(_uemakFrame);
+  }
+
+  function _uemakShowBubble() {
+    var band = document.getElementById('uemakBand');
+    if (!band) return;
+    var bw = band.offsetWidth;
+    var bh = band.offsetHeight;
+    band.querySelectorAll('.uemak-bubble').forEach(function(e) { e.remove(); });
+    var bub = document.createElement('div');
+    bub.className   = 'uemak-bubble';
+    bub.textContent = UEMAK_BUBBLES[Math.floor(Math.random() * UEMAK_BUBBLES.length)];
+    // クランプなし：アイコンと完全連動
+    bub.style.left = (_uemakX + UEMAK_BUBBLE_OFFSET_X) + 'px';
+    // アイコン（74px固定）の上端から少し上に表示（斜め右上）
+    var charH = 74;
+    bub.style.top = Math.max(-30, (bh - charH) / 2 - 38) + 'px';
+    bub.style.fontSize = '12px';
+    band.appendChild(bub);
+    setTimeout(function() { bub.remove(); }, 3500);
+  }
+
+  function _uemakScheduleBubble() {
+    var wait = 4000 + Math.random() * 4000;
+    setTimeout(function() {
+      var band = document.getElementById('uemakBand');
+      var bw   = band ? band.offsetWidth : 800;
+      if (_uemakRunning && _uemakX > 60 && _uemakX < bw - 60) _uemakShowBubble();
+      if (_uemakRunning) _uemakScheduleBubble();
+    }, wait);
+  }
+
+  window.hideUemakRunner = function() {
+    _uemakRunning = false;
+    var header = document.getElementById('uemakBandHeader');
+    var band   = document.getElementById('uemakBand');
+    if (header) header.style.display = 'none';
+    if (band) {
+      band.style.display = 'none';
+      band.querySelectorAll('.uemak-bubble').forEach(function(e){ e.remove(); });
+    }
+  };
+
+  window.showUemakRunner = function() {
+    var header = document.getElementById('uemakBandHeader');
+    var band   = document.getElementById('uemakBand');
+    if (header) header.style.display = 'block';
+    if (band)   band.style.display   = 'block';
+    if (_uemakRunning) return; // 既に動いていれば重複起動しない
+    _uemakRunning  = true;
+    _uemakX        = (band ? band.offsetWidth : 800) + 90;
+    _uemakSpeedIdx = Math.floor(Math.random() * UEMAK_SPEEDS.length);
+    requestAnimationFrame(_uemakFrame);
+    _uemakScheduleBubble();
+  };
+})();
 
 // ===== 絵文字足跡エフェクト（カオス版）=====
 (() => {
