@@ -687,6 +687,26 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
 .gorilla-btn:active{transform:scale(.96);box-shadow:none;}
 .gorilla-btn:disabled{opacity:.5;cursor:default;transform:none;}
 #gorilla-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;display:none;}
+/* ===== 関西弁トグルボタン ===== */
+.kansai-toggle-wrap{position:relative;}
+.kansai-toggle-btn{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  z-index:10;display:inline-flex;align-items:center;gap:4px;
+  background:linear-gradient(135deg,#fff0f8,#fff);
+  border:2px solid #f4a0c0;border-radius:99px;
+  padding:4px 13px;font-size:11px;font-weight:900;
+  color:#c04070;cursor:pointer;font-family:inherit;
+  box-shadow:3px 3px 0 #fde8f0;white-space:nowrap;
+  transition:all .2s;line-height:1.4;
+}
+.kansai-toggle-btn:hover{transform:translateY(calc(-50% - 1px));box-shadow:4px 4px 0 #fde8f0;}
+.kansai-toggle-btn:active{transform:translateY(calc(-50% + 1px));box-shadow:1px 1px 0 #fde8f0;}
+.kansai-toggle-btn.kansai-on{
+  background:linear-gradient(135deg,#f4a0c0,#e05090);
+  border-color:#e05090;color:#fff;
+  box-shadow:3px 3px 0 rgba(224,80,144,.25);
+}
+.kansai-toggle-btn.kansai-on:hover{box-shadow:4px 4px 0 rgba(224,80,144,.35);}
 /* ===== uemak ランナー帯 ===== */
 .uemak-band-header{display:none;background:#0d1828;padding:5px 16px 4px;text-align:center;font-size:10px;font-weight:900;color:rgba(255,255,255,.38);letter-spacing:.13em;border-top:1px solid rgba(255,255,255,.05);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .uemak-runner-band{display:none;position:relative;overflow:visible;height:88px;background:linear-gradient(135deg,#0f1c2e 0%,#172033 50%,#1a2640 100%);border-bottom:2px solid rgba(255,255,255,.06);}
@@ -1649,6 +1669,68 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
     },{ passive:true });
   }
 
+  // ===== 関西弁モード グローバル設定 =====
+  window._kansaiMode = false;
+  window._kansaiToggleBtns = [];
+
+  // 通常版セリフ
+  const _bubbleTextsNormal = {
+    '🥦':['ニヤニヤ〜！','コツコツ〜！','なんだこれ！','ぶろっこりー！','うおおお！','10分！',
+           'ニヤニヤが止まらん！','また来たぞ！','軌跡残すぜ！','今日も10分！','ぐへへ〜！','満開ニヤニヤ！'],
+    '🌸':['サクサク〜✨','10分！10分！','軌跡残すよ〜！','満開間近〜！','ぽわわ〜','咲いた！',
+           'きれいに咲くよ！','コツコツ咲こ！','今日も一輪！','ふわ〜っと！','10分で一輪🌸','サクサク開花！'],
+    '🦍':['ウホウホ！','伝説ゴリへ！','コツサクだ！','ウホ…強くなる！','ウホウホウホ！！','筋肉〜！',
+           'ウホ…今日も来たぞ！','ゴリゴリいくぜ！','コツサクウホ！','ウホ！ウホ！ウホ！','伝説は近い！','ゴリ道まっしぐら！'],
+    '🥸':['カトちゃんっぺ〜！','ぺっぺっぺ〜！','メビちゃんっぺ！','コツサクっぺ！','10分っぺ〜！',
+           'なんだこれっぺ！','ウホっぺ！','サクサクっぺ〜！','ニヤニヤっぺ！','資格もっぺ！',
+           '軌跡っぺ〜！','ぺぺぺっぺ〜！','どこ行くっぺ！','止まれないっぺ！','逆走っぺ〜！',
+           'ぺ！ぺ！ぺ！','コツコツっぺ！','開花っぺ〜！','今日もっぺ！','ぺぺぺぺ〜！！'],
+  };
+  // 関西弁版セリフ
+  const _bubbleTextsKansai = {
+    '🥦':['やったるで‼️','まかしときー‼️','ニヤニヤやんか〜！','コツコツいこか！','なんやこれ！',
+           'ぶろっこりやで！','うおおおやんけ！','10分やで！','ニヤニヤとまらへんわ！',
+           'また来たで！','軌跡残したるで！','今日も10分やんな！','ぐへへ〜やんか！','満開ニヤニヤやで！'],
+    '🌸':['ぼちぼちでんなー','まかしときー‼️','サクサクやで〜✨','軌跡残すでぇ〜！',
+           '満開ちゃうか〜！','ほわほわ〜やで','咲いたで！','きれいに咲くでぇ！',
+           'コツコツ咲こか！','今日も一輪やで！','ふわ〜っとやんか！','10分で一輪やで🌸','サクサク開花やで！'],
+    '🦍':['強くなったる‼️','今日も来たでー‼️','伝説は近いで‼️','やらな損やで‼️',
+           'ウホウホやんけ！','伝説ゴリになるでぇ！','コツサクやんか！','ウホ…強なるで！',
+           'ウホウホウホやんけ！！','筋肉やでぇ〜！','ゴリゴリいくでぇ！',
+           'コツサクウホやんか！','ゴリ道まっしぐらやんか！'],
+    '🥸':['どないでっか？！','なんやねん〜！','カトちゃんやんか〜！','メビちゃんやんな！',
+           'コツサクやんか！','10分やんな〜！','なんやねんこれ！','ウホやんか！',
+           'サクサクやんな〜！','ニヤニヤやんか！','資格もとろか！','軌跡やんな〜！',
+           'どこいくねん！','止まられへん！','逆走やんか〜！','なんやねん！なんやねん！',
+           'コツコツやんな！','開花やんか〜！','今日もやんな！','なんやねん！！'],
+  };
+  // 通常版 ニヤボタンセリフ
+  const _niyaMsgsNormal = [
+    'ニヤニヤ待て‼️','オイ🥸 コラ〜🦍','押せだっぺ🥸',
+    'やるじゃないゴリ🦍','なんだこれっぺ‼️','ぐへへ〜🥦',
+    'ちゃんと見てたっぺ🥸','また押したゴリ🦍','コツサクっぺ〜🥸',
+    'ウホウホ‼️🦍','満開ニヤニヤ🌸','ニヤニヤが止まらん！',
+    '押したな？😏','コツコツしてる場合か‼️','気づいたら伝説🏆',
+    'ぐへへ〜！🥦','収拾がつかんっぺ🥸','ニヤボタンっぺ〜！',
+  ];
+  // 関西弁版 ニヤボタンセリフ
+  const _niyaMsgsKansai = [
+    'ニヤニヤまちいや‼️','ちょっとまってぇや🥸🦍','押してみ🥸',
+    'やるやんゴリ🦍','なんやねんこれ‼️','ぐへへ〜やんか🥦',
+    'ちゃんと見てたでぇ🥸','また押したんか🦍','コツサクやんな〜🥸',
+    'ウホウホやんけ‼️🦍','満開ニヤニヤやで🌸','ニヤニヤとまらへん！',
+    '押したやろ？😏','コツコツしてる場合かいな‼️','気づいたら伝説やんか🏆',
+    'ぐへへ〜やんか！🥦','収拾つかへんやんか🥸','ニヤボタンやんな〜！',
+  ];
+
+  window.toggleKansaiMode = function() {
+    window._kansaiMode = !window._kansaiMode;
+    window._kansaiToggleBtns.forEach(btn => {
+      btn.classList.toggle('kansai-on', window._kansaiMode);
+      btn.textContent = window._kansaiMode ? '🦍 関西弁 ON' : '🦍 関西弁';
+    });
+  };
+
   // ランナー走行（コミカル強化版）
   function initRunners() {
     document.querySelectorAll('.runner-band').forEach(band=>{
@@ -1656,15 +1738,17 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       const baseSpeed = parseFloat(band.dataset.speed||'2') * 100;
       const withNiya = band.dataset.niya === '1';
 
-      // ニヤボタン用吹き出しコメント
-      const niyaBubbleMsgs = [
-        'ニヤニヤ待て‼️','オイ🥸 コラ〜🦍','押せだっぺ🥸',
-        'やるじゃないゴリ🦍','なんだこれっぺ‼️','ぐへへ〜🥦',
-        'ちゃんと見てたっぺ🥸','また押したゴリ🦍','コツサクっぺ〜🥸',
-        'ウホウホ‼️🦍','満開ニヤニヤ🌸','ニヤニヤが止まらん！',
-        '押したな？😏','コツコツしてる場合か‼️','気づいたら伝説🏆',
-        'ぐへへ〜！🥦','収拾がつかんっぺ🥸','ニヤボタンっぺ〜！',
-      ];
+      // 関西弁トグルボタンをラッパーごと挿入
+      const wrap = document.createElement('div');
+      wrap.className = 'kansai-toggle-wrap';
+      band.parentNode.insertBefore(wrap, band);
+      wrap.appendChild(band);
+      const kBtn = document.createElement('button');
+      kBtn.className = 'kansai-toggle-btn';
+      kBtn.textContent = '🦍 関西弁';
+      kBtn.onclick = window.toggleKansaiMode;
+      wrap.appendChild(kBtn);
+      window._kansaiToggleBtns.push(kBtn);
 
       // サイズ生成：通常は1.2〜3.5rem、まれに4〜8rem（ダイナミック）
       function randSize() {
@@ -1707,7 +1791,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
           existing.forEach(e=>e.remove());
           const bub = document.createElement('div');
           bub.className = 'niya-btn-bubble';
-          bub.textContent = niyaBubbleMsgs[Math.floor(Math.random()*niyaBubbleMsgs.length)];
+          const _nMsgs = window._kansaiMode ? _niyaMsgsKansai : _niyaMsgsNormal;
+          bub.textContent = _nMsgs[Math.floor(Math.random()*_nMsgs.length)];
           const bw2 = band.offsetWidth;
           const niyaClickOffset = BUBBLE_OFFSET_NORMAL;
           bub.style.left = (niyaBtn.x + niyaClickOffset) + 'px';
@@ -1721,20 +1806,6 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       }
 
       const events = ['stumble','jump','spin','bubble','grow','shrink'];
-
-      // コメント（全体的に多め＋🥸はっぺ系ギャグ）
-      const bubbleTexts = {
-        '🥦':['ニヤニヤ〜！','コツコツ〜！','なんだこれ！','ぶろっこりー！','うおおお！','10分！',
-               'ニヤニヤが止まらん！','また来たぞ！','軌跡残すぜ！','今日も10分！','ぐへへ〜！','満開ニヤニヤ！'],
-        '🌸':['サクサク〜✨','10分！10分！','軌跡残すよ〜！','満開間近〜！','ぽわわ〜','咲いた！',
-               'きれいに咲くよ！','コツコツ咲こ！','今日も一輪！','ふわ〜っと！','10分で一輪🌸','サクサク開花！'],
-        '🦍':['ウホウホ！','伝説ゴリへ！','コツサクだ！','ウホ…強くなる！','ウホウホウホ！！','筋肉〜！',
-               'ウホ…今日も来たぞ！','ゴリゴリいくぜ！','コツサクウホ！','ウホ！ウホ！ウホ！','伝説は近い！','ゴリ道まっしぐら！'],
-        '🥸':['カトちゃんっぺ〜！','ぺっぺっぺ〜！','メビちゃんっぺ！','コツサクっぺ！','10分っぺ〜！',
-               'なんだこれっぺ！','ウホっぺ！','サクサクっぺ〜！','ニヤニヤっぺ！','資格もっぺ！',
-               '軌跡っぺ〜！','ぺぺぺっぺ〜！','どこ行くっぺ！','止まれないっぺ！','逆走っぺ〜！',
-               'ぺ！ぺ！ぺ！','コツコツっぺ！','開花っぺ〜！','今日もっぺ！','ぺぺぺぺ〜！！'],
-      };
 
       let activated = false;
       function startAnimation() {
@@ -1920,7 +1991,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
             existing.forEach(e=>e.remove());
             const bub=document.createElement('div');
             bub.className='niya-btn-bubble';
-            bub.textContent=niyaBubbleMsgs[Math.floor(Math.random()*niyaBubbleMsgs.length)];
+            const _nMsgs2 = window._kansaiMode ? _niyaMsgsKansai : _niyaMsgsNormal;
+            bub.textContent=_nMsgs2[Math.floor(Math.random()*_nMsgs2.length)];
             const niyaFlowOffset = BUBBLE_OFFSET_NORMAL;
             bub.style.left = (r.x + niyaFlowOffset) + 'px';
             bub.style.top = Math.max(-28, band.offsetHeight/2 - 48) + 'px';
@@ -1967,7 +2039,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:1000;}
       const BUBBLE_OFFSET_REVERSE = -48; // px：逆走時の左オフセット
 
       function showBubble(r, bw) {
-        const texts=bubbleTexts[r.emoji]||['コツサク〜！'];
+        const _btMap = window._kansaiMode ? _bubbleTextsKansai : _bubbleTextsNormal;
+        const texts=_btMap[r.emoji]||['コツサクやで〜！'];
         const text=texts[Math.floor(Math.random()*texts.length)];
         const bubble=document.createElement('div');
         bubble.className='runner-bubble'; bubble.textContent=text;
