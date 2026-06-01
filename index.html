@@ -861,6 +861,69 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
         <div class="uemak-shooting-star" style="--t:18%;--d:3.2s;--dl:0s;"></div>
         <div class="uemak-shooting-star" style="--t:52%;--d:4.3s;--dl:1.5s;"></div>
         <div class="uemak-shooting-star" style="--t:74%;--d:2.9s;--dl:2.9s;"></div>
+        <!-- ピクセルロゴ：UEMAKバンド中央 -->
+        <div class="kotsu-logo-wrap">
+          <canvas id="kotsusaku-logo"></canvas>
+        </div>
+        <style>
+        #uemakBand .kotsu-logo-wrap{
+          position:absolute;left:50%;top:50%;
+          transform:translate(-50%,-50%);
+          z-index:3;margin:0;line-height:0;
+          pointer-events:none;
+        }
+        </style>
+        <script>
+        (function(){
+        const FONT={K:[[1,0,0,0,1],[1,0,0,1,0],[1,0,1,0,0],[1,1,0,0,0],[1,0,1,0,0],[1,0,0,1,0],[1,0,0,0,1]],O:[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],T:[[1,1,1,1,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0]],H:[[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],U:[[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],S:[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,0],[0,1,1,1,0],[0,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],A:[[0,0,1,0,0],[0,1,0,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,0,0,0,1]]};
+        const TEXT='KOTHUSAKU',SCALE=5,CW=5,CH=7,GAP=2,PAD=2,CG='#A8E6CF',CS='#FFB7C5';
+        const CC=[CG,CG,CG,CG,CG,CS,CS,CS,CS];
+        const canvas=document.getElementById('kotsusaku-logo'),ctx=canvas.getContext('2d');
+        const TW=TEXT.length*CW+(TEXT.length-1)*GAP+PAD*2,TH=CH+PAD*2;
+        canvas.width=TW*SCALE; canvas.height=TH*SCALE;
+        canvas.style.display='block'; canvas.style.imageRendering='pixelated';
+        const on=[];
+        TEXT.split('').forEach((ch,ci)=>{
+          const cd=FONT[ch]||[],ox=PAD+ci*(CW+GAP),col=CC[ci];
+          for(let r=0;r<CH;r++)for(let c=0;c<CW;c++){
+            if(cd[r]&&cd[r][c]) on.push({x:ox+c,y:PAD+r,color:col,ci:ci});
+          }
+        });
+        on.sort((a,b)=>a.x!==b.x?a.x-b.x:a.y-b.y);
+        const KCI=[0,1,2,3,4],SCI=[5,6,7,8],ACI=[0,1,2,3,4,5,6,7,8];
+        let vis=new Set(),aov={};
+        function bg(){ctx.clearRect(0,0,canvas.width,canvas.height);}
+        function d(x,y,c,a=1){ctx.globalAlpha=a;ctx.fillStyle=c;ctx.fillRect(x*SCALE,y*SCALE,SCALE,SCALE);ctx.globalAlpha=1;}
+        function rdr(bm={}){bg();on.forEach(p=>{if(!vis.has(p.ci))return;const bl=bm[p.color]!==undefined?bm[p.color]:7,al=aov[p.color]!==undefined?aov[p.color]:1;if(al<=0)return;ctx.shadowBlur=bl;ctx.shadowColor=p.color;d(p.x,p.y,p.color,al);ctx.shadowBlur=0;});}
+        function seq(...fs){let i=0;const n=()=>{if(i<fs.length)fs[i++](n);};n();}
+        function wt(ms,cb){setTimeout(cb,ms);}
+        function typ(cis,sp,cb){let i=0;function n(){if(i>=cis.length){cb();return;}vis.add(cis[i++]);rdr();setTimeout(n,sp);}n();}
+        function srg(color,ms,cb){const t0=performance.now();(function t(ts){const p=Math.min(1,(ts-t0)/ms);rdr({[color]:7+16*Math.sin(p*Math.PI)});p<1?requestAnimationFrame(t):cb();})(t0);}
+        function fdo(cb){let s=0;(function f(){bg();ctx.shadowBlur=6;on.filter(p=>vis.has(p.ci)).forEach(({x,y,color})=>{ctx.shadowColor=color;d(x,y,color,Math.max(0,1-s/22));});ctx.shadowBlur=0;s++;s<=22?requestAnimationFrame(f):cb();})();}
+        function fFlash(cb){ACI.forEach(i=>vis.add(i));bg();ctx.shadowBlur=20;on.forEach(({x,y,color})=>{ctx.shadowColor=color;d(x,y,color);});ctx.shadowBlur=0;setTimeout(cb,0);}
+        function fWave(cb){ACI.forEach(i=>vis.add(i));const mx=Math.max(...on.map(p=>p.x));const t0=performance.now();(function t(ts){const wx=(ts-t0)*.052;bg();on.forEach(p=>{const dx=wx-p.x;if(dx<0)return;ctx.shadowBlur=6+Math.max(0,1-dx/4.5)*14;ctx.shadowColor=p.color;d(p.x,p.y,p.color);ctx.shadowBlur=0;});wx<mx+7?requestAnimationFrame(t):(rdr(),cb());})(t0);}
+        function fRise(cb){ACI.forEach(i=>vis.add(i));const G=28,R=350,by=TH-1,bx={};on.forEach(p=>{if(!bx[p.x])bx[p.x]=[];bx[p.x].push(p);});const cols=Object.keys(bx).sort((a,b)=>+a-+b).map((x,i)=>({x:+x,dots:bx[x],delay:i*G}));const t0=performance.now();(function t(ts){const el=ts-t0;bg();let done=true;cols.forEach(col=>{const de=el-col.delay;if(de<0){done=false;return;}const p=Math.min(1,de/R);if(p<1)done=false;const e=1-Math.pow(1-p,2);col.dots.forEach(p2=>{const cy=Math.round(by+(p2.y-by)*e);ctx.shadowBlur=6;ctx.shadowColor=p2.color;ctx.globalAlpha=p;ctx.fillStyle=p2.color;ctx.fillRect(p2.x*SCALE,cy*SCALE,SCALE,SCALE);ctx.globalAlpha=1;ctx.shadowBlur=0;});});done?(rdr(),cb()):requestAnimationFrame(t);})(t0);}
+        function fNeon(cb){ACI.forEach(i=>vis.add(i));const FL=480,MD=1300;const ds=on.map(p=>({...p,delay:(p.x-PAD)*20+Math.random()*160}));const t0=performance.now(),te=t0+MD+FL;(function t(ts){bg();ds.forEach(p=>{const de=ts-t0-p.delay;if(de<0)return;if(de<FL){if(Math.random()<.3+(de/FL)*.7){ctx.shadowBlur=8+Math.random()*10;ctx.shadowColor=p.color;d(p.x,p.y,p.color,.4+Math.random()*.6);ctx.shadowBlur=0;}}else{ctx.shadowBlur=6;ctx.shadowColor=p.color;d(p.x,p.y,p.color);ctx.shadowBlur=0;}});ts<te?requestAnimationFrame(t):(rdr(),cb());})(t0);}
+        const FINS=[fFlash,fWave,fRise,fNeon];
+        let li=0;
+        function loop(){vis.clear();aov={};seq(
+          n=>{bg();wt(320,n);},
+          n=>typ(KCI,220,n), n=>wt(260,n),
+          n=>srg(CG,620,n),  n=>wt(160,n),
+          n=>{KCI.forEach(i=>vis.delete(i));rdr();wt(180,n);},
+          n=>typ(KCI,120,n), n=>wt(300,n),
+          n=>typ(SCI,220,n), n=>wt(260,n),
+          n=>srg(CS,620,n),  n=>wt(160,n),
+          n=>{SCI.forEach(i=>vis.delete(i));rdr();wt(180,n);},
+          n=>typ(SCI,120,n), n=>wt(360,n),
+          n=>{vis.clear();bg();wt(260,n);},
+          n=>FINS[li%4](n),
+          n=>wt(1500,n),
+          n=>fdo(()=>{li++;wt(360,loop);}),
+        );}
+        loop();
+        })();
+        </script>
         <div class="uemak-char" id="uemakChar">
           <img src="uemak.png" alt="C_uemak 運営責任者">
         </div>
