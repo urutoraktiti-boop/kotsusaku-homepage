@@ -727,7 +727,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 .uemak-runner-band{display:none;position:relative;overflow:visible;height:88px;background:linear-gradient(135deg,#0f1c2e 0%,#172033 50%,#1a2640 100%);border-bottom:2px solid rgba(255,255,255,.06);}
 .uemak-shooting-star{position:absolute;height:2px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:uemakShootStar linear infinite;width:80px;top:var(--t);animation-duration:var(--d);animation-delay:var(--dl);}
 @keyframes uemakShootStar{from{left:110%;opacity:1;}to{left:-20%;opacity:0;}}
-.uemak-char{position:absolute;top:50%;pointer-events:none;will-change:left;animation:uemakFly 2.8s ease-in-out infinite;}
+.uemak-char{position:absolute;top:50%;pointer-events:none;will-change:left;animation:uemakFly 2.8s ease-in-out infinite;z-index:10;}
 .uemak-char img{height:74px;width:auto;display:block;mix-blend-mode:screen;filter:drop-shadow(0 2px 14px rgba(96,200,255,.35)) drop-shadow(0 0 22px rgba(255,120,50,.2));}
 @keyframes uemakFly{0%,100%{transform:translateY(-50%) rotate(-3deg);}33%{transform:translateY(calc(-50% - 6px)) rotate(-5deg);}66%{transform:translateY(calc(-50% + 3px)) rotate(-1deg);}}
 .uemak-cape-trail{position:absolute;height:3px;border-radius:999px;background:linear-gradient(90deg,rgba(210,55,25,.55),transparent);pointer-events:none;animation:uemakCapeTrail 2.8s ease-in-out infinite;}
