@@ -1581,6 +1581,30 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   let _statsFirstLoad = true;
   let _sakuraParticlesStarted = false;
 
+  async function getVerifiedTotalStudyMin(summaryTotalMin) {
+    try {
+      const snap = await db.collection('analytics').get();
+      let verifiedTotal = 0;
+      snap.forEach(doc => {
+        verifiedTotal += Number((doc.data() || {}).totalStudyMin || 0);
+      });
+      if (!verifiedTotal) return summaryTotalMin;
+
+      const diff = Math.abs(verifiedTotal - summaryTotalMin);
+      const tolerance = Math.max(60, Math.round(verifiedTotal * 0.1));
+      if (diff > tolerance) {
+        console.warn('analytics_summary.totalStudyMin mismatch; using verified analytics sum', {
+          summaryTotalMin,
+          verifiedTotal
+        });
+        return verifiedTotal;
+      }
+    } catch(e) {
+      console.warn('verified totalStudyMin check skipped:', e);
+    }
+    return summaryTotalMin;
+  }
+
   // summaryデータをUIに反映する共通関数（フェーズ3・4）
   function applyStats(data, loading, body) {
     const totalMins  = data.totalStudyMin || 0;
@@ -1699,7 +1723,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
         return;
       }
       if (errEl) errEl.style.display = 'none';
-      applyStats(snap.data(), loading, body);
+      const data = snap.data();
+      data.totalStudyMin = await getVerifiedTotalStudyMin(Number(data.totalStudyMin || 0));
+      applyStats(data, loading, body);
     } catch(e) {
       if (loading) loading.style.display = 'none';
       if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'データの読み込みに失敗しました。'; }
