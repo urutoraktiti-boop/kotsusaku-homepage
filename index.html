@@ -1685,10 +1685,17 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
     }
   }
 
-  // メインデータ取得：summary 1件を60秒ごとに取得。
+  // メインデータ取得：初回表示時に1回、その後は毎時の集計反映後にsummary 1件を取得。
   // onSnapshotの常時購読は、開きっぱなしタブ数に比例して読み取りが増えるため停止。
-  const STATS_POLL_INTERVAL_MS = 60 * 1000;
+  const STATS_POLL_DELAY_AFTER_HOUR_MS = 2 * 60 * 1000;
   let _statsPollTimer = null;
+
+  function _msUntilNextHourlyStatsFetch() {
+    const now = new Date();
+    const next = new Date(now);
+    next.setHours(now.getHours() + 1, 0, 0, 0);
+    return Math.max(1000, (next - now) + STATS_POLL_DELAY_AFTER_HOUR_MS);
+  }
 
   async function _fetchStatsOnce() {
     const loading = document.getElementById('stats-loading');
@@ -1716,12 +1723,21 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   function _startStatsPolling() {
     if (_statsPollTimer || document.hidden) return;
     _fetchStatsOnce();
-    _statsPollTimer = setInterval(_fetchStatsOnce, STATS_POLL_INTERVAL_MS);
+    _scheduleNextStatsFetch();
+  }
+
+  function _scheduleNextStatsFetch() {
+    if (document.hidden) return;
+    _statsPollTimer = setTimeout(async () => {
+      _statsPollTimer = null;
+      await _fetchStatsOnce();
+      _scheduleNextStatsFetch();
+    }, _msUntilNextHourlyStatsFetch());
   }
 
   function _stopStatsPolling() {
     if (_statsPollTimer) {
-      clearInterval(_statsPollTimer);
+      clearTimeout(_statsPollTimer);
       _statsPollTimer = null;
     }
   }
