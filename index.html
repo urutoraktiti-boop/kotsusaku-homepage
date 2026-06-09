@@ -2390,21 +2390,19 @@ var _gorillaVideoReady = false;
 var _gorillaRafA = null;
 var _gorillaStA = null;
 
-// --- 動画要素（即時作成）---
-var _gorillaVid = document.createElement('video');
-_gorillaVid.src = 'gorilla-dance.webm';
-_gorillaVid.muted = true;
-_gorillaVid.loop = true;
-_gorillaVid.playsInline = true;
-_gorillaVid.autoplay = true;
-_gorillaVid.preload = 'auto';
-_gorillaVid.style.display = 'none';
-document.body.appendChild(_gorillaVid);
+// iOS/iPadOS Safari系はWebMのアルファ透過が安定しないため、透過PNGで描画する
+var _gorillaForceImageFallback = /[?&]gorillaFallback=1/.test(location.search);
+var _gorillaUseImageFallback = _gorillaForceImageFallback
+  || /iPad|iPhone|iPod/.test(navigator.userAgent)
+  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+var _gorillaVid = null;
+var _gorillaImg = null;
 
-// 読み込み完了を待ってキュー処理
-_gorillaVid.addEventListener('canplaythrough', function() {
+function gorillaMarkReady() {
   _gorillaVideoReady = true;
-  try { _gorillaVid.play(); } catch(e) { console.warn('[gorilla] play failed:', e); }
+  if (_gorillaVid) {
+    try { _gorillaVid.play(); } catch(e) { console.warn('[gorilla] play failed:', e); }
+  }
   // 待機中の呼び出しを処理
   if (_gorillaPendingTotalHours !== null) {
     var h = _gorillaPendingTotalHours;
@@ -2416,14 +2414,72 @@ _gorillaVid.addEventListener('canplaythrough', function() {
     _gorillaPendingTeaser = false;
     gorillaShowTeaser();
   }
-}, { once: true });
+}
 
-_gorillaVid.addEventListener('error', function(e) {
-  console.error('[gorilla] video load error:', e, _gorillaVid.error);
-});
+if (_gorillaUseImageFallback) {
+  _gorillaImg = new Image();
+  _gorillaImg.onload = gorillaMarkReady;
+  _gorillaImg.onerror = function(e) { console.error('[gorilla] image load error:', e); };
+  _gorillaImg.src = 'uhogori-boy.png';
+} else {
+  // --- 動画要素（即時作成）---
+  _gorillaVid = document.createElement('video');
+  _gorillaVid.src = 'gorilla-dance.webm';
+  _gorillaVid.muted = true;
+  _gorillaVid.loop = true;
+  _gorillaVid.playsInline = true;
+  _gorillaVid.autoplay = true;
+  _gorillaVid.preload = 'auto';
+  _gorillaVid.style.display = 'none';
+  document.body.appendChild(_gorillaVid);
 
-// 早めにロード試行（一部ブラウザはautoplayだけだとloadしない）
-try { _gorillaVid.load(); } catch(e) {}
+  // 読み込み完了を待ってキュー処理
+  _gorillaVid.addEventListener('canplaythrough', gorillaMarkReady, { once: true });
+
+  _gorillaVid.addEventListener('error', function(e) {
+    console.error('[gorilla] video load error:', e, _gorillaVid.error);
+  });
+
+  // 早めにロード試行（一部ブラウザはautoplayだけだとloadしない）
+  try { _gorillaVid.load(); } catch(e) {}
+}
+
+function gorillaAssetReady() {
+  if (_gorillaUseImageFallback) return !!(_gorillaImg && _gorillaImg.complete && _gorillaImg.naturalWidth);
+  return !!(_gorillaVid && _gorillaVid.readyState >= 2 && _gorillaVid.videoWidth);
+}
+
+function gorillaAssetWidth() {
+  return _gorillaUseImageFallback ? _gorillaImg.naturalWidth : _gorillaVid.videoWidth;
+}
+
+function gorillaAssetHeight() {
+  return _gorillaUseImageFallback ? _gorillaImg.naturalHeight : _gorillaVid.videoHeight;
+}
+
+function gorillaAssetDuration() {
+  if (_gorillaUseImageFallback) return 4.8;
+  return (_gorillaVid && isFinite(_gorillaVid.duration) && _gorillaVid.duration > 0) ? _gorillaVid.duration : 13.5;
+}
+
+function gorillaResetAsset() {
+  if (!_gorillaUseImageFallback && _gorillaVid) {
+    try { _gorillaVid.currentTime = 0; } catch(e) {}
+  }
+}
+
+function gorillaDrawAsset(ctx, x, y, w, h, flip, phase) {
+  var source = _gorillaUseImageFallback ? _gorillaImg : _gorillaVid;
+  if (!source) return;
+  ctx.save();
+  var bob = _gorillaUseImageFallback ? Math.sin(phase || 0) * h * 0.035 : 0;
+  var tilt = _gorillaUseImageFallback ? Math.sin((phase || 0) * 0.9) * 0.04 : 0;
+  ctx.translate(x, y + bob);
+  ctx.rotate(tilt);
+  ctx.scale(flip ? -1 : 1, 1);
+  try { ctx.drawImage(source, -w / 2, -h, w, h); } catch(e) {}
+  ctx.restore();
+}
 
 // --- canvas リサイズ ---
 function gorillaResizeA() {
@@ -2438,7 +2494,7 @@ window.addEventListener('resize', gorillaResizeA);
 function gorillaDrawA(ts) {
   var canvasA = document.getElementById('gorilla-canvas');
   if (!canvasA) { _gorillaRafA = requestAnimationFrame(gorillaDrawA); return; }
-  if (_gorillaVid.readyState < 2 || !_gorillaVid.videoWidth) {
+  if (!gorillaAssetReady()) {
     _gorillaRafA = requestAnimationFrame(gorillaDrawA);
     return;
   }
@@ -2448,17 +2504,13 @@ function gorillaDrawA(ts) {
   var ctx = canvasA.getContext('2d');
   ctx.clearRect(0, 0, canvasA.width, canvasA.height);
   var h = canvasA.height * GORILLA_SIZE;
-  var asp = _gorillaVid.videoWidth / _gorillaVid.videoHeight;
+  var asp = gorillaAssetWidth() / gorillaAssetHeight();
   var w = h * asp;
   var travel = canvasA.width + w * 1.4;
   for (var i = 0; i < GORILLA_COUNT; i++) {
     var t = (((elapsed + (i / GORILLA_COUNT) * GORILLA_DUR) % GORILLA_DUR)) / GORILLA_DUR;
     var x = canvasA.width + w * 0.2 - t * travel;
-    ctx.save();
-    ctx.translate(x, canvasA.height);
-    ctx.scale(-1, 1);
-    try { ctx.drawImage(_gorillaVid, -w/2, -h, w, h); } catch(e) {}
-    ctx.restore();
+    gorillaDrawAsset(ctx, x, canvasA.height, w, h, true, elapsed * 5 + i);
   }
   _gorillaRafA = requestAnimationFrame(gorillaDrawA);
 }
@@ -2538,14 +2590,13 @@ function gorillaB2(done) {
   overlay.height = window.innerHeight;
   var ctx = overlay.getContext('2d');
   // 動画の実長を使う（取得できなければ13.5秒）
-  var vidDur = (_gorillaVid && isFinite(_gorillaVid.duration) && _gorillaVid.duration > 0)
-               ? _gorillaVid.duration : 13.5;
+  var vidDur = gorillaAssetDuration();
   var FADE_IN = 0.5;
   var FADE_OUT = 0.8;
   // 動画長より短くならないように。フェード分の余裕を確保。
   var total = Math.max(vidDur, FADE_IN + FADE_OUT + 1);
   // 演出開始時に動画を頭出し（毎回ちゃんと最初から見える）
-  try { _gorillaVid.currentTime = 0; } catch(e) {}
+  gorillaResetAsset();
   var st = null;
   function draw(ts) {
     if (!st) st = ts;
@@ -2557,15 +2608,13 @@ function gorillaB2(done) {
     else                           alpha = 1;
     alpha = Math.max(0, Math.min(1, alpha));
     var h = overlay.height * 0.7;
-    var asp = _gorillaVid.videoWidth / _gorillaVid.videoHeight;
+    var asp = gorillaAssetWidth() / gorillaAssetHeight();
     var w = h * asp;
     ctx.fillStyle = 'rgba(0,0,0,' + (alpha * 0.5) + ')';
     ctx.fillRect(0, 0, overlay.width, overlay.height);
     ctx.save();
     ctx.globalAlpha = alpha;
-    ctx.translate(overlay.width / 2, overlay.height / 2 + h / 2);
-    ctx.scale(-1, 1);
-    try { ctx.drawImage(_gorillaVid, -w/2, -h, w, h); } catch(err) {}
+    gorillaDrawAsset(ctx, overlay.width / 2, overlay.height / 2 + h / 2, w, h, true, e * 5);
     ctx.restore();
     if (e < total) requestAnimationFrame(draw);
     else { ctx.clearRect(0, 0, overlay.width, overlay.height); overlay.style.display = 'none'; done && done(); }
@@ -2583,7 +2632,7 @@ function gorillaB3(done) {
   var ctx = overlay.getContext('2d');
   var total = 8;
   var h = overlay.height * 0.28;
-  var asp = _gorillaVid.videoWidth / _gorillaVid.videoHeight;
+  var asp = gorillaAssetWidth() / gorillaAssetHeight();
   var w = h * asp;
   var gs = [];
   for (var k = 0; k < 8; k++) {
@@ -2610,9 +2659,7 @@ function gorillaB3(done) {
       alpha = Math.max(0, Math.min(1, alpha));
       ctx.save();
       ctx.globalAlpha = alpha;
-      ctx.translate(g.x, y + h);
-      ctx.scale(g.flip, 1);
-      try { ctx.drawImage(_gorillaVid, -w/2, -h, w, h); } catch(err) {}
+      gorillaDrawAsset(ctx, g.x, y + h, w, h, g.flip < 0, e * 5 + i);
       ctx.restore();
     }
     if (e < total || any) requestAnimationFrame(draw);
