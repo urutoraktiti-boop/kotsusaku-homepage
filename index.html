@@ -525,6 +525,41 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 .feature h3{margin:0;max-width:240px;font-size:27px;line-height:1.22;}
 .feature p{position:relative;z-index:2;margin:13px 0 0;max-width:280px;color:var(--soft);line-height:1.75;font-size:14px;}
 
+/* ── KOTSU HABIT ── */
+.kotsu-habit{position:relative;padding:38px;border-radius:40px;background:rgba(255,255,255,.86);backdrop-filter:blur(18px);border:2px solid rgba(255,255,255,.95);box-shadow:0 18px 52px rgba(109,40,217,.14);overflow:hidden;}
+.kotsu-habit:before{content:"";position:absolute;right:-62px;top:-62px;width:220px;height:220px;border-radius:50%;background:conic-gradient(from 20deg,#059669,#fbbf24,#db2777,#818cf8,#059669);opacity:.13;}
+.kotsu-habit-head{position:relative;z-index:1;display:flex;justify-content:space-between;gap:28px;align-items:flex-end;margin-bottom:26px;}
+.kotsu-habit-kicker{display:inline-flex;align-items:center;gap:7px;background:rgba(209,250,229,.75);border:1.5px solid rgba(5,150,105,.2);border-radius:999px;padding:6px 14px;color:#065f46;font-size:12px;font-weight:1000;margin-bottom:12px;}
+.kotsu-habit h2{font-size:clamp(32px,5vw,64px);}
+.kotsu-habit-lead{max-width:430px;color:var(--soft);line-height:1.85;font-size:14px;margin:0;}
+.kotsu-steps{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
+.kotsu-step{background:rgba(255,255,255,.92);border:1.5px solid rgba(255,255,255,.95);border-radius:24px;padding:22px 18px;box-shadow:0 6px 24px rgba(73,91,125,.08);transition:transform .18s,box-shadow .18s;}
+.kotsu-step:hover{transform:translateY(-4px);box-shadow:0 16px 38px rgba(219,39,119,.13);}
+.kotsu-step-num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:999px;background:rgba(253,242,248,.9);color:var(--pink);font-size:12px;font-weight:1000;margin-bottom:12px;}
+.kotsu-step-icon{font-size:32px;line-height:1;margin-bottom:10px;}
+.kotsu-step-title{font-size:17px;font-weight:1000;line-height:1.35;margin-bottom:8px;}
+.kotsu-step-body{font-size:13px;color:var(--soft);line-height:1.75;}
+.kotsu-pill-grid{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:9px;margin:22px 0;}
+.kotsu-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.95);border:1.5px solid rgba(219,39,119,.13);border-radius:999px;padding:8px 13px;font-size:12px;font-weight:900;color:var(--ink);box-shadow:0 3px 12px rgba(109,40,217,.06);}
+.kotsu-rank-strip{position:relative;z-index:1;display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:20px;}
+.kotsu-rank{background:rgba(255,255,255,.95);border:1.5px solid rgba(233,213,255,.8);border-radius:16px;padding:12px 8px;text-align:center;}
+.kotsu-rank-icon{font-size:23px;line-height:1;margin-bottom:5px;}
+.kotsu-rank-name{font-size:11px;font-weight:1000;line-height:1.35;}
+.kotsu-rank-kp{font-size:10px;color:var(--soft);margin-top:3px;font-weight:800;}
+.kotsu-habit-actions{position:relative;z-index:1;display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;}
+.kotsu-habit .btn{min-height:48px;border-radius:18px;padding:0 22px;font-size:14px;}
+@media(max-width:960px){
+  .kotsu-habit-head{display:block;}
+  .kotsu-habit-lead{margin-top:14px;}
+  .kotsu-steps{grid-template-columns:1fr;}
+  .kotsu-rank-strip{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:560px){
+  .kotsu-habit{padding:26px 18px;border-radius:28px;}
+  .kotsu-habit-actions{flex-direction:column;}
+  .kotsu-habit .btn{width:100%;}
+}
+
 /* ── LICENSE ── */
 .license{position:relative;padding:36px;border-radius:40px;background:rgba(255,255,255,.7);backdrop-filter:blur(16px);border:2px solid rgba(255,255,255,.85);box-shadow:0 12px 40px rgba(219,39,119,.1);overflow:hidden;}
 .license .mini-photo{position:absolute;right:26px;top:-18px;}
@@ -752,6 +787,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
         <a href="#story">物語</a>
         <a href="#board">世界観</a>
         <a href="#features">できること</a>
+        <a href="./kotsu-habit.html" class="nav-new-pink" style="position:relative;">📋 コツ習慣β<span class="nav-new-badge"><span class="nav-new-dot-p"></span>BETA</span></a>
         <a href="#license">資格の道</a>
         <a href="./manual.html" class="nav-new-green" style="position:relative;">📖 使い方<span class="nav-new-badge"><span class="nav-new-dot-g"></span>NEW</span></a>
         <a href="./install.html" class="nav-new-pink" style="position:relative;">📲 追加方法<span class="nav-new-badge"><span class="nav-new-dot-p"></span>NEW</span></a>
@@ -1215,6 +1251,62 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 
   <!-- ランナー帯④ -->
   <div class="runner-band" data-runner="🥸 🌸 🦍 🥦" data-speed="2.0"></div>
+
+  <!-- ══ KOTSU HABIT ══ -->
+  <section class="section" id="kotsu-habit">
+    <div class="wrap">
+      <div class="kotsu-habit reveal">
+        <div class="kotsu-habit-head">
+          <div>
+            <div class="kotsu-habit-kicker">🧪 コツ習慣 β版公開中</div>
+            <h2>新しい習慣機能、<br>育てています。</h2>
+          </div>
+          <p class="kotsu-habit-lead">
+            今日やることを「コツ」として登録し、終わったら「習得」するβ版機能です。
+            使い方やできることは、専用ページで分かりやすくまとめました。
+          </p>
+        </div>
+
+        <div class="kotsu-steps">
+          <div class="kotsu-step">
+            <div class="kotsu-step-num">1</div>
+            <div class="kotsu-step-icon">📋</div>
+            <div class="kotsu-step-title">コツを登録</div>
+            <div class="kotsu-step-body">科目と種類を選んで、今日やることを小さく登録します。</div>
+          </div>
+          <div class="kotsu-step">
+            <div class="kotsu-step-num">2</div>
+            <div class="kotsu-step-icon">✅</div>
+            <div class="kotsu-step-title">習得で完了</div>
+            <div class="kotsu-step-body">終わったら習得。KPやランクに積み上がります。</div>
+          </div>
+          <div class="kotsu-step">
+            <div class="kotsu-step-num">3</div>
+            <div class="kotsu-step-icon">🌸</div>
+            <div class="kotsu-step-title">記録が育つ</div>
+            <div class="kotsu-step-body">グラフ、装備、ストーリー進化で続けた跡が見えます。</div>
+          </div>
+        </div>
+
+        <div class="kotsu-pill-grid" aria-label="コツ習慣でできること">
+          <span class="kotsu-pill">🧪 β版</span>
+          <span class="kotsu-pill">📋 コツ登録</span>
+          <span class="kotsu-pill">✅ 習得ボタン</span>
+          <span class="kotsu-pill">🏆 KPランク</span>
+          <span class="kotsu-pill">📊 記録グラフ</span>
+          <span class="kotsu-pill">🚀 今後も更新予定</span>
+        </div>
+
+        <div class="kotsu-habit-actions">
+          <a class="btn guide" href="./kotsu-habit.html">コツ習慣βのページを見る</a>
+          <a class="btn" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">アプリで試す</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ランナー帯⑤ -->
+  <div class="runner-band" data-runner="📋 ✅ 🌸 🏆" data-speed="2.1"></div>
 
   <!-- ══ LICENSE ══ -->
   <section class="section" id="license">

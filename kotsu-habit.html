@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>コツ習慣 β版 | コツコツサクサク</title>
+<meta name="description" content="コツコツサクサクの新機能、コツ習慣 β版の使い方。今日のコツを登録し、習得し、KPやストーリー進化で続ける機能を分かりやすく紹介します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NXV6WLDRFX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NXV6WLDRFX');
+</script>
+<style>
+:root{
+  --ink:#1e1b4b;--soft:#6b7280;--green:#059669;--pink:#db2777;
+  --sky:#818cf8;--yellow:#fbbf24;--mint:#d1fae5;--rose:#fce7f3;
+  --blue:#ede9fe;--line:#e9d5ff;--orange:#f97316;--purple:#7c3aed;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{color:var(--ink);font-family:'Noto Sans JP',sans-serif;background:linear-gradient(160deg,#fdf2f8 0%,#fce7f3 15%,#ede9fe 45%,#dbeafe 75%,#d1fae5 100%);background-attachment:fixed;overflow-x:hidden;}
+.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.78);border-bottom:1px solid rgba(219,39,119,.12);backdrop-filter:blur(24px);}
+.nav-inner{width:min(1180px,100%);margin:auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.brand{font-size:clamp(15px,2.4vw,22px);font-weight:1000;white-space:nowrap;text-decoration:none;color:var(--ink);font-family:'Noto Serif JP',serif;}
+.brand .green{color:var(--green)}.brand .pink{color:var(--pink)}
+.nav-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--soft);text-decoration:none;font-size:13px;font-weight:800;padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);background:rgba(255,255,255,.7);backdrop-filter:blur(8px);transition:background .15s,border-color .15s;}
+.back-btn:hover{background:var(--mint);border-color:var(--green);}
+.back-btn.primary{color:#fff;background:linear-gradient(135deg,var(--pink),#9333ea);border-color:transparent;}
+.hero{padding:58px 20px 44px;text-align:center;position:relative;overflow:hidden;}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;pointer-events:none;animation:float 9s ease-in-out infinite;}
+.hero:before{width:420px;height:420px;background:radial-gradient(circle,rgba(52,211,153,.2),transparent 70%);top:-150px;left:-90px;}
+.hero:after{width:520px;height:520px;background:radial-gradient(circle,rgba(244,114,182,.18),transparent 70%);right:-140px;bottom:-190px;animation-direction:reverse;}
+@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.05)}}
+.hero-inner{position:relative;z-index:1;width:min(900px,100%);margin:auto;}
+.beta-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#fffbeb,#fff7ed);border:2px solid rgba(249,115,22,.28);box-shadow:0 10px 28px rgba(249,115,22,.12);border-radius:999px;padding:8px 16px;color:#c2410c;font-size:13px;font-weight:1000;margin-bottom:18px;}
+.beta-dot{width:9px;height:9px;border-radius:50%;background:var(--orange);animation:pulse 1.2s ease-in-out infinite;box-shadow:0 0 0 4px rgba(249,115,22,.18);}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+h1{font-size:clamp(36px,7vw,78px);font-weight:900;line-height:1.02;font-family:'Noto Serif JP',serif;margin-bottom:16px;}
+h1 .g{color:var(--green)}h1 .p{color:var(--pink)}
+.hero-sub{max-width:640px;margin:0 auto 24px;color:var(--soft);font-size:clamp(15px,2vw,19px);line-height:1.85;}
+.hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 26px;border-radius:20px;text-decoration:none;border:none;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;transition:transform .18s,box-shadow .18s;}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{background:linear-gradient(135deg,var(--pink),#be185d);color:#fff;box-shadow:0 12px 32px rgba(219,39,119,.28);}
+.btn.light{background:rgba(255,255,255,.78);color:#065f46;border:1.5px solid rgba(5,150,105,.24);backdrop-filter:blur(10px);}
+.notice{width:min(860px,calc(100% - 40px));margin:0 auto 28px;background:rgba(255,251,235,.86);border:2px solid rgba(249,115,22,.25);border-radius:22px;padding:18px 20px;display:flex;align-items:flex-start;gap:14px;box-shadow:0 8px 28px rgba(249,115,22,.08);}
+.notice-icon{font-size:1.8rem;line-height:1;flex-shrink:0}
+.notice-title{font-size:.95rem;font-weight:1000;color:#c2410c;margin-bottom:5px;}
+.notice-text{font-size:.82rem;color:#92400e;line-height:1.75;}
+.toc-section{padding:34px 20px;background:rgba(255,255,255,.44);border-top:1px solid rgba(219,39,119,.08);border-bottom:1px solid rgba(219,39,119,.08);backdrop-filter:blur(12px);}
+.toc-inner{width:min(860px,100%);margin:auto;}
+.toc-title{font-size:12px;font-weight:1000;color:var(--soft);letter-spacing:.12em;margin-bottom:14px;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;}
+.toc-item{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.76);border:1.5px solid rgba(255,255,255,.9);border-radius:16px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:13px;font-weight:800;box-shadow:0 3px 14px rgba(109,40,217,.06);transition:transform .15s,border-color .15s,background .15s;}
+.toc-item:hover{transform:translateY(-2px);background:rgba(209,250,229,.72);border-color:rgba(5,150,105,.3);}
+.section{padding:70px 20px;border-bottom:1px solid rgba(219,39,119,.07);}
+.section:nth-of-type(even){background:rgba(255,255,255,.16);}
+.wrap{width:min(860px,100%);margin:auto;}
+.sec-label{display:inline-flex;align-items:center;gap:6px;background:rgba(209,250,229,.75);border:1px solid rgba(5,150,105,.2);border-radius:999px;padding:5px 12px;color:#065f46;font-size:11px;font-weight:1000;letter-spacing:.08em;margin-bottom:12px;}
+.sec-title{font-size:clamp(28px,5vw,50px);font-weight:900;line-height:1.12;font-family:'Noto Serif JP',serif;margin-bottom:14px;}
+.sec-lead{font-size:15px;color:var(--soft);line-height:1.9;max-width:660px;margin-bottom:30px;}
+.step-list{display:flex;flex-direction:column;gap:14px;}
+.step-card{display:flex;gap:16px;align-items:flex-start;background:rgba(255,255,255,.76);border:2px solid rgba(255,255,255,.88);border-radius:24px;padding:20px 22px;box-shadow:0 8px 28px rgba(109,40,217,.08);backdrop-filter:blur(14px);}
+.step-num{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--ink);color:#fff;font-size:.9rem;font-weight:1000;flex-shrink:0;}
+.step-body{flex:1}.step-title{font-size:1rem;font-weight:1000;margin-bottom:6px;line-height:1.4}.step-desc{font-size:.84rem;color:var(--soft);line-height:1.8}.step-desc b{color:var(--ink)}
+.mini-demo{margin-top:12px;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:12px;display:flex;gap:8px;flex-wrap:wrap;}
+.demo-chip{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 12px;border-radius:999px;font-size:.76rem;font-weight:900;background:var(--blue);color:var(--ink);}
+.demo-chip.green{background:var(--mint);color:#065f46}.demo-chip.pink{background:var(--rose);color:#9d174d}.demo-chip.gold{background:#fef3c7;color:#92400e}
+.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:22px;}
+.feature-card{background:rgba(255,255,255,.72);border:2px solid rgba(255,255,255,.86);border-radius:22px;padding:20px 18px;box-shadow:0 6px 24px rgba(109,40,217,.07);}
+.feature-icon{font-size:1.8rem;margin-bottom:8px}.feature-title{font-size:.95rem;font-weight:1000;margin-bottom:5px}.feature-text{font-size:.8rem;color:var(--soft);line-height:1.75}
+.rank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:22px;}
+.rank-card{background:rgba(255,255,255,.8);border:1.5px solid rgba(233,213,255,.9);border-radius:18px;padding:15px 12px;text-align:center;box-shadow:0 4px 16px rgba(109,40,217,.06);}
+.rank-icon{font-size:1.8rem;line-height:1;margin-bottom:7px}.rank-name{font-size:.82rem;font-weight:1000}.rank-kp{font-size:.7rem;color:var(--soft);font-weight:800;margin-top:3px}
+.calc-box{background:rgba(255,255,255,.78);border:2px solid rgba(5,150,105,.2);border-radius:22px;padding:22px;margin-top:24px;}
+.calc-title{font-size:.95rem;font-weight:1000;color:#065f46;margin-bottom:8px}.formula{background:#0f172a;color:#fff;border-radius:14px;padding:14px 16px;font-weight:900;font-size:.9rem;margin:10px 0;overflow:auto}.calc-note{font-size:.8rem;color:var(--soft);line-height:1.75}
+.faq-list{margin-top:24px}.faq-item{border-bottom:1px solid rgba(219,39,119,.12)}.faq-q{width:100%;background:none;border:none;text-align:left;padding:18px 0;font-family:inherit;font-size:15px;font-weight:900;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px}.faq-icon{font-size:18px;color:var(--pink);transition:transform .2s}.faq-item.open .faq-icon{transform:rotate(45deg)}.faq-a{display:none;font-size:14px;color:var(--soft);line-height:1.85;padding:0 0 18px}.faq-item.open .faq-a{display:block}
+.future-banner{position:relative;overflow:hidden;background:linear-gradient(135deg,#db2777,#9333ea 55%,#059669);border-radius:34px;padding:34px 28px;color:#fff;box-shadow:0 26px 70px rgba(147,51,234,.26);}
+.future-banner:before{content:"";position:absolute;right:-70px;bottom:-90px;width:240px;height:240px;border-radius:50%;background:rgba(251,191,36,.28);}
+.future-banner:after{content:"";position:absolute;left:-70px;top:-90px;width:230px;height:230px;border-radius:50%;background:rgba(255,255,255,.12);}
+.future-content{position:relative;z-index:1}.future-kicker{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:1000;margin-bottom:14px}.future-title{font-family:'Noto Serif JP',serif;font-size:clamp(26px,5vw,44px);font-weight:900;line-height:1.15;margin-bottom:10px}.future-text{max-width:620px;color:rgba(255,255,255,.82);font-size:14px;line-height:1.85;margin-bottom:18px}.future-list{display:flex;gap:8px;flex-wrap:wrap}.future-pill{background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.25);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900;color:#fff}
+.cta{padding:56px 20px 84px;text-align:center}.cta-panel{width:min(760px,100%);margin:auto;background:rgba(255,255,255,.78);border:2px solid rgba(255,255,255,.88);border-radius:30px;padding:32px 24px;box-shadow:0 16px 48px rgba(109,40,217,.1);backdrop-filter:blur(16px)}.cta-panel h2{font-family:'Noto Serif JP',serif;font-size:clamp(26px,5vw,44px);margin-bottom:10px}.cta-panel p{color:var(--soft);line-height:1.8;margin-bottom:22px}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}.reveal.in{opacity:1;transform:translateY(0)}
+@media(max-width:680px){.nav-inner{align-items:flex-start}.back-btn{font-size:12px;padding:6px 10px}.notice{width:calc(100% - 32px)}.step-card{flex-direction:column}.feature-grid{grid-template-columns:1fr}.section{padding:54px 16px}.future-banner{border-radius:26px;padding:28px 20px}.hero{padding-top:46px}.btn{width:100%}.hero-actions{padding:0 8px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html"><span class="green">コツコツ</span> <span class="pink">サクサク</span></a>
+    <div class="nav-actions">
+      <a class="back-btn primary" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">← アプリを開く</a>
+      <a class="back-btn" href="./index.html">ホームへ</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="beta-badge"><span class="beta-dot"></span>コツ習慣 β版 公開中</div>
+    <h1><span class="g">今日のコツ</span>を登録して、<br><span class="p">習得</span>していく。</h1>
+    <p class="hero-sub">コツ習慣は、勉強や学習を「コツ1件」単位で管理する新機能です。完璧な計画より、今日の1コツ。小さく登録して、終わったら習得。それが積み上がる仕組みです。</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">📋 コツ習慣をはじめる</a>
+      <a class="btn light" href="#howto">使い方を見る</a>
+    </div>
+  </div>
+</section>
+
+<div class="notice">
+  <div class="notice-icon">🧪</div>
+  <div>
+    <div class="notice-title">β版について</div>
+    <div class="notice-text">現在のコツ習慣はβ版です。基本機能は使えますが、画面表示・名称・演出・集計の見せ方は、今後のアップデートでさらに分かりやすく育てていく予定です。</div>
+  </div>
+</div>
+
+<section class="toc-section">
+  <div class="toc-inner">
+    <div class="toc-title">目次 / Contents</div>
+    <div class="toc-grid">
+      <a href="#about" class="toc-item">📋 コツ習慣とは</a>
+      <a href="#howto" class="toc-item">✅ 基本の使い方</a>
+      <a href="#features" class="toc-item">⚡ できること</a>
+      <a href="#rank" class="toc-item">🏆 KPとランク</a>
+      <a href="#faq" class="toc-item">❓ よくある質問</a>
+      <a href="#future" class="toc-item">🚀 今後の予定</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="sec-label reveal">ABOUT</div>
+    <h2 class="sec-title reveal">「やること」を、<br>コツに変える。</h2>
+    <p class="sec-lead reveal">コツ習慣は、学習や習慣を小さな単位で登録・完了・記録する機能です。時間を計るだけではなく、「今日は何をやったか」まで残せます。</p>
+    <div class="feature-grid reveal">
+      <div class="feature-card"><div class="feature-icon">📋</div><div class="feature-title">コツ単位で管理</div><div class="feature-text">科目と種類を選んで、今日やることを1件ずつ登録できます。</div></div>
+      <div class="feature-card"><div class="feature-icon">✅</div><div class="feature-title">習得で完了</div><div class="feature-text">終わったら「習得」。完了のたびにKPがたまります。</div></div>
+      <div class="feature-card"><div class="feature-icon">📊</div><div class="feature-title">記録を見える化</div><div class="feature-text">7日間グラフや科目別集計で、自分の積み上げが見えます。</div></div>
+      <div class="feature-card"><div class="feature-icon">🌸</div><div class="feature-title">物語も育つ</div><div class="feature-text">コツ数に応じて、ストーリーキャラクターの進化にもつながります。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="howto">
+  <div class="wrap">
+    <div class="sec-label reveal">HOW TO USE</div>
+    <h2 class="sec-title reveal">使い方は、<br>3ステップ。</h2>
+    <p class="sec-lead reveal">まずは深く考えずに、今日やることを1つだけ入れてみてください。コツ習慣は「始めるまでを軽くする」ための機能です。</p>
+    <div class="step-list">
+      <div class="step-card reveal">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">「今日のコツ」を登録する</div>
+          <div class="step-desc">アプリの <b>📋 コツ（タスク）習得</b> を開き、科目・種類・確認の順に選びます。よく使う組み合わせはテンプレート保存できます。</div>
+          <div class="mini-demo"><span class="demo-chip green">① 科目</span><span class="demo-chip pink">② 種類</span><span class="demo-chip gold">③ 確認</span></div>
+        </div>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">終わったら「習得」を押す</div>
+          <div class="step-desc">完了したら <b>習得</b> ボタンをタップ。実績量や実績分を入力すると、獲得KPにも反映されます。</div>
+          <div class="mini-demo"><span class="demo-chip">予定量</span><span class="demo-chip">実績量</span><span class="demo-chip">実績分</span><span class="demo-chip green">KP獲得</span></div>
+        </div>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">積み上げを確認する</div>
+          <div class="step-desc">装備タブではカテゴリ別の育ち具合、記録タブでは直近7日や科目別の集計を確認できます。コツ数が増えるとストーリー進化も解放されます。</div>
+          <div class="mini-demo"><span class="demo-chip pink">装備</span><span class="demo-chip green">記録</span><span class="demo-chip gold">進化図鑑</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="sec-label reveal">FEATURES</div>
+    <h2 class="sec-title reveal">β版で使えること。</h2>
+    <p class="sec-lead reveal">細かく管理しすぎず、でもちゃんと残せる。今のβ版では、以下の機能を中心に使えます。</p>
+    <div class="feature-grid reveal">
+      <div class="feature-card"><div class="feature-icon">⭐</div><div class="feature-title">テンプレート登録</div><div class="feature-text">よく使う科目と種類の組み合わせを保存して、次回からすぐ追加できます。</div></div>
+      <div class="feature-card"><div class="feature-icon">🔄</div><div class="feature-title">未完了の繰り越し</div><div class="feature-text">昨日の未完了を今日へ、今日の未完了を明日へ移せます。</div></div>
+      <div class="feature-card"><div class="feature-icon">🔬</div><div class="feature-title">カテゴリ自動分類</div><div class="feature-text">問題演習、暗記、復習、講義などを自動で分類し、装備レベルに反映します。</div></div>
+      <div class="feature-card"><div class="feature-icon">☁️</div><div class="feature-title">クラウド同期対応</div><div class="feature-text">同期コードを使っている場合、登録内容やKPなどをFirebaseにも保存できます。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="rank">
+  <div class="wrap">
+    <div class="sec-label reveal">KP RANK</div>
+    <h2 class="sec-title reveal">コツを積むほど、<br>ランクが上がる。</h2>
+    <p class="sec-lead reveal">コツを完了するとKP（コツポイント）を獲得します。β版でも、積み上げがランクとして見えるようになっています。</p>
+    <div class="rank-grid reveal">
+      <div class="rank-card"><div class="rank-icon">🌱</div><div class="rank-name">コツ見習い</div><div class="rank-kp">0 KP</div></div>
+      <div class="rank-card"><div class="rank-icon">📝</div><div class="rank-name">コツ学習者</div><div class="rank-kp">100 KP</div></div>
+      <div class="rank-card"><div class="rank-icon">💪</div><div class="rank-name">コツ努力家</div><div class="rank-kp">300 KP</div></div>
+      <div class="rank-card"><div class="rank-icon">🔥</div><div class="rank-name">コツ猛者</div><div class="rank-kp">700 KP</div></div>
+      <div class="rank-card"><div class="rank-icon">⚡</div><div class="rank-name">コツ達人</div><div class="rank-kp">1,500 KP</div></div>
+      <div class="rank-card"><div class="rank-icon">👑</div><div class="rank-name">コツの申し子</div><div class="rank-kp">3,000 KP</div></div>
+      <div class="rank-card"><div class="rank-icon">🏆</div><div class="rank-name">伝説のコツ</div><div class="rank-kp">6,000 KP</div></div>
+    </div>
+    <div class="calc-box reveal">
+      <div class="calc-title">KPの計算イメージ</div>
+      <div class="formula">KP = 10（基本）+ 実績量 + 実績分 × 0.5</div>
+      <div class="calc-note">例：20問、30分のコツを習得した場合は、10 + 20 + 15 = 45 KP。入力がない場合も、基本KPは獲得できます。</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="sec-label reveal">FAQ</div>
+    <h2 class="sec-title reveal">よくある質問。</h2>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>β版でも普通に使えますか？</span><span class="faq-icon">＋</span></button>
+        <div class="faq-a">はい、基本的な登録・習得・記録は使えます。ただしβ版のため、今後の更新で画面や名称、演出が変わる可能性があります。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>10分ブロックの記録と何が違いますか？</span><span class="faq-icon">＋</span></button>
+        <div class="faq-a">10分ブロックは「いつ、どれくらい学習したか」を残す機能です。コツ習慣は「何をやったか」をコツ単位で残す機能です。時間と内容の両方を残せます。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>科目や種類は自由に追加できますか？</span><span class="faq-icon">＋</span></button>
+        <div class="faq-a">はい。選択肢から選ぶだけでなく、自分で入力して追加できます。資格、勉強、読書、運動など、自由にコツ化できます。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="future">
+  <div class="wrap">
+    <div class="future-banner reveal">
+      <div class="future-content">
+        <div class="future-kicker"><span class="beta-dot"></span>今後もバージョンアップ予定</div>
+        <div class="future-title">コツ習慣は、まだ育っている途中です。</div>
+        <div class="future-text">β版でいただいた使い心地をもとに、もっと登録しやすく、もっと続けたくなる形へ育てていきます。小さな1コツが、ちゃんと楽しく積み上がる場所にしていく予定です。</div>
+        <div class="future-list">
+          <span class="future-pill">📱 さらに見やすい入力画面</span>
+          <span class="future-pill">🎯 チャレンジ強化</span>
+          <span class="future-pill">📊 記録グラフ改善</span>
+          <span class="future-pill">🌸 進化演出の追加</span>
+          <span class="future-pill">🏅 バッジ・称号の拡張</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta-panel reveal">
+    <h2>まずは、今日の1コツ。</h2>
+    <p>大きく変えようとしなくて大丈夫。1件登録して、終わったら習得。それだけで今日の軌跡になります。</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">📋 アプリで試す</a>
+      <a class="btn light" href="./index.html">ホームへ戻る</a>
+    </div>
+  </div>
+</section>
+
+<script>
+function toggleFaq(btn){
+  const item = btn.closest('.faq-item');
+  item.classList.toggle('open');
+}
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
