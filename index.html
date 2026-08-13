@@ -87,6 +87,16 @@ h1 .g{color:var(--green)}
 .hero-video-sound{position:absolute;top:10px;right:10px;width:38px;height:38px;border:none;border-radius:50%;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(30,27,75,.22);font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s,background .12s;}
 .hero-video-sound:hover{transform:scale(1.08);background:rgba(255,255,255,.96);}
 .hero-video-sound:active{transform:scale(.94);}
+/* YouTube ファサード（クリックされるまでiframeを読み込まない） */
+.hero-yt-facade{display:block;position:relative;width:100%;padding:0;border:none;background:linear-gradient(135deg,#fdf2f8,#d1fae5);cursor:pointer;aspect-ratio:16/9;overflow:hidden;}
+.hero-video-card.portrait .hero-yt-facade{aspect-ratio:9/16;}
+.hero-yt-thumb{display:block;width:100%;height:100%;object-fit:cover;}
+.hero-yt-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:68px;height:48px;border-radius:14px;background:rgba(219,39,119,.92);box-shadow:0 6px 20px rgba(219,39,119,.4);transition:transform .16s,background .16s;}
+.hero-yt-play::after{content:"";position:absolute;top:50%;left:52%;transform:translate(-50%,-50%);border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #fff;}
+.hero-yt-facade:hover .hero-yt-play{transform:translate(-50%,-50%) scale(1.12);background:#db2777;}
+.hero-yt-facade:focus-visible{outline:3px solid var(--green);outline-offset:-3px;}
+.hero-yt-frame{display:block;width:100%;aspect-ratio:16/9;border:none;}
+.hero-video-card.portrait .hero-yt-frame{aspect-ratio:9/16;}
 @media(max-width:680px){.hero-videos{margin-top:24px;gap:14px;}.hero-video-card{flex:1 1 100%;max-width:100%;}}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;border-radius:20px;padding:0 28px;text-decoration:none;color:#fff;background:linear-gradient(135deg,var(--pink),#be185d);font-weight:900;font-size:15px;box-shadow:0 12px 32px rgba(219,39,119,.32);transition:transform .18s,box-shadow .18s;border:none;cursor:pointer;}
 .btn:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(219,39,119,.42);}
@@ -2841,15 +2851,27 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
 (function(){
   // ─────────────────────────────────────────────
   // ここに動画を追加するだけでヒーローに並びます。
+  //
+  // ■ YouTube を埋め込む場合
+  //   youtube : 動画ID（11文字）。URLではなくIDだけを入れます。
+  //             https://www.youtube.com/watch?v=XXXXXXXXXXX  → 'XXXXXXXXXXX'
+  //             https://youtu.be/XXXXXXXXXXX                 → 'XXXXXXXXXXX'
+  //   ※クリックされるまでYouTubeの読み込みは発生しません（表示が軽い）
+  //
+  // ■ 動画ファイルを直接置く場合
   //   file    : 拡張子を除いたファイル名（hero-1 → hero-1.webm / hero-1.mp4 を探す）
+  //   sound   : true にすると音声トグルボタンを表示
+  //
+  // ■ 共通
   //   caption : 動画の上に重ねる説明文（省略可）
   //   portrait: true にすると縦型（9:16）表示
-  //   sound   : true にすると音声トグルボタンを表示
-  // ファイルが無いカードは自動的に非表示になるので、
-  // 動画を置くまではページの見た目は今までどおりです。
+  //
+  // ID未設定・ファイルが無いカードは自動的に非表示になるので、
+  // 設定するまではページの見た目は今までどおりです。
   // ─────────────────────────────────────────────
   var HERO_VIDEOS = [
-    { file:'hero-1', caption:'', portrait:false, sound:false },
+    // ↓ '' の部分に YouTube の動画IDを貼るだけで表示されます
+    { youtube:'', caption:'20,000時間達成', portrait:false },
     { file:'hero-2', caption:'', portrait:false, sound:false },
     { file:'hero-3', caption:'', portrait:false, sound:false }
   ];
@@ -2868,9 +2890,72 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
     else wrap.classList.remove('is-ready');
   }
 
+  // YouTube用：サムネイル＋再生ボタンだけ先に置き、クリックで初めてiframeを読み込む
+  function buildYouTube(conf, card){
+    var id = String(conf.youtube || '').trim();
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return false;  // 未設定・不正IDは表示しない
+
+    var fa = document.createElement('button');
+    fa.className = 'hero-yt-facade';
+    fa.type = 'button';
+    fa.setAttribute('aria-label', (conf.caption || 'YouTube動画') + ' を再生');
+
+    var thumb = document.createElement('img');
+    thumb.className = 'hero-yt-thumb';
+    thumb.loading = 'lazy';
+    thumb.alt = '';
+    thumb.src = 'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg';
+    // maxres が無い動画は hqdefault にフォールバック
+    thumb.addEventListener('error', function(){
+      if (thumb.dataset.fb) return;
+      thumb.dataset.fb = '1';
+      thumb.src = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+    });
+    fa.appendChild(thumb);
+
+    var play = document.createElement('span');
+    play.className = 'hero-yt-play';
+    play.setAttribute('aria-hidden','true');
+    fa.appendChild(play);
+
+    fa.addEventListener('click', function(){
+      var f = document.createElement('iframe');
+      f.className = 'hero-yt-frame';
+      f.src = 'https://www.youtube-nocookie.com/embed/' + id +
+              '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+      f.title = conf.caption || 'YouTube動画';
+      f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.setAttribute('allowfullscreen','');
+      card.replaceChild(f, fa);
+      var cap = card.querySelector('.hero-video-cap');
+      if (cap) cap.remove();  // 再生後は説明文を消して映像に集中させる
+    });
+
+    card.appendChild(fa);
+    return true;
+  }
+
   HERO_VIDEOS.forEach(function(conf, i){
     var card = document.createElement('div');
     card.className = 'hero-video-card is-hidden' + (conf.portrait ? ' portrait' : '');
+
+    // YouTube指定があればそちらを優先
+    if (conf.youtube !== undefined) {
+      if (buildYouTube(conf, card)) {
+        card.classList.remove('is-hidden');
+        liveCount++;
+        reveal();
+        if (conf.caption) {
+          var ycap = document.createElement('div');
+          ycap.className = 'hero-video-cap';
+          ycap.textContent = conf.caption;
+          card.appendChild(ycap);
+        }
+        wrap.appendChild(card);
+      }
+      return;
+    }
 
     var vid = document.createElement('video');
     vid.muted = true;          // 自動再生には muted が必須
