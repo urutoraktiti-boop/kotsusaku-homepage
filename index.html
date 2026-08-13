@@ -75,6 +75,19 @@ h1 .g{color:var(--green)}
 .lead{margin:20px 0 0;font-size:clamp(16px,2.2vw,24px);line-height:1.5;font-weight:950;}
 .sub{margin:13px auto 0;max-width:520px;color:var(--soft);font-size:14.5px;line-height:1.85;}
 .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;justify-content:center;}
+/* ── ヒーロー動画 ── */
+.hero-videos{display:none;margin-top:32px;gap:18px;flex-wrap:wrap;justify-content:center;align-items:flex-start;}
+.hero-videos.is-ready{display:flex;}
+.hero-video-card{position:relative;flex:1 1 300px;max-width:420px;min-width:0;border-radius:24px;overflow:hidden;background:rgba(255,255,255,.6);backdrop-filter:blur(12px);border:1.5px solid rgba(5,150,105,.22);box-shadow:0 14px 38px rgba(5,150,105,.16);transition:transform .18s,box-shadow .18s;}
+.hero-video-card:hover{transform:translateY(-3px);box-shadow:0 22px 50px rgba(5,150,105,.24);}
+.hero-video-card.is-hidden{display:none;}
+.hero-video-card video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:linear-gradient(135deg,#fdf2f8,#d1fae5);}
+.hero-video-card.portrait video{aspect-ratio:9/16;}
+.hero-video-cap{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 12px;background:linear-gradient(to top,rgba(30,27,75,.72),transparent);color:#fff;font-size:13px;font-weight:900;letter-spacing:.02em;text-align:left;text-shadow:0 1px 6px rgba(0,0,0,.4);pointer-events:none;}
+.hero-video-sound{position:absolute;top:10px;right:10px;width:38px;height:38px;border:none;border-radius:50%;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(30,27,75,.22);font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s,background .12s;}
+.hero-video-sound:hover{transform:scale(1.08);background:rgba(255,255,255,.96);}
+.hero-video-sound:active{transform:scale(.94);}
+@media(max-width:680px){.hero-videos{margin-top:24px;gap:14px;}.hero-video-card{flex:1 1 100%;max-width:100%;}}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;border-radius:20px;padding:0 28px;text-decoration:none;color:#fff;background:linear-gradient(135deg,var(--pink),#be185d);font-weight:900;font-size:15px;box-shadow:0 12px 32px rgba(219,39,119,.32);transition:transform .18s,box-shadow .18s;border:none;cursor:pointer;}
 .btn:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(219,39,119,.42);}
 .btn.light{color:#065f46;background:rgba(255,255,255,.78);backdrop-filter:blur(12px);border:1.5px solid rgba(5,150,105,.25);box-shadow:0 8px 24px rgba(5,150,105,.1);}
@@ -826,6 +839,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
           <a class="btn guide" href="./install.html">ホーム画面に追加する方法</a>
           <button class="btn light" onclick="closeToApp()">インストール済みの方はこちら</button>
         </div>
+        <!-- ヒーロー動画：HERO_VIDEOS に定義したものだけ描画される -->
+        <div class="hero-videos" id="hero-videos"></div>
       </div>
     </div>
   </section>
@@ -2819,6 +2834,123 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
     lastX = e.clientX; lastY = e.clientY; lastStamp = now;
     addPaw(e.clientX, e.clientY);
   }, { passive: true });
+})();
+</script>
+<!-- ══ ヒーロー動画 ══ -->
+<script>
+(function(){
+  // ─────────────────────────────────────────────
+  // ここに動画を追加するだけでヒーローに並びます。
+  //   file    : 拡張子を除いたファイル名（hero-1 → hero-1.webm / hero-1.mp4 を探す）
+  //   caption : 動画の上に重ねる説明文（省略可）
+  //   portrait: true にすると縦型（9:16）表示
+  //   sound   : true にすると音声トグルボタンを表示
+  // ファイルが無いカードは自動的に非表示になるので、
+  // 動画を置くまではページの見た目は今までどおりです。
+  // ─────────────────────────────────────────────
+  var HERO_VIDEOS = [
+    { file:'hero-1', caption:'', portrait:false, sound:false },
+    { file:'hero-2', caption:'', portrait:false, sound:false },
+    { file:'hero-3', caption:'', portrait:false, sound:false }
+  ];
+
+  var EXTS = ['webm','mp4'];  // 対応形式（webm優先、無ければmp4）
+  var TYPES = { webm:'video/webm', mp4:'video/mp4' };
+
+  var wrap = document.getElementById('hero-videos');
+  if (!wrap) return;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var liveCount = 0;
+
+  function reveal(){
+    if (liveCount > 0) wrap.classList.add('is-ready');
+    else wrap.classList.remove('is-ready');
+  }
+
+  HERO_VIDEOS.forEach(function(conf, i){
+    var card = document.createElement('div');
+    card.className = 'hero-video-card is-hidden' + (conf.portrait ? ' portrait' : '');
+
+    var vid = document.createElement('video');
+    vid.muted = true;          // 自動再生には muted が必須
+    vid.loop = true;
+    vid.playsInline = true;
+    vid.setAttribute('playsinline','');
+    vid.setAttribute('aria-label', conf.caption || ('ヒーロー動画 ' + (i + 1)));
+    if (conf.poster) vid.poster = conf.poster;
+
+    if (reduceMotion) {
+      // アニメーション抑制設定の場合は自動再生せず、コントロールを出す
+      vid.controls = true;
+      vid.preload = 'metadata';
+    } else {
+      vid.autoplay = true;
+      vid.preload = 'auto';
+    }
+
+    EXTS.forEach(function(ext){
+      var s = document.createElement('source');
+      s.src = conf.file + '.' + ext;
+      s.type = TYPES[ext];
+      vid.appendChild(s);
+    });
+
+    // 再生できたら表示、全ソース失敗なら伏せたまま
+    var shown = false;
+    vid.addEventListener('loadeddata', function(){
+      if (shown) return;
+      shown = true;
+      card.classList.remove('is-hidden');
+      liveCount++;
+      reveal();
+      if (!reduceMotion) {
+        var p = vid.play();
+        if (p && p.catch) p.catch(function(){ vid.controls = true; });
+      }
+    });
+    vid.addEventListener('error', function(){
+      // 全ソース読み込み失敗：カードは伏せたままにする
+      if (!shown) card.classList.add('is-hidden');
+    });
+
+    card.appendChild(vid);
+
+    if (conf.caption) {
+      var cap = document.createElement('div');
+      cap.className = 'hero-video-cap';
+      cap.textContent = conf.caption;
+      card.appendChild(cap);
+    }
+
+    if (conf.sound && !reduceMotion) {
+      var btn = document.createElement('button');
+      btn.className = 'hero-video-sound';
+      btn.type = 'button';
+      btn.textContent = '🔇';
+      btn.setAttribute('aria-label','音声のオン・オフ');
+      btn.addEventListener('click', function(){
+        vid.muted = !vid.muted;
+        btn.textContent = vid.muted ? '🔇' : '🔊';
+        if (!vid.muted) { var p = vid.play(); if (p && p.catch) p.catch(function(){}); }
+      });
+      card.appendChild(btn);
+    }
+
+    wrap.appendChild(card);
+  });
+
+  // 画面外では一時停止してバッテリー・通信を節約
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        var v = en.target;
+        if (en.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+        else v.pause();
+      });
+    }, { threshold: 0.1 });
+    wrap.querySelectorAll('video').forEach(function(v){ io.observe(v); });
+  }
 })();
 </script>
 <!-- ニヤニヤ演出 -->
