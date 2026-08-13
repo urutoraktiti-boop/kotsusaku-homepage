@@ -768,10 +768,13 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 /* 上位マイルストーンほど輝きを強く（緑→桜のグラデーションで格の違いを出す） */
 .ms-btn.tier2{background:linear-gradient(135deg,#059669,#db2777,#f472b6);box-shadow:0 6px 22px rgba(5,150,105,.35),0 6px 22px rgba(219,39,119,.3);}
 .ms-btn.tier2:hover{box-shadow:0 10px 30px rgba(5,150,105,.45),0 10px 30px rgba(219,39,119,.4);}
-.ms20-teaser{display:none;width:100%;max-width:340px;margin:14px auto 0;overflow:hidden;border-radius:99px;background:linear-gradient(135deg,#fdf2f8,#f3e8ff);border:1.5px solid #f0abfc;height:36px;position:relative;}
-.ms20-teaser.is-on{display:block;}
-.ms20-teaser-inner{display:flex;white-space:nowrap;position:absolute;top:50%;transform:translateY(-50%);animation:teaser-scroll 14s linear infinite;}
-.ms20-teaser-inner span{font-size:13px;font-weight:900;color:#c026d3;padding-right:48px;}
+.ms-teaser{display:none;width:100%;max-width:340px;margin:14px auto 0;overflow:hidden;border-radius:99px;background:linear-gradient(135deg,#fdf2f8,#f3e8ff);border:1.5px solid #f0abfc;height:36px;position:relative;}
+.ms-teaser.is-on{display:block;}
+.ms-teaser-inner{display:flex;white-space:nowrap;position:absolute;top:50%;transform:translateY(-50%);animation:teaser-scroll 14s linear infinite;}
+.ms-teaser-inner span{font-size:13px;font-weight:900;color:#c026d3;padding-right:48px;}
+/* 上位マイルストーンの予告は緑寄りにして格の違いを出す */
+.ms-teaser.tier2{background:linear-gradient(135deg,#ecfdf5,#fdf2f8);border-color:#6ee7b7;}
+.ms-teaser.tier2 .ms-teaser-inner span{color:#059669;}
 /* モーダル */
 .ms-modal{position:fixed;inset:0;z-index:10001;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(30,27,75,.78);backdrop-filter:blur(6px);}
 .ms-modal.is-open{display:flex;}
@@ -926,11 +929,19 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
           </div>
           <!-- ══ マイルストーン達成ムービー（到達したものが上から順に並ぶ） ══ -->
           <div class="ms-btns" id="ms-btns"></div>
-          <!-- 20,000時間未満テロップ（10,000時間到達後に表示） -->
-          <div class="ms20-teaser" id="ms20-teaser">
-            <div class="ms20-teaser-inner">
+          <!-- 予告テロップ（同時に表示されるのは常に1つ） -->
+          <!-- 10,000〜20,000時間 -->
+          <div class="ms-teaser" id="ms20-teaser">
+            <div class="ms-teaser-inner">
               <span>20,000時間で🌸特別ムービー公開🌸。。。。</span>
               <span>20,000時間で🌸特別ムービー公開🌸。。。。</span>
+            </div>
+          </div>
+          <!-- 20,000〜55,555時間 -->
+          <div class="ms-teaser tier2" id="ms55555-teaser">
+            <div class="ms-teaser-inner">
+              <span>55,555時間で🌸記念ムービー公開🌸。。。。</span>
+              <span>55,555時間で🌸記念ムービー公開🌸。。。。</span>
             </div>
           </div>
           <!-- 桜パーティクルエリア -->
@@ -2925,7 +2936,8 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
       id:'ms55555', hours:55555, yt:'xm3j9z8WaQQ', tier:2,
       label:'🌸 55,555時間達成記念ムービーを見る 🌸',
       title:'🌸 55,555時間、達成しました 🌸',
-      sub:'ここまで積み上げた仲間たちへ、記念ムービーを'
+      sub:'ここまで積み上げた仲間たちへ、記念ムービーを',
+      teaserEl:'ms55555-teaser', teaserFrom:1200000   // 20,000時間から予告
     }
   ];
 
