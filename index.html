@@ -758,6 +758,29 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 .gorilla-btn:active{transform:scale(.96);box-shadow:none;}
 .gorilla-btn:disabled{opacity:.5;cursor:default;transform:none;}
 #gorilla-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;display:none;}
+/* ══ 20,000時間マイルストーン演出 ══ */
+.ms20-btn{display:none;margin:14px auto 0;padding:12px 30px;border:none;border-radius:99px;background:linear-gradient(135deg,#db2777,#f472b6);color:#fff;font-size:14.5px;font-weight:900;letter-spacing:.03em;cursor:pointer;box-shadow:0 6px 20px rgba(219,39,119,.4);transition:transform .12s,box-shadow .12s;}
+.ms20-btn.is-on{display:block;}
+.ms20-btn:hover{transform:scale(1.05);box-shadow:0 10px 28px rgba(219,39,119,.5);}
+.ms20-btn:active{transform:scale(.96);}
+.ms20-btn.pulse{animation:ms20Pulse 1.6s ease-in-out 4;}
+@keyframes ms20Pulse{0%,100%{box-shadow:0 6px 20px rgba(219,39,119,.4);}50%{box-shadow:0 6px 34px rgba(219,39,119,.85),0 0 0 10px rgba(219,39,119,.12);}}
+.ms20-teaser{display:none;width:100%;max-width:340px;margin:14px auto 0;overflow:hidden;border-radius:99px;background:linear-gradient(135deg,#fdf2f8,#f3e8ff);border:1.5px solid #f0abfc;height:36px;position:relative;}
+.ms20-teaser.is-on{display:block;}
+.ms20-teaser-inner{display:flex;white-space:nowrap;position:absolute;top:50%;transform:translateY(-50%);animation:teaser-scroll 14s linear infinite;}
+.ms20-teaser-inner span{font-size:13px;font-weight:900;color:#c026d3;padding-right:48px;}
+/* モーダル */
+.ms20-modal{position:fixed;inset:0;z-index:10001;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(30,27,75,.78);backdrop-filter:blur(6px);}
+.ms20-modal.is-open{display:flex;}
+.ms20-dialog{position:relative;width:100%;max-width:880px;background:rgba(255,255,255,.97);border-radius:24px;overflow:hidden;box-shadow:0 24px 70px rgba(30,27,75,.45);animation:ms20In .28s cubic-bezier(.2,.8,.3,1);}
+@keyframes ms20In{from{opacity:0;transform:translateY(18px) scale(.97);}to{opacity:1;transform:none;}}
+.ms20-head{padding:16px 56px 14px 22px;background:linear-gradient(135deg,#059669,#db2777);color:#fff;}
+.ms20-head b{display:block;font-size:17px;font-weight:900;font-family:'Noto Serif JP',serif;letter-spacing:.02em;}
+.ms20-head span{display:block;margin-top:3px;font-size:12.5px;font-weight:800;opacity:.92;}
+.ms20-close{position:absolute;top:12px;right:12px;width:38px;height:38px;border:none;border-radius:50%;background:rgba(255,255,255,.9);color:#1e1b4b;font-size:19px;line-height:1;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s,background .12s;}
+.ms20-close:hover{transform:scale(1.08);background:#fff;}
+.ms20-body{background:#000;}
+@media(max-width:560px){.ms20-dialog{border-radius:18px;}.ms20-head{padding:13px 50px 11px 16px;}.ms20-head b{font-size:15px;}.ms20-head span{font-size:11.5px;}.ms20-btn{padding:11px 20px;font-size:13px;}}
 /* ===== 方言セレクターパネル ===== */
 .dialect-panel{
   display:flex;flex-wrap:wrap;gap:6px;
@@ -896,6 +919,15 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
             <div class="gorilla-teaser-inner">
               <span>10,000時間で🦍ゴリ召喚ゴリ🦍。。。。</span>
               <span>10,000時間で🦍ゴリ召喚ゴリ🦍。。。。</span>
+            </div>
+          </div>
+          <!-- ══ 20,000時間マイルストーン ══ -->
+          <button class="ms20-btn" id="ms20-btn" type="button">🌸 20,000時間達成ムービーを見る 🌸</button>
+          <!-- 20,000時間未満テロップ（10,000時間到達後に表示） -->
+          <div class="ms20-teaser" id="ms20-teaser">
+            <div class="ms20-teaser-inner">
+              <span>20,000時間で🌸特別ムービー公開🌸。。。。</span>
+              <span>20,000時間で🌸特別ムービー公開🌸。。。。</span>
             </div>
           </div>
           <!-- 桜パーティクルエリア -->
@@ -1800,6 +1832,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
       // 10,000時間未満：テロップを表示
       if (window.gorillaShowTeaser) window.gorillaShowTeaser();
     }
+
+    // ── 20,000時間マイルストーン：達成ムービーの開放／予告 ──
+    if (window.milestone20kApply) window.milestone20kApply(totalMins);
   }
 
   // メインデータ取得：初回表示時に1回、その後は毎時の集計反映後にsummary 1件を取得。
@@ -2846,6 +2881,135 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
   }, { passive: true });
 })();
 </script>
+<!-- ══ 20,000時間達成ムービー モーダル ══ -->
+<div class="ms20-modal" id="ms20-modal" role="dialog" aria-modal="true" aria-labelledby="ms20-title" aria-hidden="true">
+  <div class="ms20-dialog">
+    <div class="ms20-head">
+      <b id="ms20-title">🌸 20,000時間、達成しました 🌸</b>
+      <span>みんなのコツコツが、ここまで積み上がりました</span>
+    </div>
+    <button class="ms20-close" id="ms20-close" type="button" aria-label="閉じる">✕</button>
+    <div class="ms20-body" id="ms20-body"></div>
+  </div>
+</div>
+<script>
+(function(){
+  // ─────────────────────────────────────────────
+  // 20,000時間マイルストーン演出
+  //   ・20,000時間（1,200,000分）到達でボタンを開放
+  //   ・到達後の初回セッションのみモーダルを自動で開く
+  //   ・10,000〜20,000時間の間は予告テロップを表示
+  //   YT_ID を差し替えれば別の動画に変更できます
+  // ─────────────────────────────────────────────
+  var YT_ID = 'ssA7uCZWQkQ';
+  var THRESHOLD_MINS = 1200000;   // 20,000時間 × 60
+  var SEEN_KEY = 'ms20_seen_v1';
+
+  var modal = document.getElementById('ms20-modal');
+  var body  = document.getElementById('ms20-body');
+  var btn   = document.getElementById('ms20-btn');
+  var teaser= document.getElementById('ms20-teaser');
+  var closeBtn = document.getElementById('ms20-close');
+  if (!modal || !body || !btn) return;
+
+  var lastFocus = null;
+
+  // サムネイル＋再生ボタンだけ先に置き、クリックで初めてiframeを読み込む
+  function buildFacade(){
+    body.textContent = '';
+    var fa = document.createElement('button');
+    fa.className = 'hero-yt-facade';
+    fa.type = 'button';
+    fa.setAttribute('aria-label','20,000時間達成ムービーを再生');
+
+    var thumb = document.createElement('img');
+    thumb.className = 'hero-yt-thumb';
+    thumb.alt = '';
+    thumb.src = 'https://i.ytimg.com/vi/' + YT_ID + '/maxresdefault.jpg';
+    thumb.addEventListener('error', function(){
+      if (thumb.dataset.fb) return;
+      thumb.dataset.fb = '1';
+      thumb.src = 'https://i.ytimg.com/vi/' + YT_ID + '/hqdefault.jpg';
+    });
+    fa.appendChild(thumb);
+
+    var play = document.createElement('span');
+    play.className = 'hero-yt-play';
+    play.setAttribute('aria-hidden','true');
+    fa.appendChild(play);
+
+    fa.addEventListener('click', function(){
+      var f = document.createElement('iframe');
+      f.className = 'hero-yt-frame';
+      f.src = 'https://www.youtube-nocookie.com/embed/' + YT_ID +
+              '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+      f.title = '20,000時間達成ムービー';
+      f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.setAttribute('allowfullscreen','');
+      body.replaceChild(f, fa);
+      // iframeにフォーカスを移すとESCキーがiframe側に吸われて閉じられなくなるため、
+      // フォーカスは閉じるボタンに残す
+      if (closeBtn) closeBtn.focus();
+    });
+
+    body.appendChild(fa);
+  }
+
+  function openModal(){
+    lastFocus = document.activeElement;
+    buildFacade();
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeModal(){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    body.textContent = '';   // iframeを破棄して再生を止める
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  btn.addEventListener('click', openModal);
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  function seen(){
+    try { return sessionStorage.getItem(SEEN_KEY) === '1'; } catch(e){ return false; }
+  }
+  function markSeen(){
+    try { sessionStorage.setItem(SEEN_KEY, '1'); } catch(e){}
+  }
+
+  // 統計読み込み後に呼ばれる：到達済みならボタン開放、未到達なら予告テロップ
+  window.milestone20kApply = function(totalMins){
+    var mins = Number(totalMins) || 0;
+    if (mins >= THRESHOLD_MINS) {
+      if (teaser) teaser.classList.remove('is-on');
+      btn.classList.add('is-on');
+      if (!seen()) {
+        markSeen();
+        btn.classList.add('pulse');
+        // ゴリラ演出（800ms）と重ならないよう少し遅らせて開く
+        setTimeout(openModal, 2200);
+      }
+    } else {
+      btn.classList.remove('is-on');
+      // 10,000時間到達後だけ予告を出す（それ未満はゴリラ予告を優先）
+      if (teaser) {
+        if (mins >= 600000) teaser.classList.add('is-on');
+        else teaser.classList.remove('is-on');
+      }
+    }
+  };
+})();
+</script>
 <!-- ══ ヒーロー動画 ══ -->
 <script>
 (function(){
@@ -2870,8 +3034,7 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
   // 設定するまではページの見た目は今までどおりです。
   // ─────────────────────────────────────────────
   var HERO_VIDEOS = [
-    // ↓ '' の部分に YouTube の動画IDを貼るだけで表示されます
-    { youtube:'', caption:'20,000時間達成', portrait:false },
+    { file:'hero-1', caption:'', portrait:false, sound:false },
     { file:'hero-2', caption:'', portrait:false, sound:false },
     { file:'hero-3', caption:'', portrait:false, sound:false }
   ];
