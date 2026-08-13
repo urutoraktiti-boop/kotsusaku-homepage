@@ -75,6 +75,29 @@ h1 .g{color:var(--green)}
 .lead{margin:20px 0 0;font-size:clamp(16px,2.2vw,24px);line-height:1.5;font-weight:950;}
 .sub{margin:13px auto 0;max-width:520px;color:var(--soft);font-size:14.5px;line-height:1.85;}
 .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;justify-content:center;}
+/* ── ヒーロー動画 ── */
+.hero-videos{display:none;margin-top:32px;gap:18px;flex-wrap:wrap;justify-content:center;align-items:flex-start;}
+.hero-videos.is-ready{display:flex;}
+.hero-video-card{position:relative;flex:1 1 300px;max-width:420px;min-width:0;border-radius:24px;overflow:hidden;background:rgba(255,255,255,.6);backdrop-filter:blur(12px);border:1.5px solid rgba(5,150,105,.22);box-shadow:0 14px 38px rgba(5,150,105,.16);transition:transform .18s,box-shadow .18s;}
+.hero-video-card:hover{transform:translateY(-3px);box-shadow:0 22px 50px rgba(5,150,105,.24);}
+.hero-video-card.is-hidden{display:none;}
+.hero-video-card video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:linear-gradient(135deg,#fdf2f8,#d1fae5);}
+.hero-video-card.portrait video{aspect-ratio:9/16;}
+.hero-video-cap{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 12px;background:linear-gradient(to top,rgba(30,27,75,.72),transparent);color:#fff;font-size:13px;font-weight:900;letter-spacing:.02em;text-align:left;text-shadow:0 1px 6px rgba(0,0,0,.4);pointer-events:none;}
+.hero-video-sound{position:absolute;top:10px;right:10px;width:38px;height:38px;border:none;border-radius:50%;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(30,27,75,.22);font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s,background .12s;}
+.hero-video-sound:hover{transform:scale(1.08);background:rgba(255,255,255,.96);}
+.hero-video-sound:active{transform:scale(.94);}
+/* YouTube ファサード（クリックされるまでiframeを読み込まない） */
+.hero-yt-facade{display:block;position:relative;width:100%;padding:0;border:none;background:linear-gradient(135deg,#fdf2f8,#d1fae5);cursor:pointer;aspect-ratio:16/9;overflow:hidden;}
+.hero-video-card.portrait .hero-yt-facade{aspect-ratio:9/16;}
+.hero-yt-thumb{display:block;width:100%;height:100%;object-fit:cover;}
+.hero-yt-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:68px;height:48px;border-radius:14px;background:rgba(219,39,119,.92);box-shadow:0 6px 20px rgba(219,39,119,.4);transition:transform .16s,background .16s;}
+.hero-yt-play::after{content:"";position:absolute;top:50%;left:52%;transform:translate(-50%,-50%);border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #fff;}
+.hero-yt-facade:hover .hero-yt-play{transform:translate(-50%,-50%) scale(1.12);background:#db2777;}
+.hero-yt-facade:focus-visible{outline:3px solid var(--green);outline-offset:-3px;}
+.hero-yt-frame{display:block;width:100%;aspect-ratio:16/9;border:none;}
+.hero-video-card.portrait .hero-yt-frame{aspect-ratio:9/16;}
+@media(max-width:680px){.hero-videos{margin-top:24px;gap:14px;}.hero-video-card{flex:1 1 100%;max-width:100%;}}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;border-radius:20px;padding:0 28px;text-decoration:none;color:#fff;background:linear-gradient(135deg,var(--pink),#be185d);font-weight:900;font-size:15px;box-shadow:0 12px 32px rgba(219,39,119,.32);transition:transform .18s,box-shadow .18s;border:none;cursor:pointer;}
 .btn:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(219,39,119,.42);}
 .btn.light{color:#065f46;background:rgba(255,255,255,.78);backdrop-filter:blur(12px);border:1.5px solid rgba(5,150,105,.25);box-shadow:0 8px 24px rgba(5,150,105,.1);}
@@ -735,6 +758,29 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 .gorilla-btn:active{transform:scale(.96);box-shadow:none;}
 .gorilla-btn:disabled{opacity:.5;cursor:default;transform:none;}
 #gorilla-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;display:none;}
+/* ══ 20,000時間マイルストーン演出 ══ */
+.ms20-btn{display:none;margin:14px auto 0;padding:12px 30px;border:none;border-radius:99px;background:linear-gradient(135deg,#db2777,#f472b6);color:#fff;font-size:14.5px;font-weight:900;letter-spacing:.03em;cursor:pointer;box-shadow:0 6px 20px rgba(219,39,119,.4);transition:transform .12s,box-shadow .12s;}
+.ms20-btn.is-on{display:block;}
+.ms20-btn:hover{transform:scale(1.05);box-shadow:0 10px 28px rgba(219,39,119,.5);}
+.ms20-btn:active{transform:scale(.96);}
+.ms20-btn.pulse{animation:ms20Pulse 1.6s ease-in-out 4;}
+@keyframes ms20Pulse{0%,100%{box-shadow:0 6px 20px rgba(219,39,119,.4);}50%{box-shadow:0 6px 34px rgba(219,39,119,.85),0 0 0 10px rgba(219,39,119,.12);}}
+.ms20-teaser{display:none;width:100%;max-width:340px;margin:14px auto 0;overflow:hidden;border-radius:99px;background:linear-gradient(135deg,#fdf2f8,#f3e8ff);border:1.5px solid #f0abfc;height:36px;position:relative;}
+.ms20-teaser.is-on{display:block;}
+.ms20-teaser-inner{display:flex;white-space:nowrap;position:absolute;top:50%;transform:translateY(-50%);animation:teaser-scroll 14s linear infinite;}
+.ms20-teaser-inner span{font-size:13px;font-weight:900;color:#c026d3;padding-right:48px;}
+/* モーダル */
+.ms20-modal{position:fixed;inset:0;z-index:10001;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(30,27,75,.78);backdrop-filter:blur(6px);}
+.ms20-modal.is-open{display:flex;}
+.ms20-dialog{position:relative;width:100%;max-width:880px;background:rgba(255,255,255,.97);border-radius:24px;overflow:hidden;box-shadow:0 24px 70px rgba(30,27,75,.45);animation:ms20In .28s cubic-bezier(.2,.8,.3,1);}
+@keyframes ms20In{from{opacity:0;transform:translateY(18px) scale(.97);}to{opacity:1;transform:none;}}
+.ms20-head{padding:16px 56px 14px 22px;background:linear-gradient(135deg,#059669,#db2777);color:#fff;}
+.ms20-head b{display:block;font-size:17px;font-weight:900;font-family:'Noto Serif JP',serif;letter-spacing:.02em;}
+.ms20-head span{display:block;margin-top:3px;font-size:12.5px;font-weight:800;opacity:.92;}
+.ms20-close{position:absolute;top:12px;right:12px;width:38px;height:38px;border:none;border-radius:50%;background:rgba(255,255,255,.9);color:#1e1b4b;font-size:19px;line-height:1;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s,background .12s;}
+.ms20-close:hover{transform:scale(1.08);background:#fff;}
+.ms20-body{background:#000;}
+@media(max-width:560px){.ms20-dialog{border-radius:18px;}.ms20-head{padding:13px 50px 11px 16px;}.ms20-head b{font-size:15px;}.ms20-head span{font-size:11.5px;}.ms20-btn{padding:11px 20px;font-size:13px;}}
 /* ===== 方言セレクターパネル ===== */
 .dialect-panel{
   display:flex;flex-wrap:wrap;gap:6px;
@@ -826,6 +872,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
           <a class="btn guide" href="./install.html">ホーム画面に追加する方法</a>
           <button class="btn light" onclick="closeToApp()">インストール済みの方はこちら</button>
         </div>
+        <!-- ヒーロー動画：HERO_VIDEOS に定義したものだけ描画される -->
+        <div class="hero-videos" id="hero-videos"></div>
       </div>
     </div>
   </section>
@@ -871,6 +919,15 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
             <div class="gorilla-teaser-inner">
               <span>10,000時間で🦍ゴリ召喚ゴリ🦍。。。。</span>
               <span>10,000時間で🦍ゴリ召喚ゴリ🦍。。。。</span>
+            </div>
+          </div>
+          <!-- ══ 20,000時間マイルストーン ══ -->
+          <button class="ms20-btn" id="ms20-btn" type="button">🌸 20,000時間達成ムービーを見る 🌸</button>
+          <!-- 20,000時間未満テロップ（10,000時間到達後に表示） -->
+          <div class="ms20-teaser" id="ms20-teaser">
+            <div class="ms20-teaser-inner">
+              <span>20,000時間で🌸特別ムービー公開🌸。。。。</span>
+              <span>20,000時間で🌸特別ムービー公開🌸。。。。</span>
             </div>
           </div>
           <!-- 桜パーティクルエリア -->
@@ -1775,6 +1832,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
       // 10,000時間未満：テロップを表示
       if (window.gorillaShowTeaser) window.gorillaShowTeaser();
     }
+
+    // ── 20,000時間マイルストーン：達成ムービーの開放／予告 ──
+    if (window.milestone20kApply) window.milestone20kApply(totalMins);
   }
 
   // メインデータ取得：初回表示時に1回、その後は毎時の集計反映後にsummary 1件を取得。
@@ -2819,6 +2879,326 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
     lastX = e.clientX; lastY = e.clientY; lastStamp = now;
     addPaw(e.clientX, e.clientY);
   }, { passive: true });
+})();
+</script>
+<!-- ══ 20,000時間達成ムービー モーダル ══ -->
+<div class="ms20-modal" id="ms20-modal" role="dialog" aria-modal="true" aria-labelledby="ms20-title" aria-hidden="true">
+  <div class="ms20-dialog">
+    <div class="ms20-head">
+      <b id="ms20-title">🌸 20,000時間、達成しました 🌸</b>
+      <span>みんなのコツコツが、ここまで積み上がりました</span>
+    </div>
+    <button class="ms20-close" id="ms20-close" type="button" aria-label="閉じる">✕</button>
+    <div class="ms20-body" id="ms20-body"></div>
+  </div>
+</div>
+<script>
+(function(){
+  // ─────────────────────────────────────────────
+  // 20,000時間マイルストーン演出
+  //   ・20,000時間（1,200,000分）到達でボタンを開放
+  //   ・到達後の初回セッションのみモーダルを自動で開く
+  //   ・10,000〜20,000時間の間は予告テロップを表示
+  //   YT_ID を差し替えれば別の動画に変更できます
+  // ─────────────────────────────────────────────
+  var YT_ID = 'ssA7uCZWQkQ';
+  var THRESHOLD_MINS = 1200000;   // 20,000時間 × 60
+  var SEEN_KEY = 'ms20_seen_v1';
+
+  var modal = document.getElementById('ms20-modal');
+  var body  = document.getElementById('ms20-body');
+  var btn   = document.getElementById('ms20-btn');
+  var teaser= document.getElementById('ms20-teaser');
+  var closeBtn = document.getElementById('ms20-close');
+  if (!modal || !body || !btn) return;
+
+  var lastFocus = null;
+
+  // サムネイル＋再生ボタンだけ先に置き、クリックで初めてiframeを読み込む
+  function buildFacade(){
+    body.textContent = '';
+    var fa = document.createElement('button');
+    fa.className = 'hero-yt-facade';
+    fa.type = 'button';
+    fa.setAttribute('aria-label','20,000時間達成ムービーを再生');
+
+    var thumb = document.createElement('img');
+    thumb.className = 'hero-yt-thumb';
+    thumb.alt = '';
+    thumb.src = 'https://i.ytimg.com/vi/' + YT_ID + '/maxresdefault.jpg';
+    thumb.addEventListener('error', function(){
+      if (thumb.dataset.fb) return;
+      thumb.dataset.fb = '1';
+      thumb.src = 'https://i.ytimg.com/vi/' + YT_ID + '/hqdefault.jpg';
+    });
+    fa.appendChild(thumb);
+
+    var play = document.createElement('span');
+    play.className = 'hero-yt-play';
+    play.setAttribute('aria-hidden','true');
+    fa.appendChild(play);
+
+    fa.addEventListener('click', function(){
+      var f = document.createElement('iframe');
+      f.className = 'hero-yt-frame';
+      f.src = 'https://www.youtube-nocookie.com/embed/' + YT_ID +
+              '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+      f.title = '20,000時間達成ムービー';
+      f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.setAttribute('allowfullscreen','');
+      body.replaceChild(f, fa);
+      // iframeにフォーカスを移すとESCキーがiframe側に吸われて閉じられなくなるため、
+      // フォーカスは閉じるボタンに残す
+      if (closeBtn) closeBtn.focus();
+    });
+
+    body.appendChild(fa);
+  }
+
+  function openModal(){
+    lastFocus = document.activeElement;
+    buildFacade();
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeModal(){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    body.textContent = '';   // iframeを破棄して再生を止める
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  btn.addEventListener('click', openModal);
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  function seen(){
+    try { return sessionStorage.getItem(SEEN_KEY) === '1'; } catch(e){ return false; }
+  }
+  function markSeen(){
+    try { sessionStorage.setItem(SEEN_KEY, '1'); } catch(e){}
+  }
+
+  // 統計読み込み後に呼ばれる：到達済みならボタン開放、未到達なら予告テロップ
+  window.milestone20kApply = function(totalMins){
+    var mins = Number(totalMins) || 0;
+    if (mins >= THRESHOLD_MINS) {
+      if (teaser) teaser.classList.remove('is-on');
+      btn.classList.add('is-on');
+      if (!seen()) {
+        markSeen();
+        btn.classList.add('pulse');
+        // ゴリラ演出（800ms）と重ならないよう少し遅らせて開く
+        setTimeout(openModal, 2200);
+      }
+    } else {
+      btn.classList.remove('is-on');
+      // 10,000時間到達後だけ予告を出す（それ未満はゴリラ予告を優先）
+      if (teaser) {
+        if (mins >= 600000) teaser.classList.add('is-on');
+        else teaser.classList.remove('is-on');
+      }
+    }
+  };
+})();
+</script>
+<!-- ══ ヒーロー動画 ══ -->
+<script>
+(function(){
+  // ─────────────────────────────────────────────
+  // ここに動画を追加するだけでヒーローに並びます。
+  //
+  // ■ YouTube を埋め込む場合
+  //   youtube : 動画ID（11文字）。URLではなくIDだけを入れます。
+  //             https://www.youtube.com/watch?v=XXXXXXXXXXX  → 'XXXXXXXXXXX'
+  //             https://youtu.be/XXXXXXXXXXX                 → 'XXXXXXXXXXX'
+  //   ※クリックされるまでYouTubeの読み込みは発生しません（表示が軽い）
+  //
+  // ■ 動画ファイルを直接置く場合
+  //   file    : 拡張子を除いたファイル名（hero-1 → hero-1.webm / hero-1.mp4 を探す）
+  //   sound   : true にすると音声トグルボタンを表示
+  //
+  // ■ 共通
+  //   caption : 動画の上に重ねる説明文（省略可）
+  //   portrait: true にすると縦型（9:16）表示
+  //
+  // ID未設定・ファイルが無いカードは自動的に非表示になるので、
+  // 設定するまではページの見た目は今までどおりです。
+  // ─────────────────────────────────────────────
+  var HERO_VIDEOS = [
+    { file:'hero-1', caption:'', portrait:false, sound:false },
+    { file:'hero-2', caption:'', portrait:false, sound:false },
+    { file:'hero-3', caption:'', portrait:false, sound:false }
+  ];
+
+  var EXTS = ['webm','mp4'];  // 対応形式（webm優先、無ければmp4）
+  var TYPES = { webm:'video/webm', mp4:'video/mp4' };
+
+  var wrap = document.getElementById('hero-videos');
+  if (!wrap) return;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var liveCount = 0;
+
+  function reveal(){
+    if (liveCount > 0) wrap.classList.add('is-ready');
+    else wrap.classList.remove('is-ready');
+  }
+
+  // YouTube用：サムネイル＋再生ボタンだけ先に置き、クリックで初めてiframeを読み込む
+  function buildYouTube(conf, card){
+    var id = String(conf.youtube || '').trim();
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return false;  // 未設定・不正IDは表示しない
+
+    var fa = document.createElement('button');
+    fa.className = 'hero-yt-facade';
+    fa.type = 'button';
+    fa.setAttribute('aria-label', (conf.caption || 'YouTube動画') + ' を再生');
+
+    var thumb = document.createElement('img');
+    thumb.className = 'hero-yt-thumb';
+    thumb.loading = 'lazy';
+    thumb.alt = '';
+    thumb.src = 'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg';
+    // maxres が無い動画は hqdefault にフォールバック
+    thumb.addEventListener('error', function(){
+      if (thumb.dataset.fb) return;
+      thumb.dataset.fb = '1';
+      thumb.src = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+    });
+    fa.appendChild(thumb);
+
+    var play = document.createElement('span');
+    play.className = 'hero-yt-play';
+    play.setAttribute('aria-hidden','true');
+    fa.appendChild(play);
+
+    fa.addEventListener('click', function(){
+      var f = document.createElement('iframe');
+      f.className = 'hero-yt-frame';
+      f.src = 'https://www.youtube-nocookie.com/embed/' + id +
+              '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+      f.title = conf.caption || 'YouTube動画';
+      f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.setAttribute('allowfullscreen','');
+      card.replaceChild(f, fa);
+      var cap = card.querySelector('.hero-video-cap');
+      if (cap) cap.remove();  // 再生後は説明文を消して映像に集中させる
+    });
+
+    card.appendChild(fa);
+    return true;
+  }
+
+  HERO_VIDEOS.forEach(function(conf, i){
+    var card = document.createElement('div');
+    card.className = 'hero-video-card is-hidden' + (conf.portrait ? ' portrait' : '');
+
+    // YouTube指定があればそちらを優先
+    if (conf.youtube !== undefined) {
+      if (buildYouTube(conf, card)) {
+        card.classList.remove('is-hidden');
+        liveCount++;
+        reveal();
+        if (conf.caption) {
+          var ycap = document.createElement('div');
+          ycap.className = 'hero-video-cap';
+          ycap.textContent = conf.caption;
+          card.appendChild(ycap);
+        }
+        wrap.appendChild(card);
+      }
+      return;
+    }
+
+    var vid = document.createElement('video');
+    vid.muted = true;          // 自動再生には muted が必須
+    vid.loop = true;
+    vid.playsInline = true;
+    vid.setAttribute('playsinline','');
+    vid.setAttribute('aria-label', conf.caption || ('ヒーロー動画 ' + (i + 1)));
+    if (conf.poster) vid.poster = conf.poster;
+
+    if (reduceMotion) {
+      // アニメーション抑制設定の場合は自動再生せず、コントロールを出す
+      vid.controls = true;
+      vid.preload = 'metadata';
+    } else {
+      vid.autoplay = true;
+      vid.preload = 'auto';
+    }
+
+    EXTS.forEach(function(ext){
+      var s = document.createElement('source');
+      s.src = conf.file + '.' + ext;
+      s.type = TYPES[ext];
+      vid.appendChild(s);
+    });
+
+    // 再生できたら表示、全ソース失敗なら伏せたまま
+    var shown = false;
+    vid.addEventListener('loadeddata', function(){
+      if (shown) return;
+      shown = true;
+      card.classList.remove('is-hidden');
+      liveCount++;
+      reveal();
+      if (!reduceMotion) {
+        var p = vid.play();
+        if (p && p.catch) p.catch(function(){ vid.controls = true; });
+      }
+    });
+    vid.addEventListener('error', function(){
+      // 全ソース読み込み失敗：カードは伏せたままにする
+      if (!shown) card.classList.add('is-hidden');
+    });
+
+    card.appendChild(vid);
+
+    if (conf.caption) {
+      var cap = document.createElement('div');
+      cap.className = 'hero-video-cap';
+      cap.textContent = conf.caption;
+      card.appendChild(cap);
+    }
+
+    if (conf.sound && !reduceMotion) {
+      var btn = document.createElement('button');
+      btn.className = 'hero-video-sound';
+      btn.type = 'button';
+      btn.textContent = '🔇';
+      btn.setAttribute('aria-label','音声のオン・オフ');
+      btn.addEventListener('click', function(){
+        vid.muted = !vid.muted;
+        btn.textContent = vid.muted ? '🔇' : '🔊';
+        if (!vid.muted) { var p = vid.play(); if (p && p.catch) p.catch(function(){}); }
+      });
+      card.appendChild(btn);
+    }
+
+    wrap.appendChild(card);
+  });
+
+  // 画面外では一時停止してバッテリー・通信を節約
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        var v = en.target;
+        if (en.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+        else v.pause();
+      });
+    }, { threshold: 0.1 });
+    wrap.querySelectorAll('video').forEach(function(v){ io.observe(v); });
+  }
 })();
 </script>
 <!-- ニヤニヤ演出 -->
