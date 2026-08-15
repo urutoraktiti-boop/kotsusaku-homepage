@@ -27,6 +27,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <!-- ゴリラ・フェス（記念モード）。ON/OFF は gorifest.js 冒頭の GORIFEST で切り替え -->
 <script src="./gorifest.js"></script>
+<!-- 記念テーマ曲プレーヤー（[data-theme-player] を見つけて組み立てる） -->
+<script src="./theme-player.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
@@ -1543,6 +1545,21 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ══ 記念テーマ曲（55,555時間に到達するまで非表示。annivApply が出す）══ -->
+  <section class="section" id="theme-song" style="display:none;">
+    <div class="wrap">
+      <div class="reveal" style="text-align:center;">
+        <div class="sec-label">🌸 記念テーマ曲</div>
+        <h2>軌跡は、咲く。</h2>
+        <p class="lead" style="margin:14px auto 0;max-width:34rem;">
+          55,555時間に寄せたテーマ曲です。よかったら聴きながら、今日の10分へ。
+        </p>
+      </div>
+      <!-- 中身は theme-player.js が組み立てる -->
+      <div class="reveal" style="margin-top:26px;" data-theme-player></div>
     </div>
   </section>
 
@@ -3684,9 +3701,14 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
   // 到達したら 55555.html 側も自動で本編に切り替わる。
   var GOAL_MINS = 55555 * 60;
   window.annivApply = function(totalMins){
+    var reached = (Number(totalMins) || 0) >= GOAL_MINS;
+
     var link = document.getElementById('nav-anniv');
-    if (!link) return;
-    link.style.display = (Number(totalMins) || 0) >= GOAL_MINS ? '' : 'none';
+    if (link) link.style.display = reached ? '' : 'none';
+
+    // 記念テーマ曲。未到達の間は非表示なので、音源も読み込まれない。
+    var song = document.getElementById('theme-song');
+    if (song) song.style.display = reached ? '' : 'none';
   };
 })();
 </script>

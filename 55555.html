@@ -22,6 +22,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
 <!-- ゴリラ・フェス（記念モード）。ON/OFF は gorifest.js 冒頭の GORIFEST で切り替え -->
 <script src="./gorifest.js"></script>
+<!-- 記念テーマ曲プレーヤー（[data-theme-player] を見つけて組み立てる） -->
+<script src="./theme-player.js" defer></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NXV6WLDRFX"></script>
 <script>
@@ -333,6 +335,18 @@ body{
   <section class="anniv-sec">
     <div class="wrap">
       <div class="center">
+        <div class="anniv-kicker">記念テーマ曲</div>
+        <h2 class="anniv-title">軌跡は、咲く。</h2>
+        <p class="anniv-lead">この日のためのテーマ曲ができました。よかったら聴きながら読んでください。</p>
+      </div>
+      <!-- 中身は theme-player.js が組み立てる -->
+      <div class="reveal" style="margin-top:26px;" data-theme-player></div>
+    </div>
+  </section>
+
+  <section class="anniv-sec">
+    <div class="wrap">
+      <div class="center">
         <div class="anniv-kicker">ここまでの道のり</div>
         <h2 class="anniv-title">積み上げてきた、節目。</h2>
       </div>
@@ -593,6 +607,8 @@ body{
       wireMovie(mainEl);
       wireShare(mainEl);
       wireReveal(mainEl);
+      // 本編はテンプレートから後で差し込むため、ここでプレーヤーを組み立てる
+      if (window.themePlayerInit) window.themePlayerInit();
 
       var d = mainEl.querySelector('[data-date]');
       if (d && ACHIEVED_ON) {
