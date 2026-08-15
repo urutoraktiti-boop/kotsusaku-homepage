@@ -57,6 +57,9 @@ body{margin:0;color:var(--ink);font-family:'Noto Sans JP',sans-serif;background:
 .nav-links .nav-new-green:hover{background:#2ea64f!important;}
 .nav-links .nav-new-pink{color:#fff!important;background:var(--pink)!important;}
 .nav-links .nav-new-pink:hover{background:#d95888!important;}
+/* 55,555時間 記念ページへの導線（到達後のみ表示。金の縁で記念であることを示す）*/
+.nav-links .nav-anniv{color:#92400e!important;background:#fffbeb!important;box-shadow:inset 0 0 0 1.5px #fcd34d;}
+.nav-links .nav-anniv:hover{background:#fef3c7!important;}
 @keyframes navPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
 .nav-new-badge{position:absolute;top:-5px;right:-3px;display:inline-flex;align-items:center;gap:3px;background:#172033;color:#fff;font-size:8px;font-weight:1000;padding:1px 5px 1px 4px;border-radius:999px;letter-spacing:.04em;line-height:1.5;pointer-events:none;}
 .nav-new-dot-g{width:6px;height:6px;border-radius:50%;background:#35b95b;flex-shrink:0;animation:navPulse 1.4s ease-in-out infinite;}
@@ -954,6 +957,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
         <a href="#story">物語</a>
         <a href="#board">世界観</a>
         <a href="#features">できること</a>
+        <!-- 55,555時間に到達するまで非表示。annivApply が到達時に出す -->
+        <a href="./55555.html" id="nav-anniv" class="nav-anniv" style="position:relative;display:none;">🌸 55,555時間<span class="nav-new-badge"><span class="nav-new-dot-g"></span>NEW</span></a>
         <a href="./kotsu-habit.html" class="nav-new-pink" style="position:relative;">📋 コツ習慣<span class="nav-new-badge"><span class="nav-new-dot-p"></span>NEW</span></a>
         <a href="#license">資格の道</a>
         <a href="./manual.html">📖 使い方</a>
@@ -2029,6 +2034,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 
     // ── マイルストーン：達成ムービーの開放／予告 ──
     if (window.milestoneApply) window.milestoneApply(totalMins);
+
+    // ── 55,555時間 記念ページ：到達後だけナビに導線を出す ──
+    if (window.annivApply) window.annivApply(totalMins);
 
     // ── ヒーロー動画：時間到達で解禁されるものを追加 ──
     // 毎時のsummary再取得でも呼ばれるため、開きっぱなしのタブでも達成した時点で動画が現れる
@@ -3668,6 +3676,20 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
 </script>
 
 <canvas id="gorilla-overlay"></canvas>
+
+<!-- ══ 55,555時間 記念ページへの導線（到達後のみ表示）══ -->
+<script>
+(function(){
+  // applyStats から呼ばれる。55,555時間に届くまでナビのリンクを出さない。
+  // 到達したら 55555.html 側も自動で本編に切り替わる。
+  var GOAL_MINS = 55555 * 60;
+  window.annivApply = function(totalMins){
+    var link = document.getElementById('nav-anniv');
+    if (!link) return;
+    link.style.display = (Number(totalMins) || 0) >= GOAL_MINS ? '' : 'none';
+  };
+})();
+</script>
 
 <!-- ══ ゴリラ・フェス：記念バナーの数値連動 ＋ 「55555」イースターエッグ ══ -->
 <script>
