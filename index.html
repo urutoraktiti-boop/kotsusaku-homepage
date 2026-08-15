@@ -81,6 +81,10 @@ h1 .g{color:var(--green)}
 .hero-video-card{position:relative;flex:1 1 300px;max-width:420px;min-width:0;border-radius:24px;overflow:hidden;background:rgba(255,255,255,.6);backdrop-filter:blur(12px);border:1.5px solid rgba(5,150,105,.22);box-shadow:0 14px 38px rgba(5,150,105,.16);transition:transform .18s,box-shadow .18s;}
 .hero-video-card:hover{transform:translateY(-3px);box-shadow:0 22px 50px rgba(5,150,105,.24);}
 .hero-video-card.is-hidden{display:none;}
+/* 達成記念の動画は桜寄りの枠にして、通常の紹介動画と格を分ける */
+.hero-video-card.tier2{border-color:rgba(219,39,119,.38);box-shadow:0 16px 44px rgba(219,39,119,.24);}
+.hero-video-card.tier2:hover{box-shadow:0 24px 56px rgba(219,39,119,.32);}
+.hero-video-card.tier2 .hero-video-cap{background:linear-gradient(to top,rgba(219,39,119,.82),transparent);}
 .hero-video-card video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:linear-gradient(135deg,#fdf2f8,#d1fae5);}
 .hero-video-card.portrait video{aspect-ratio:9/16;}
 .hero-video-cap{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 12px;background:linear-gradient(to top,rgba(30,27,75,.72),transparent);color:#fff;font-size:13px;font-weight:900;letter-spacing:.02em;text-align:left;text-shadow:0 1px 6px rgba(0,0,0,.4);pointer-events:none;}
@@ -1849,6 +1853,10 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 
     // ── マイルストーン：達成ムービーの開放／予告 ──
     if (window.milestoneApply) window.milestoneApply(totalMins);
+
+    // ── ヒーロー動画：時間到達で解禁されるものを追加 ──
+    // 毎時のsummary再取得でも呼ばれるため、開きっぱなしのタブでも達成した時点で動画が現れる
+    if (window.heroVideoApply) window.heroVideoApply(totalMins);
   }
 
   // メインデータ取得：初回表示時に1回、その後は毎時の集計反映後にsummary 1件を取得。
@@ -3085,16 +3093,23 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
   //
   // ■ 動画ファイルを直接置く場合
   //   file    : 拡張子を除いたファイル名（hero-1 → hero-1.webm / hero-1.mp4 を探す）
+  //   ext     : 'mp4' のように形式を1つに固定する（省略時は webm→mp4 の順に探す）
   //   sound   : true にすると音声トグルボタンを表示
   //
   // ■ 共通
   //   caption : 動画の上に重ねる説明文（省略可）
   //   portrait: true にすると縦型（9:16）表示
+  //   hours   : 指定するとその総学習時間に到達するまで表示しない（省略時は常に表示）
+  //             未到達の間はカード自体を作らないので、動画ファイルの通信も発生しません
+  //   tier    : 2 にすると達成記念用の桜色の枠になる（省略可）
   //
   // ID未設定・ファイルが無いカードは自動的に非表示になるので、
   // 設定するまではページの見た目は今までどおりです。
   // ─────────────────────────────────────────────
   var HERO_VIDEOS = [
+    // 55,555時間達成の記念ムービー（到達後、ヒーローの先頭に出る）
+    { file:'ms55555-hero', ext:'mp4', hours:55555, tier:2, sound:true,
+      caption:'🌸 55,555時間、達成しました 🌸' },
     { file:'hero-1', caption:'', portrait:false, sound:false },
     { file:'hero-2', caption:'', portrait:false, sound:false },
     { file:'hero-3', caption:'', portrait:false, sound:false }
@@ -3112,6 +3127,19 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
   function reveal(){
     if (liveCount > 0) wrap.classList.add('is-ready');
     else wrap.classList.remove('is-ready');
+  }
+
+  // 画面外では一時停止してバッテリー・通信を節約
+  // 後から解禁されるカードも拾えるよう、先に用意して生成時にobserveする
+  var io = null;
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        var v = en.target;
+        if (en.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+        else v.pause();
+      });
+    }, { threshold: 0.1 });
   }
 
   // YouTube用：サムネイル＋再生ボタンだけ先に置き、クリックで初めてiframeを読み込む
@@ -3160,9 +3188,13 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
     return true;
   }
 
-  HERO_VIDEOS.forEach(function(conf, i){
+  function buildCard(conf, i){
     var card = document.createElement('div');
-    card.className = 'hero-video-card is-hidden' + (conf.portrait ? ' portrait' : '');
+    card.className = 'hero-video-card is-hidden'
+                   + (conf.portrait ? ' portrait' : '')
+                   + (conf.tier === 2 ? ' tier2' : '');
+    // 後から解禁されたカードでもHERO_VIDEOSの並び順どおりに表示されるようにする
+    card.style.order = i;
 
     // YouTube指定があればそちらを優先
     if (conf.youtube !== undefined) {
@@ -3198,7 +3230,8 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
       vid.preload = 'auto';
     }
 
-    EXTS.forEach(function(ext){
+    // ext 指定があればその形式だけを読む（無駄な404リクエストを出さない）
+    (conf.ext ? [conf.ext] : EXTS).forEach(function(ext){
       var s = document.createElement('source');
       s.src = conf.file + '.' + ext;
       s.type = TYPES[ext];
@@ -3224,6 +3257,7 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
     });
 
     card.appendChild(vid);
+    if (io) io.observe(vid);
 
     if (conf.caption) {
       var cap = document.createElement('div');
@@ -3247,19 +3281,25 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
     }
 
     wrap.appendChild(card);
+  }
+
+  // hours 指定なしは即描画、指定ありは到達するまで保留（動画ファイルも読み込まない）
+  var pending = [];
+  HERO_VIDEOS.forEach(function(conf, i){
+    if (conf.hours) pending.push({ conf:conf, i:i, built:false });
+    else buildCard(conf, i);
   });
 
-  // 画面外では一時停止してバッテリー・通信を節約
-  if ('IntersectionObserver' in window && !reduceMotion) {
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){
-        var v = en.target;
-        if (en.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function(){}); }
-        else v.pause();
-      });
-    }, { threshold: 0.1 });
-    wrap.querySelectorAll('video').forEach(function(v){ io.observe(v); });
-  }
+  // 統計読み込み後に呼ばれる：到達した動画をヒーローに出す
+  window.heroVideoApply = function(totalMins){
+    var mins = Number(totalMins) || 0;
+    pending.forEach(function(item){
+      if (item.built) return;                         // 毎時の再取得での二重生成を防ぐ
+      if (mins < item.conf.hours * 60) return;
+      item.built = true;
+      buildCard(item.conf, item.i);
+    });
+  };
 })();
 </script>
 <!-- ニヤニヤ演出 -->
