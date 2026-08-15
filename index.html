@@ -162,6 +162,9 @@ h1 .g{color:var(--green)}
 .char-card:nth-child(2){--dur:2.9s;--delay:.5s;background:rgba(253,242,248,.7);border-color:rgba(249,168,212,.5);}
 .char-card:nth-child(3){--dur:3.5s;--delay:.2s;background:rgba(237,233,254,.7);border-color:rgba(196,181,253,.5);}
 .char-card:nth-child(4){--dur:3.1s;--delay:.7s;background:rgba(255,247,237,.7);border-color:rgba(253,186,116,.5);}
+/* 55,555時間記念で仲間入りした2人。衣装の色に合わせた（金／青緑）*/
+.char-card:nth-child(5){--dur:3.4s;--delay:.3s;background:rgba(254,243,199,.7);border-color:rgba(252,211,77,.55);}
+.char-card:nth-child(6){--dur:2.95s;--delay:.9s;background:rgba(204,251,241,.7);border-color:rgba(94,234,212,.55);}
 .char-card:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 24px 56px rgba(219,39,119,.18);}
 @keyframes buddyFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .char-img-wrap{
@@ -865,9 +868,13 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   font-size:clamp(28px,7vw,54px);letter-spacing:-.02em;}
 .gori-banner-unit{font-size:clamp(13px,2.4vw,20px);margin-left:8px;letter-spacing:.04em;}
 .gori-banner-sub{margin-top:8px;font-size:clamp(11px,2vw,13px);font-weight:800;color:var(--soft);}
+/* パネルより手前に出す。z-indexが無いと、負のマージンで重なった分を
+   パネルの背景に塗りつぶされて幅の狭い画面でキャラが欠ける */
 .gori-banner-char{flex-shrink:0;align-self:flex-end;pointer-events:none;object-fit:contain;object-position:bottom;
+  position:relative;z-index:1;
   height:clamp(66px,15vw,170px);filter:drop-shadow(0 8px 16px rgba(146,64,14,.22));}
-.gori-banner-char.left{transform:scaleX(-1);margin-right:-26px;}
+/* ゴリゴゴは帽子と襟に「G」の紋章があるため左右反転しない（紋章が裏返るため）*/
+.gori-banner-char.left{margin-right:-26px;}
 .gori-banner-char.right{margin-left:-26px;}
 .gori-banner-telop{margin-top:12px;overflow:hidden;border-radius:99px;height:34px;position:relative;
   background:linear-gradient(135deg,#fef3c7,#fdf2f8);border:1.5px solid #fcd34d;}
@@ -876,7 +883,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 .gori-banner-telop-inner span{font-size:12.5px;font-weight:900;color:#b45309;padding-right:44px;}
 @media(max-width:599px){
   .gori-banner{margin-bottom:20px;}
-  .gori-banner-char{height:clamp(48px,13vw,66px);}
+  .gori-banner-char{height:clamp(58px,17vw,84px);}
   .gori-banner-char.left{margin-right:-14px;}
   .gori-banner-char.right{margin-left:-14px;}
   .gori-banner-core{padding:14px 14px 12px;border-radius:18px;}
@@ -980,13 +987,13 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
         <!-- ══ 55,555時間達成 記念バナー（ゴリラ・フェス開催中のみ表示）══ -->
         <div class="gori-banner gori-only" aria-label="55,555時間達成記念">
           <div class="gori-banner-inner">
-            <img class="gori-banner-char left" src="./gorigogo.png" alt="" onerror="this.remove()">
+            <img class="gori-banner-char left" src="./Gorigogo.png" alt="" onerror="this.remove()">
             <div class="gori-banner-core">
               <div class="gori-banner-kicker">🦍 GORILLA FEST 🦍</div>
               <div class="gori-banner-num"><span id="gori-banner-hours">55,555</span><span class="gori-banner-unit">時間 達成</span></div>
               <div class="gori-banner-sub">みんなのコツコツが、ここまで積み上がりました</div>
             </div>
-            <img class="gori-banner-char right" src="./goriwoo.png" alt="" onerror="this.remove()">
+            <img class="gori-banner-char right" src="./GoriWoo.png" alt="" onerror="this.remove()">
           </div>
           <div class="gori-banner-telop">
             <div class="gori-banner-telop-inner">
@@ -1335,7 +1342,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 
   <!-- キャラカルーセル直上のリードテキスト -->
   <div class="wrap" style="padding:28px 20px 0;text-align:center;">
-    <p class="lead">ニヤブロも、ウホゴリも。今日の10分、コツサク中。</p>
+    <p class="lead">ニヤブロも、ウホゴリも、ゴリゴゴも、ゴリウーも。今日の10分、コツサク中。</p>
   </div>
 
   <!-- キャラ カルーセル（STATSの後） -->
@@ -1375,7 +1382,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
       </div>
       <!-- 55,555時間記念で仲間入りした2人。画像未配置の間はカードごと自動で消える -->
       <div class="char-card gori-new">
-        <div class="char-img-wrap"><img src="./gorigogo.png" alt="ゴリゴゴ" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)"></div>
+        <div class="char-img-wrap"><img src="./Gorigogo.png" alt="ゴリゴゴ" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)"></div>
         <div class="buddy-name">ゴリゴゴ</div>
         <div class="buddy-lv-wrap">
           <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv4" style="color:#b45309;">-</span></div>
@@ -1383,7 +1390,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
         </div>
       </div>
       <div class="char-card gori-new">
-        <div class="char-img-wrap"><img src="./goriwoo.png" alt="ゴリウー" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)"></div>
+        <div class="char-img-wrap"><img src="./GoriWoo.png" alt="ゴリウー" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)"></div>
         <div class="buddy-name">ゴリウー</div>
         <div class="buddy-lv-wrap">
           <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv5" style="color:#0d9488;">-</span></div>
@@ -1405,7 +1412,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 
   <!-- ランナー帯① -->
   <div class="gori-peek from-left" aria-hidden="true">
-    <img src="./gorigogo.png" alt="" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)">
+    <img loading="lazy" src="./Gorigogo.png" alt="" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)">
   </div>
   <div class="runner-band" data-runner="🥦 🌸 🦍 🥸" data-speed="2.2"></div>
 
@@ -1462,7 +1469,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 
   <!-- ランナー帯③ -->
   <div class="gori-peek from-right" aria-hidden="true">
-    <img src="./goriwoo.png" alt="" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)">
+    <img loading="lazy" src="./GoriWoo.png" alt="" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)">
   </div>
   <div class="runner-band" data-runner="🦍 🥦 🌸 🥸" data-speed="2.4"></div>
 

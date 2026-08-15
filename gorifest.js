@@ -37,7 +37,7 @@ var GORIFEST = { on: true, until: '2026-10-31' };
   window.goriRunner = function (s) { return s; };      // ランナー帯の並びを差し替え
 
   // ── 画像が未配置のキャラ枠を片付ける ────────────────────────────────
-  // gorigogo.png / goriwoo.png がまだ無い間は、壊れた画像を出さずに
+  // Gorigogo.png / GoriWoo.png がまだ無い間は、壊れた画像を出さずに
   // カード（とカルーセルのドット1つ）ごと消す。お祭りの ON/OFF とは無関係に必要。
   window.goriDropChar = function (img) {
     var card = img.closest ? img.closest('.char-card') : null;
