@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>55,555時間 達成記念 | コツコツサクサク</title>
+<meta name="description" content="コツコツサクサクのみんなの総学習時間が55,555時間に到達しました。ここまでの道のりと、達成記念の特設ページです。">
+<!-- favicon（バイナリ不要のSVG。ゴリラ・フェス開催中は gorifest.js が🦍に差し替える） -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='32' y='48' font-size='52' text-anchor='middle'%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="./uhogori-boy.png">
+<meta name="theme-color" content="#059669">
+<!-- OGP：共有時はゴリゴゴが出る -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="コツコツサクサク">
+<meta property="og:title" content="55,555時間 達成記念 | コツコツサクサク">
+<meta property="og:description" content="みんなの10分が積み上がって、55,555時間になりました。ここまでの道のりと、達成記念の特設ページです。">
+<meta property="og:url" content="https://urutoraktiti-boop.github.io/kotsusaku-homepage/55555.html">
+<meta property="og:image" content="https://urutoraktiti-boop.github.io/kotsusaku-homepage/Gorigogo.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
+<!-- ゴリラ・フェス（記念モード）。ON/OFF は gorifest.js 冒頭の GORIFEST で切り替え -->
+<script src="./gorifest.js"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NXV6WLDRFX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NXV6WLDRFX');
+</script>
+<style>
+/* CONCEPT.md 準拠：コツコツ＝緑、サクサク＝桜、アクセント＝ラベンダー。
+   ページ上部（達成の事実）を緑、下部（お祝い・CTA）を桜で流す。
+   金は記念の差し色としてのみ使う。 */
+:root{
+  --ink:#1e1b4b;--soft:#6b7280;--green:#059669;--pink:#db2777;
+  --lavender:#7c3aed;--mint:#d1fae5;--rose:#fce7f3;--line:#e9d5ff;
+  --gold:#a16207;--gold-line:#fcd34d;--gold-wash:#fffbeb;
+  --shadow:0 22px 48px rgba(109,40,217,.1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  color:var(--ink);font-family:'Noto Sans JP',sans-serif;
+  background:linear-gradient(160deg,#fdf2f8 0%,#fce7f3 15%,#ede9fe 45%,#dbeafe 75%,#d1fae5 100%);
+  background-attachment:fixed;overflow-x:hidden;line-height:1.85;
+}
+:focus-visible{outline:3px solid var(--green);outline-offset:3px;border-radius:4px;}
+
+/* ── NAV（他のサブページと同じ形） ── */
+.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.78);border-bottom:1px solid rgba(219,39,119,.12);backdrop-filter:blur(24px);}
+.nav-inner{width:min(1180px,100%);margin:auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.brand{font-size:clamp(15px,2.4vw,22px);font-weight:1000;white-space:nowrap;text-decoration:none;color:var(--ink);font-family:'Noto Serif JP',serif;}
+.brand .green{color:var(--green)}.brand .pink{color:var(--pink)}
+.nav-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--soft);text-decoration:none;font-size:13px;font-weight:800;padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);background:rgba(255,255,255,.7);backdrop-filter:blur(8px);transition:background .15s,border-color .15s;}
+.back-btn:hover{background:var(--mint);border-color:var(--green);}
+.back-btn.primary{color:#fff;background:linear-gradient(135deg,var(--pink),#9333ea);border-color:transparent;}
+
+/* ── 共通レイアウト ── */
+.wrap{width:min(920px,100%);margin:auto;padding-inline:20px;}
+.anniv-sec{padding:clamp(44px,8vw,76px) 0;}
+.anniv-sec + .anniv-sec{border-top:1px solid rgba(219,39,119,.08);}
+.anniv-kicker{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(209,250,229,.8);border:1px solid rgba(5,150,105,.22);border-radius:999px;
+  padding:5px 14px;color:#065f46;font-size:11px;font-weight:1000;letter-spacing:.1em;margin-bottom:14px;
+}
+/* .sec-title は使わない（gorifest.js が🦍を添えるため。ここは公式の佇まいを保つ） */
+.anniv-title{font-family:'Noto Serif JP',serif;font-weight:900;font-size:clamp(26px,4.4vw,44px);line-height:1.25;letter-spacing:.02em;text-wrap:balance;}
+.anniv-lead{margin-top:14px;color:var(--soft);font-size:clamp(14px,1.6vw,16px);max-width:38rem;}
+.center{text-align:center;}
+.center .anniv-lead{margin-inline:auto;}
+
+/* ── 読み込み・エラー ── */
+.anniv-state{padding:96px 20px;text-align:center;color:var(--soft);font-size:14px;font-weight:800;}
+
+/* ── 予告（未到達） ── */
+.teaser{padding:clamp(56px,10vw,96px) 0;text-align:center;}
+.teaser-num{font-family:'Noto Serif JP',serif;font-weight:900;color:var(--green);
+  font-size:clamp(40px,10vw,86px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
+.teaser-goal{font-size:clamp(13px,2vw,16px);font-weight:900;color:var(--soft);margin-top:10px;}
+.teaser-bar{width:min(520px,100%);height:12px;margin:26px auto 12px;border-radius:999px;background:rgba(255,255,255,.75);
+  border:1.5px solid var(--line);overflow:hidden;}
+.teaser-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),#34d399,var(--pink));
+  width:0;transition:width 1.4s cubic-bezier(.4,0,.2,1);}
+.teaser-pct{font-size:12px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums;}
+.teaser-note{margin-top:26px;color:var(--soft);font-size:14px;max-width:32rem;margin-inline:auto;}
+
+/* ── ヒーロー（達成） ── */
+.hero{position:relative;overflow:hidden;padding:clamp(40px,7vw,72px) 0 clamp(32px,5vw,52px);text-align:center;}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;pointer-events:none;animation:blobFloat 9s ease-in-out infinite;}
+.hero::before{width:420px;height:420px;background:radial-gradient(circle,rgba(52,211,153,.22),transparent 70%);top:-160px;left:-100px;}
+.hero::after{width:520px;height:520px;background:radial-gradient(circle,rgba(244,114,182,.2),transparent 70%);right:-150px;bottom:-200px;animation-direction:reverse;}
+@keyframes blobFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-18px) scale(1.04)}}
+.hero-inner{position:relative;z-index:1;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;background:var(--gold-wash);
+  border:1.5px solid var(--gold-line);border-radius:999px;padding:7px 18px;
+  color:var(--gold);font-size:12px;font-weight:1000;letter-spacing:.12em;margin-bottom:22px;
+}
+.hero-figs{display:flex;align-items:flex-end;justify-content:center;gap:clamp(4px,2vw,20px);margin-bottom:6px;}
+.hero-fig{height:clamp(78px,15vw,178px);width:auto;object-fit:contain;object-position:bottom;flex-shrink:0;
+  filter:drop-shadow(0 14px 24px rgba(30,27,75,.18));}
+.hero-num{font-family:'Noto Serif JP',serif;font-weight:900;color:var(--green);
+  font-size:clamp(52px,13vw,132px);line-height:.9;letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;white-space:nowrap;}
+.hero-num-unit{font-family:'Noto Sans JP',sans-serif;font-size:.24em;color:var(--ink);letter-spacing:.1em;margin-left:.24em;vertical-align:.4em;}
+.hero-title{font-family:'Noto Serif JP',serif;font-weight:900;font-size:clamp(22px,3.4vw,36px);margin-top:18px;line-height:1.4;text-wrap:balance;}
+.hero-date{margin-top:10px;font-size:12px;font-weight:900;letter-spacing:.14em;color:var(--soft);}
+.hero-msg{margin:22px auto 0;max-width:34rem;font-size:clamp(14px,1.7vw,16.5px);color:var(--ink);}
+/* inline-flex にすると <b> が独立したフレックス要素になり、
+   狭い画面で「そして現／在、」のように語の途中で折れる。通常のテキストとして流す。 */
+.hero-live{margin:18px auto 0;max-width:23rem;font-size:13px;font-weight:800;color:var(--soft);line-height:1.9;
+  background:rgba(255,255,255,.7);border:1.5px solid var(--line);border-radius:18px;padding:10px 20px;backdrop-filter:blur(8px);}
+.hero-live b{color:var(--green);font-size:15px;font-variant-numeric:tabular-nums;}
+
+/* ── 数字 ── */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:8px;}
+.fig-card{background:rgba(255,255,255,.72);border:1.5px solid rgba(255,255,255,.9);border-radius:24px;
+  padding:26px 20px;text-align:center;box-shadow:var(--shadow);backdrop-filter:blur(14px);}
+.fig-num{display:block;font-family:'Noto Serif JP',serif;font-weight:900;font-size:clamp(28px,4vw,40px);
+  line-height:1.15;font-variant-numeric:tabular-nums;color:var(--green);}
+.fig-card:nth-child(2) .fig-num{color:var(--lavender);}
+.fig-card:nth-child(3) .fig-num{color:var(--pink);}
+.fig-label{display:block;margin-top:8px;font-size:13px;font-weight:900;}
+.fig-note{display:block;margin-top:5px;font-size:11.5px;color:var(--soft);line-height:1.7;}
+
+/* ── 記念ムービー ── */
+.movie{border-radius:26px;overflow:hidden;border:2px solid rgba(219,39,119,.3);
+  box-shadow:0 18px 46px rgba(219,39,119,.2);background:#000;}
+.yt-facade{display:block;position:relative;width:100%;padding:0;border:none;cursor:pointer;aspect-ratio:16/9;overflow:hidden;
+  background:linear-gradient(135deg,#fdf2f8,#d1fae5);}
+.yt-thumb{display:block;width:100%;height:100%;object-fit:cover;}
+.yt-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:74px;height:52px;border-radius:15px;
+  background:rgba(219,39,119,.92);box-shadow:0 6px 22px rgba(219,39,119,.45);transition:transform .16s,background .16s;}
+.yt-play::after{content:"";position:absolute;top:50%;left:52%;transform:translate(-50%,-50%);
+  border-style:solid;border-width:11px 0 11px 18px;border-color:transparent transparent transparent #fff;}
+.yt-facade:hover .yt-play{transform:translate(-50%,-50%) scale(1.12);background:var(--pink);}
+.yt-frame{display:block;width:100%;aspect-ratio:16/9;border:none;}
+.movie-cap{margin-top:12px;font-size:12px;color:var(--soft);text-align:center;}
+
+/* ── ここまでの道のり ── */
+.road{list-style:none;position:relative;max-width:560px;margin:8px auto 0;}
+.road::before{content:"";position:absolute;left:21px;top:22px;bottom:22px;width:2px;border-radius:2px;
+  background:linear-gradient(var(--green),var(--lavender),var(--pink));}
+.road-step{position:relative;padding:0 0 28px 62px;}
+.road-step:last-child{padding-bottom:0;}
+.road-dot{position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:19px;
+  background:#fff;border:2px solid var(--line);box-shadow:0 6px 16px rgba(109,40,217,.12);}
+.road-step.done .road-dot{border-color:var(--gold-line);background:var(--gold-wash);}
+.road-step.now .road-dot{border-color:var(--pink);background:var(--rose);}
+.road-hours{display:block;font-family:'Noto Serif JP',serif;font-weight:900;font-size:clamp(20px,3vw,26px);
+  line-height:1.25;color:var(--green);font-variant-numeric:tabular-nums;}
+.road-step.now .road-hours{color:var(--pink);}
+.road-hours small{font-family:'Noto Sans JP',sans-serif;font-size:12px;margin-left:4px;}
+.road-name{display:block;font-size:14px;font-weight:900;margin-top:3px;}
+.road-desc{display:block;font-size:12.5px;color:var(--soft);margin-top:4px;line-height:1.75;}
+
+/* ── 新しい仲間 ── */
+.cast{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;margin-top:8px;}
+.cast-card{background:rgba(255,255,255,.72);border:1.5px solid rgba(255,255,255,.9);border-radius:26px;
+  padding:26px 20px 22px;text-align:center;box-shadow:var(--shadow);backdrop-filter:blur(14px);
+  display:flex;flex-direction:column;align-items:center;gap:12px;}
+/* 2人は縦横比が違うので、高さを揃えて同じ地面に立たせる */
+.cast-card img{height:clamp(160px,22vw,215px);width:auto;max-width:86%;object-fit:contain;object-position:bottom center;
+  filter:drop-shadow(0 14px 22px rgba(30,27,75,.18));}
+.cast-name{font-family:'Noto Serif JP',serif;font-weight:900;font-size:19px;}
+.cast-desc{font-size:12.5px;color:var(--soft);line-height:1.8;}
+
+/* ── 遊び方 ── */
+.play{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:8px;}
+.play-card{background:rgba(255,255,255,.7);border:1.5px solid rgba(255,255,255,.9);border-radius:22px;
+  padding:24px 20px;box-shadow:var(--shadow);backdrop-filter:blur(14px);}
+.play-mark{font-size:26px;line-height:1;}
+.play-name{font-size:15px;font-weight:900;margin-top:12px;}
+.play-desc{font-size:12.5px;color:var(--soft);margin-top:7px;line-height:1.8;}
+.play-key{display:inline-block;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);
+  border-radius:6px;padding:1px 7px;color:var(--lavender);font-weight:700;}
+
+/* ── シェア ── */
+.share{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px;}
+.share-btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;
+  font-family:inherit;font-size:13.5px;font-weight:900;padding:12px 22px;border-radius:999px;
+  border:1.5px solid var(--line);background:rgba(255,255,255,.8);color:var(--ink);
+  transition:transform .16s,border-color .16s,background .16s;}
+.share-btn:hover{transform:translateY(-2px);border-color:var(--pink);background:#fff;}
+.share-done{margin-top:12px;font-size:12px;font-weight:900;color:var(--green);min-height:1.2em;}
+
+/* ── CTA（サクサク開花＝桜） ── */
+.cta{background:linear-gradient(135deg,rgba(253,242,248,.9),rgba(252,231,243,.9));
+  border-top:1px solid rgba(219,39,119,.14);padding:clamp(52px,8vw,84px) 0;text-align:center;}
+.cta-title{font-family:'Noto Serif JP',serif;font-weight:900;font-size:clamp(24px,4vw,40px);line-height:1.3;color:var(--pink);text-wrap:balance;}
+.cta-lead{margin:16px auto 0;max-width:30rem;color:var(--soft);font-size:14.5px;}
+.cta-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:26px;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 28px;
+  border-radius:20px;text-decoration:none;border:none;font-family:inherit;font-size:15px;font-weight:900;
+  cursor:pointer;transition:transform .18s,box-shadow .18s;}
+.btn:hover{transform:translateY(-2px);}
+.btn.primary{background:linear-gradient(135deg,var(--pink),#be185d);color:#fff;box-shadow:0 12px 32px rgba(219,39,119,.3);}
+.btn.light{background:rgba(255,255,255,.85);color:#065f46;border:1.5px solid rgba(5,150,105,.26);}
+
+/* ── スクロール表示 ── */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.on{opacity:1;transform:none;}
+
+@media (max-width:600px){
+  .hero-figs{gap:2px;}
+  .hero-fig{height:clamp(64px,17vw,88px);}
+  .road-step{padding-left:54px;}
+  .road-dot{width:38px;height:38px;font-size:17px;}
+  .road::before{left:18px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;}
+  .reveal{opacity:1;transform:none;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html"><span class="green">コツコツ</span> <span class="pink">サクサク</span></a>
+    <div class="nav-actions">
+      <a class="back-btn primary" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">← アプリを開く</a>
+      <a class="back-btn" href="./index.html">ホームへ</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <!-- 読み込み中 -->
+  <div class="anniv-state" id="anniv-loading">軌跡を集めています…</div>
+
+  <!-- 読み込み失敗 -->
+  <div class="anniv-state" id="anniv-error" style="display:none;"></div>
+
+  <!-- ══ 未到達：予告だけを見せる ══ -->
+  <div id="anniv-teaser" style="display:none;">
+    <div class="wrap teaser">
+      <div class="anniv-kicker">🌸 記念ページ 準備中</div>
+      <p class="teaser-num" id="teaser-hours">0</p>
+      <p class="teaser-goal">／ 55,555時間</p>
+      <div class="teaser-bar"><div class="teaser-fill" id="teaser-fill"></div></div>
+      <p class="teaser-pct" id="teaser-pct">0%</p>
+      <p class="teaser-note">
+        みんなの10分が、いま <b id="teaser-remain">—</b> 分の距離まで来ています。<br>
+        55,555時間に届いた瞬間、このページが開きます。
+      </p>
+      <div class="cta-actions" style="margin-top:30px;">
+        <a class="btn primary" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">今日の10分をはじめる</a>
+        <a class="btn light" href="./index.html">ホームへもどる</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 到達：本編（中身は到達するまでDOMに入れない） ══ -->
+  <div id="anniv-main" style="display:none;"></div>
+</main>
+
+<!-- ══ 本編テンプレート（到達時にここから複製して差し込む） ══ -->
+<template id="anniv-tpl">
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-badge">🌸 ANNIVERSARY 🌸</div>
+      <div class="hero-figs">
+        <img class="hero-fig" src="./Gorigogo.png" alt="ゴリゴゴ" onerror="this.remove()">
+        <p class="hero-num">55,555<span class="hero-num-unit">時間</span></p>
+        <img class="hero-fig" src="./GoriWoo.png" alt="ゴリウー" onerror="this.remove()">
+      </div>
+      <h1 class="hero-title">みんなのコツコツが、<br>55,555時間になりました。</h1>
+      <p class="hero-date" data-date hidden></p>
+      <p class="hero-msg">
+        1回10分の積み重ねが、ここまで来ました。
+        毎日ひとマスずつ塗ってくれた、ひとりひとりの時間の合計です。
+        本当にありがとうございます。
+      </p>
+      <p class="hero-live">
+        そして現在、<b data-live-hours>—</b> 時間。いまも伸びつづけています。
+      </p>
+    </div>
+  </section>
+
+  <section class="anniv-sec">
+    <div class="wrap">
+      <div class="center">
+        <div class="anniv-kicker">数字で見る</div>
+        <h2 class="anniv-title">55,555時間って、<br>どれくらい？</h2>
+      </div>
+      <div class="figs reveal">
+        <!-- ここは節目の 55,555 で固定。現在値はヒーローに別途出している -->
+        <div class="fig-card">
+          <span class="fig-num">55,555</span>
+          <span class="fig-label">達成した総学習時間</span>
+          <span class="fig-note">みんなの記録の合計</span>
+        </div>
+        <div class="fig-card">
+          <span class="fig-num">3,333,300</span>
+          <span class="fig-label">分に直すと</span>
+          <span class="fig-note">10分の記録が積み上がった数</span>
+        </div>
+        <div class="fig-card">
+          <span class="fig-num">333,330</span>
+          <span class="fig-label">咲いた桜（個）</span>
+          <span class="fig-note">10分 ＝ 🌸1個 で換算</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="anniv-sec">
+    <div class="wrap">
+      <div class="center">
+        <div class="anniv-kicker">記念ムービー</div>
+        <h2 class="anniv-title">55,555時間の、記録。</h2>
+        <p class="anniv-lead">ここまでの軌跡をムービーにしました。</p>
+      </div>
+      <div class="movie reveal" style="margin-top:26px;">
+        <button class="yt-facade" type="button" data-yt="xm3j9z8WaQQ" aria-label="55,555時間達成記念ムービーを再生">
+          <img class="yt-thumb" src="https://i.ytimg.com/vi/xm3j9z8WaQQ/maxresdefault.jpg" alt="" data-yt-thumb>
+          <span class="yt-play" aria-hidden="true"></span>
+        </button>
+      </div>
+      <p class="movie-cap">再生ボタンを押すまで、YouTubeへの通信は発生しません。</p>
+    </div>
+  </section>
+
+  <section class="anniv-sec">
+    <div class="wrap">
+      <div class="center">
+        <div class="anniv-kicker">ここまでの道のり</div>
+        <h2 class="anniv-title">積み上げてきた、節目。</h2>
+      </div>
+      <ol class="road reveal" data-road></ol>
+    </div>
+  </section>
+
+  <section class="anniv-sec">
+    <div class="wrap">
+      <div class="center">
+        <div class="anniv-kicker">新しい仲間</div>
+        <h2 class="anniv-title">達成を祝いに、<br>2人がやってきました。</h2>
+      </div>
+      <div class="cast reveal">
+        <div class="cast-card">
+          <img src="./Gorigogo.png" alt="ゴリゴゴ" onerror="this.closest('.cast-card').remove()">
+          <p class="cast-name">ゴリゴゴ</p>
+          <p class="cast-desc">帽子と襟に「G」の紋章をつけた、お祭りの座長。みんなを引っぱっていきます。</p>
+        </div>
+        <div class="cast-card">
+          <img src="./GoriWoo.png" alt="ゴリウー" onerror="this.closest('.cast-card').remove()">
+          <p class="cast-name">ゴリウー</p>
+          <p class="cast-desc">青緑の衣装に蝶の刺繍。花を髪に挿した、記念の日の華やかな案内役です。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="anniv-sec">
+    <div class="wrap">
+      <div class="center">
+        <div class="anniv-kicker">開催中</div>
+        <h2 class="anniv-title">サイトのあちこちで、<br>お祭りをやっています。</h2>
+        <p class="anniv-lead">達成を記念して、期間限定でいくつか仕掛けを置きました。よかったら探してみてください。</p>
+      </div>
+      <div class="play reveal">
+        <div class="play-card">
+          <p class="play-mark">🦍</p>
+          <p class="play-name">アイコンがゴリラに</p>
+          <p class="play-desc">サイト中の飾りのアイコンが、期間中だけゴリラたちに入れ替わっています。資格や機能の案内アイコンはそのままなので、迷わずお使いいただけます。</p>
+        </div>
+        <div class="play-card">
+          <p class="play-mark">🍌</p>
+          <p class="play-name">記念スタンプラリー</p>
+          <p class="play-desc">トップ・使い方・コツ習慣・追加方法の4ページを回るとスタンプが貯まります。4枚そろうと、ちょっとしたことが起きます。</p>
+        </div>
+        <div class="play-card">
+          <p class="play-mark">💬</p>
+          <p class="play-name">ゴリラ語モード</p>
+          <p class="play-desc">トップページの方言スイッチに「ゴリラ語」が増えました。仲間たちの話し方が変わります。</p>
+        </div>
+        <div class="play-card">
+          <p class="play-mark">✨</p>
+          <p class="play-name">かくれた仕掛け</p>
+          <p class="play-desc">トップページで <span class="play-key">55555</span> と入力してみてください。何かが起こります。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="anniv-sec">
+    <div class="wrap center">
+      <div class="anniv-kicker">シェア</div>
+      <h2 class="anniv-title">この記念を、伝える。</h2>
+      <p class="anniv-lead">一緒に積み上げてくれた仲間に、届けてもらえたらうれしいです。</p>
+      <div class="share">
+        <a class="share-btn" data-share-x href="#" target="_blank" rel="noopener">𝕏 でシェア</a>
+        <a class="share-btn" data-share-line href="#" target="_blank" rel="noopener">LINE で送る</a>
+        <button class="share-btn" type="button" data-share-copy>リンクをコピー</button>
+      </div>
+      <p class="share-done" data-share-done role="status"></p>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2 class="cta-title">つぎの1マスを、<br>今日も。</h2>
+      <p class="cta-lead">この55,555時間は、まだ途中の景色です。明日もまた、10分から。</p>
+      <div class="cta-actions">
+        <a class="btn primary" href="https://urutoraktiti-boop.github.io/kotsusaku-app/">アプリを開く</a>
+        <a class="btn light" href="./index.html">ホームへもどる</a>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  // ─────────────────────────────────────────────
+  // 55,555時間 記念特設ページ
+  //
+  // 到達するまでは予告だけを表示し、本編はDOMにも入れません。
+  // 到達を判定するのは実際の総学習時間なので、公開作業は不要です。
+  //
+  // ACHIEVED_ON : 達成日（'2026-08-20' 形式）。空のままなら日付を表示しません。
+  //               推測で埋めず、達成が確認できてから記入してください。
+  // ─────────────────────────────────────────────
+  var GOAL_HOURS  = 55555;
+  var GOAL_MINS   = GOAL_HOURS * 60;
+  var ACHIEVED_ON = '';
+
+  // 年表。マイルストーンが増えたらここに足します。
+  var ROAD = [
+    { hours:10000, mark:'🌱', name:'ゴリラ、はじめて登場',
+      desc:'10,000時間でゴリラの演出が解禁されました。' },
+    { hours:20000, mark:'🌸', name:'20,000時間 達成',
+      desc:'記念ムービーを公開しました。' },
+    { hours:55555, mark:'🏆', name:'55,555時間 達成',
+      desc:'ゴリラ・フェス開催。この特設ページが開きました。' }
+  ];
+
+  var loadingEl = document.getElementById('anniv-loading');
+  var errorEl   = document.getElementById('anniv-error');
+  var teaserEl  = document.getElementById('anniv-teaser');
+  var mainEl    = document.getElementById('anniv-main');
+  var tpl       = document.getElementById('anniv-tpl');
+  var built     = false;
+
+  function fmt(n){ return Math.max(0, Math.round(n)).toLocaleString(); }
+
+  // ── 予告（未到達） ──────────────────────────────
+  function renderTeaser(mins){
+    teaserEl.style.display = '';
+    mainEl.style.display   = 'none';
+
+    var hours = Math.floor(mins / 60);
+    var pct   = Math.max(0, Math.min(100, (mins / GOAL_MINS) * 100));
+    document.getElementById('teaser-hours').textContent = fmt(hours);
+    document.getElementById('teaser-pct').textContent   = pct.toFixed(1) + '%';
+    document.getElementById('teaser-remain').textContent = fmt(GOAL_MINS - mins);
+    // 幅はトランジションで伸ばす
+    requestAnimationFrame(function(){
+      document.getElementById('teaser-fill').style.width = pct + '%';
+    });
+  }
+
+  // ── 年表 ────────────────────────────────────
+  function buildRoad(root, mins){
+    var ol = root.querySelector('[data-road]');
+    if (!ol) return;
+    ol.textContent = '';
+    ROAD.forEach(function(s, i){
+      var reached = mins >= s.hours * 60;
+      var isLast  = i === ROAD.length - 1;
+      var li = document.createElement('li');
+      li.className = 'road-step' + (reached ? (isLast ? ' now' : ' done') : '');
+
+      var dot = document.createElement('span');
+      dot.className = 'road-dot';
+      dot.setAttribute('aria-hidden','true');
+      dot.textContent = s.mark;
+
+      var h = document.createElement('span');
+      h.className = 'road-hours';
+      h.textContent = s.hours.toLocaleString();
+      var small = document.createElement('small');
+      small.textContent = '時間';
+      h.appendChild(small);
+
+      var name = document.createElement('span');
+      name.className = 'road-name';
+      name.textContent = s.name;
+
+      var desc = document.createElement('span');
+      desc.className = 'road-desc';
+      desc.textContent = s.desc;
+
+      li.appendChild(dot); li.appendChild(h); li.appendChild(name); li.appendChild(desc);
+      ol.appendChild(li);
+    });
+  }
+
+  // ── 記念ムービー（押されるまでYouTubeへ通信しない） ──
+  function wireMovie(root){
+    var fa = root.querySelector('.yt-facade');
+    if (!fa) return;
+    var thumb = fa.querySelector('[data-yt-thumb]');
+    if (thumb) {
+      thumb.addEventListener('error', function(){
+        if (!thumb.dataset.fb) {
+          // maxres が無い動画もあるので hqdefault に落とす
+          thumb.dataset.fb = '1';
+          thumb.src = 'https://i.ytimg.com/vi/' + fa.dataset.yt + '/hqdefault.jpg';
+          return;
+        }
+        // それも取れないときは、壊れた画像を出さずに下地のグラデーションを見せる
+        thumb.remove();
+      });
+    }
+    fa.addEventListener('click', function(){
+      var f = document.createElement('iframe');
+      f.className = 'yt-frame';
+      f.src = 'https://www.youtube-nocookie.com/embed/' + fa.dataset.yt +
+              '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+      f.title = '55,555時間達成記念ムービー';
+      f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.setAttribute('allowfullscreen','');
+      fa.parentNode.replaceChild(f, fa);
+    });
+  }
+
+  // ── シェア ──────────────────────────────────
+  function wireShare(root){
+    var url  = location.href.split('#')[0];
+    var text = 'コツコツサクサクのみんなの総学習時間が55,555時間に到達しました🌸';
+    var x = root.querySelector('[data-share-x]');
+    var l = root.querySelector('[data-share-line]');
+    var c = root.querySelector('[data-share-copy]');
+    var done = root.querySelector('[data-share-done]');
+    if (x) x.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) +
+                    '&url=' + encodeURIComponent(url);
+    if (l) l.href = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(url);
+    if (c) c.addEventListener('click', function(){
+      var say = function(msg){ if (done) { done.textContent = msg;
+        setTimeout(function(){ if (done.textContent === msg) done.textContent = ''; }, 2600); } };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url)
+          .then(function(){ say('リンクをコピーしました'); })
+          .catch(function(){ say('コピーできませんでした。URLを選択してコピーしてください'); });
+      } else {
+        say('コピーできませんでした。URLを選択してコピーしてください');
+      }
+    });
+  }
+
+  // ── スクロール表示 ──────────────────────────────
+  function wireReveal(root){
+    var els = root.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function(el){ el.classList.add('on'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+      });
+    }, { threshold:0.15 });
+    els.forEach(function(el){ io.observe(el); });
+  }
+
+  // ── 本編（到達） ────────────────────────────────
+  function renderMain(mins){
+    teaserEl.style.display = 'none';
+    mainEl.style.display   = '';
+
+    var hours  = Math.floor(mins / 60);
+    var sakura = Math.floor(mins / 10);
+
+    if (!built) {
+      mainEl.appendChild(tpl.content.cloneNode(true));
+      built = true;
+      buildRoad(mainEl, mins);
+      wireMovie(mainEl);
+      wireShare(mainEl);
+      wireReveal(mainEl);
+
+      var d = mainEl.querySelector('[data-date]');
+      if (d && ACHIEVED_ON) {
+        var t = new Date(ACHIEVED_ON + 'T00:00:00');
+        if (!isNaN(t.getTime())) {
+          d.textContent = t.getFullYear() + '年' + (t.getMonth()+1) + '月' + t.getDate() + '日 達成';
+          d.hidden = false;
+        }
+      }
+    } else {
+      buildRoad(mainEl, mins);
+    }
+
+    // 記念する節目（55,555）は固定表示。ここでは現在値だけを更新する。
+    // 毎時の再取得でこの数字が伸びていく。
+    mainEl.querySelectorAll('[data-live-hours]').forEach(function(el){ el.textContent = fmt(hours); });
+  }
+
+  // ── 出し分け（テスト用に window へ公開） ─────────────
+  function render(totalMins){
+    var mins = Math.max(0, Number(totalMins) || 0);
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (errorEl)   errorEl.style.display   = 'none';
+    if (mins >= GOAL_MINS) renderMain(mins); else renderTeaser(mins);
+  }
+  window.annivRender = render;
+
+  // ─────────────────────────────────────────────
+  // 統計の取得
+  // FIRESTORE_READ_POLICY.md に従い、analytics_summary/summary を
+  // 初回1回だけ読み、その後は毎時＋2分にだけ読み直す。
+  // タブが非表示の間は止める。onSnapshot・短間隔ポーリングは使わない。
+  // ─────────────────────────────────────────────
+  var db = (function(){
+    try {
+      if (typeof firebase === 'undefined') return null;
+      var app = firebase.apps.length ? firebase.app() : firebase.initializeApp({
+        apiKey:"AIzaSyCx3hjG_55Voipdjnn25szsMZiGPC0Hv8Y",
+        authDomain:"kotsusaku-app.firebaseapp.com",
+        projectId:"kotsusaku-app",
+        storageBucket:"kotsusaku-app.firebasestorage.app",
+        messagingSenderId:"394043383608",
+        appId:"1:394043383608:web:433cc0d00b59ec71e86bcd"
+      });
+      return app.firestore();
+    } catch(e){ console.warn('Firebase init error:', e); return null; }
+  })();
+
+  var POLL_DELAY_AFTER_HOUR_MS = 2 * 60 * 1000;
+  var pollTimer = null;
+
+  function msUntilNextHourlyFetch(){
+    var now  = new Date();
+    var next = new Date(now);
+    next.setHours(now.getHours() + 1, 0, 0, 0);
+    return Math.max(1000, (next - now) + POLL_DELAY_AFTER_HOUR_MS);
+  }
+
+  function showError(msg){
+    if (loadingEl) loadingEl.style.display = 'none';
+    // すでに本編／予告を出せている場合は、失敗しても表示を壊さない
+    if (built || teaserEl.style.display === '') return;
+    if (errorEl) { errorEl.style.display = 'block'; errorEl.textContent = msg; }
+  }
+
+  function fetchOnce(){
+    if (!db) { showError('データを読み込めませんでした。'); return Promise.resolve(); }
+    return db.collection('analytics_summary').doc('summary').get()
+      .then(function(snap){
+        if (!snap.exists) { showError('まだデータがありません。'); return; }
+        render(Number(snap.data().totalStudyMin || 0));
+      })
+      .catch(function(e){
+        console.warn('stats load error:', e);
+        showError('データの読み込みに失敗しました。');
+      });
+  }
+
+  function scheduleNext(){
+    if (document.hidden) return;
+    pollTimer = setTimeout(function(){
+      pollTimer = null;
+      fetchOnce().then(scheduleNext);
+    }, msUntilNextHourlyFetch());
+  }
+
+  function startPolling(){
+    if (pollTimer || document.hidden) return;
+    fetchOnce().then(scheduleNext);
+  }
+
+  function stopPolling(){
+    if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
+  }
+
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) stopPolling(); else startPolling();
+  });
+
+  startPolling();
+})();
+</script>
+
+</body>
+</html>
