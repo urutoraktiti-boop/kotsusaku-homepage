@@ -848,6 +848,7 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 .gori-only{display:none;}
 [data-gorifest="on"] .gori-only{display:block;}
 [data-gorifest="on"] .gori-only.is-flex{display:flex;}
+[data-gorifest="on"] .gori-only.is-inline-flex{display:inline-flex;}
 
 /* ── 記念ヒーローバナー ── */
 .gori-banner{width:100%;margin:0 auto 26px;max-width:760px;animation:msIn .6s cubic-bezier(.34,1.56,.64,1) both;}
@@ -880,6 +881,36 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   .gori-banner-char.right{margin-left:-14px;}
   .gori-banner-core{padding:14px 14px 12px;border-radius:18px;}
 }
+
+/* ── 達成者への感謝：ここまでの道のり ── */
+.gori-thanks-head{text-align:center;margin-bottom:30px;}
+.gori-thanks-kicker{font-size:11px;font-weight:900;letter-spacing:.18em;color:#b45309;margin-bottom:10px;}
+.gori-thanks-track{list-style:none;margin:0 auto;padding:0;max-width:540px;position:relative;}
+/* 縦のレール。最初と最後のドット中心で止める */
+.gori-thanks-track::before{content:'';position:absolute;left:20px;top:20px;bottom:20px;width:2px;
+  background:linear-gradient(#fcd34d,#f9a8d4);border-radius:2px;}
+.gori-thanks-step{position:relative;padding:0 0 26px 60px;}
+.gori-thanks-step:last-child{padding-bottom:0;}
+.gori-thanks-dot{position:absolute;left:0;top:0;width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:20px;background:#fff;
+  border:2px solid #fcd34d;box-shadow:0 4px 12px rgba(146,64,14,.14);}
+.gori-thanks-step.is-reached .gori-thanks-dot{background:linear-gradient(135deg,#fef3c7,#fce7f3);}
+.gori-thanks-step:not(.is-reached){opacity:.45;}
+.gori-thanks-hours{display:block;font-family:'Noto Serif JP',serif;font-weight:900;
+  font-size:clamp(20px,4vw,26px);color:#92400e;line-height:1.25;}
+.gori-thanks-hours small{font-size:12px;margin-left:3px;font-family:'Noto Sans JP',sans-serif;}
+.gori-thanks-title{display:block;font-size:14px;font-weight:900;color:var(--ink);margin-top:2px;}
+.gori-thanks-sub{display:block;font-size:12px;font-weight:700;color:var(--soft);margin-top:3px;line-height:1.7;}
+@media(max-width:599px){
+  .gori-thanks-step{padding-left:52px;padding-bottom:22px;}
+  .gori-thanks-dot{width:36px;height:36px;font-size:17px;}
+  .gori-thanks-track::before{left:17px;}
+}
+
+/* ── バナナカウンター ── */
+.gori-banana{margin-top:7px;font-size:.72rem;font-weight:900;color:#b45309;text-align:center;line-height:1.7;}
+.gori-banana b{font-size:.95rem;letter-spacing:-.01em;}
+.gori-banana span{color:var(--soft);font-weight:800;}
 
 /* ── セクション境目の「のぞき見」キャラ ── */
 .gori-peek{position:relative;height:0;pointer-events:none;z-index:2;}
@@ -933,6 +964,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   <button class="dialect-btn" data-dialect="okinawa"   onclick="window.setDialect('okinawa')">🌺 沖縄</button>
   <button class="dialect-btn" data-dialect="hokkaido"  onclick="window.setDialect('hokkaido')">❄️ 北海道</button>
   <button class="dialect-btn" data-dialect="tosa"      onclick="window.setDialect('tosa')">🐟 土佐</button>
+  <!-- ゴリラ語：55,555時間達成記念モード中だけ選べる -->
+  <button class="dialect-btn gori-only is-inline-flex" data-dialect="gorilla" onclick="window.setDialect('gorilla')">🦍 ゴリラ語</button>
 </div>
 
 <main>
@@ -1044,6 +1077,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
           <div style="text-align:center;margin-top:6px;">
             <div class="sakura-sublabel" style="margin-bottom:2px;">総学習時間 ／ 10分 ＝ 🌸1個</div>
             <div class="sakura-sublabel">積み上がった仲間たちの軌跡</div>
+            <!-- バナナカウンター（記念モード中のみ。桜1個＝バナナ1本で換算）-->
+            <div class="gori-banana gori-only" id="gori-banana"></div>
           </div>
           <!-- 差分バッジ＋注釈 -->
           <div class="sakura-diff-wrap" id="sakura-diff-wrap"></div>
@@ -1284,6 +1319,19 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
       <div id="t2-license-details2"></div>
     </div>
   </div>
+
+  <!-- ══ 達成者への感謝：ここまでの道のり（ゴリラ・フェス開催中のみ表示）══ -->
+  <section class="section gori-only" id="gori-thanks" style="padding:48px 0 30px;">
+    <div class="wrap">
+      <div class="gori-thanks-head">
+        <div class="gori-thanks-kicker">🦍 THANK YOU 🍌</div>
+        <h2>ここまでの道のり、<br>ありがとうゴリ。</h2>
+        <p class="lead">みんなの10分が積み重なって、ここまで来ました。</p>
+      </div>
+      <!-- 中身は MILESTONES から自動生成される（マイルストーンを足せば年表も伸びる） -->
+      <ol class="gori-thanks-track" id="gori-thanks-track"></ol>
+    </div>
+  </section>
 
   <!-- キャラカルーセル直上のリードテキスト -->
   <div class="wrap" style="padding:28px 20px 0;text-align:center;">
@@ -1935,6 +1983,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
       requestAnimationFrame(tickHours);
     }
 
+    // バナナカウンター（記念モード中のみ実体がある）
+    if (window.goriBanana) window.goriBanana(sakuraCount);
+
     showDiff(sakuraCount);
     saveSnapshot(sakuraCount);
     if (!_sakuraParticlesStarted) {
@@ -2072,6 +2123,20 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   window._dialectMode = 'standard';
 
   const _bubbleTextsAll = {
+    // ゴリラ語（55,555時間達成記念）：全員がゴリラ語で喋る。
+    // キーの絵文字はランナー帯の顔ぶれと対応しているので変更しないこと。
+    gorilla:{
+      '🥦':['ウホッコリー！','コツコツウホ〜！','なんだこれウホ！','みどりのゴリだウホ！','うおおおウホ！','10分ウホ！',
+             'ニヤニヤ止まらんウホ！','また来たウホ！','軌跡残すウホ！','今日も10分ウホ！','ぐへへウホ〜！','満開ウホウホ！'],
+      '🌸':['サクサクウホ〜✨','10分ウホ！10分ウホ！','軌跡残すウホ〜！','満開間近ウホ〜！','ぽわわウホ〜','咲いたウホ！',
+             'きれいに咲くウホ！','コツコツ咲こうウホ！','今日も一輪ウホ！','ふわ〜っとウホ！','10分で一輪ウホ🌸','サクサク開花ウホ！'],
+      '🦍':['ウホウホウホ！！','伝説ゴリへウホ！','コツサクだウホ！','ウホ…強くなるウホ！','ウホホホホーイ！','筋肉ウホ〜！',
+             'ウホ…今日も来たウホ！','ゴリゴリいくウホ！','コツサクウホウホ！','ウホ！ウホ！ウホ！','伝説は近いウホ！','ゴリ道まっしぐらウホ！'],
+      '🥸':['ウホちゃんっぺウホ！','ぺっぺっぺウホ〜！','コツサクっぺウホ！','10分っぺウホ〜！','なんだこれウホっぺ！',
+             'ウホっぺウホ！','サクサクっぺウホ〜！','ニヤニヤっぺウホ！','資格もっぺウホ！','軌跡っぺウホ〜！',
+             'どこ行くウホっぺ！','止まれないウホっぺ！','逆走っぺウホ〜！','ぺ！ウホ！ぺ！','コツコツっぺウホ！',
+             '開花っぺウホ〜！','今日もっぺウホ！','ウホぺぺぺ〜！！'],
+    },
     standard:{
       '🥦':['ニヤニヤ〜！','コツコツ〜！','なんだこれ！','ぶろっこりー！','うおおお！','10分！',
              'ニヤニヤが止まらん！','また来たぞ！','軌跡残すぜ！','今日も10分！','ぐへへ〜！','満開ニヤニヤ！'],
@@ -2175,7 +2240,17 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
     },
   };
 
+  // ゴリラ・フェスで増員される🍌は方言テーブルに無いので、専用の台詞を持たせる
+  // （これが無いと汎用フォールバックの「コツサク〜！」だけを喋ってしまう）
+  const _festBubbleTexts = {
+    '🍌':['バナナ〜！','ウホの主食！','1本ずつ、コツコツ。','もぐもぐ〜','バナナで元気ゴリ！',
+           'あまいゴリ〜','10分に1本！','ゴリの燃料だゴリ！'],
+  };
+
   const _niyaMsgsAll = {
+    gorilla: ['ニヤニヤ待てウホ‼️','オイ🥸 コラ〜ウホ🦍','押すウホ🥸','やるじゃないウホ🦍','なんだこれウホ‼️','ぐへへウホ〜🥦',
+              'ちゃんと見てたウホ🥸','また押したウホ🦍','コツサクウホ〜🥸','ウホウホウホ‼️🦍','満開ウホウホ🌸','ウホが止まらん！',
+              '押したなウホ？😏','コツコツしてる場合かウホ‼️','気づいたら伝説ウホ🏆','ぐへへウホ〜！🥦','収拾がつかんウホ🥸','ニヤボタンウホ〜！'],
     standard:['ニヤニヤ待て‼️','オイ🥸 コラ〜🦍','押せだっぺ🥸','やるじゃないゴリ🦍','なんだこれっぺ‼️','ぐへへ〜🥦',
               'ちゃんと見てたっぺ🥸','また押したゴリ🦍','コツサクっぺ〜🥸','ウホウホ‼️🦍','満開ニヤニヤ🌸','ニヤニヤが止まらん！',
               '押したな？😏','コツコツしてる場合か‼️','気づいたら伝説🏆','ぐへへ〜！🥦','収拾がつかんっぺ🥸','ニヤボタンっぺ〜！'],
@@ -2511,7 +2586,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
       const BUBBLE_OFFSET_REVERSE = -48; // px：逆走時の左オフセット
 
       function showBubble(r, bw) {
-        const texts=(_bubbleTextsAll[window._dialectMode]||_bubbleTextsAll.standard)[r.emoji]||['コツサク〜！'];
+        const texts=(_bubbleTextsAll[window._dialectMode]||_bubbleTextsAll.standard)[r.emoji]
+                    || _festBubbleTexts[r.emoji] || ['コツサク〜！'];
         const text=texts[Math.floor(Math.random()*texts.length)];
         const bubble=document.createElement('div');
         bubble.className='runner-bubble'; bubble.textContent=text;
@@ -3056,16 +3132,76 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
       label:'🌸 20,000時間達成ムービーを見る 🌸',
       title:'🌸 20,000時間、達成しました 🌸',
       sub:'みんなのコツコツが、ここまで積み上がりました',
-      teaserEl:'ms20-teaser', teaserFrom:600000   // 10,000時間から予告
+      teaserEl:'ms20-teaser', teaserFrom:600000,  // 10,000時間から予告
+      thanks:{ title:'20,000時間 達成', sub:'記念ムービーを公開しました' }
     },
     {
       id:'ms55555', hours:55555, yt:'xm3j9z8WaQQ', tier:2,
       label:'🌸 55,555時間達成記念ムービーを見る 🌸',
       title:'🌸 55,555時間、達成しました 🌸',
       sub:'ここまで積み上げた仲間たちへ、記念ムービーを',
-      teaserEl:'ms55555-teaser', teaserFrom:1200000   // 20,000時間から予告
+      teaserEl:'ms55555-teaser', teaserFrom:1200000,  // 20,000時間から予告
+      thanks:{ title:'55,555時間 達成', sub:'ゴリラ・フェス開催。ここまで本当にありがとうゴリ' }
     }
   ];
+
+  // ─────────────────────────────────────────────
+  // 「ここまでの道のり」年表
+  // MILESTONES から自動生成するので、マイルストーンを足せば年表も伸びる。
+  // 表示名は各マイルストーンの thanks で指定できる（省略時は時間から作る）。
+  // MILESTONES に無い節目（ムービーのない解禁など）だけ THANKS_EXTRA に書く。
+  // ─────────────────────────────────────────────
+  var THANKS_EXTRA = [
+    { hours:10000, title:'ゴリ召喚、解禁', sub:'10,000時間でゴリラが走りはじめた' }
+  ];
+
+  function thanksSteps(){
+    var list = THANKS_EXTRA.slice();
+    MILESTONES.forEach(function(ms){
+      list.push({
+        hours: ms.hours,
+        title: (ms.thanks && ms.thanks.title) || ms.hours.toLocaleString() + '時間 達成',
+        sub:   (ms.thanks && ms.thanks.sub)   || '記念ムービーを公開しました'
+      });
+    });
+    list.sort(function(a,b){ return a.hours - b.hours; });
+    return list;
+  }
+
+  // mins が null のときは到達判定をしない（統計が届く前の初期描画）
+  function renderThanks(mins){
+    var track = document.getElementById('gori-thanks-track');
+    if (!track) return;
+    track.textContent = '';
+    thanksSteps().forEach(function(s){
+      var reached = (mins !== null) && mins >= s.hours * 60;
+      var li = document.createElement('li');
+      li.className = 'gori-thanks-step' + (reached ? ' is-reached' : '');
+
+      var dot = document.createElement('span');
+      dot.className = 'gori-thanks-dot';
+      dot.setAttribute('aria-hidden','true');
+      dot.textContent = reached ? '🦍' : '🍌';
+
+      var hours = document.createElement('span');
+      hours.className = 'gori-thanks-hours';
+      hours.textContent = s.hours.toLocaleString();
+      var unit = document.createElement('small');
+      unit.textContent = '時間';
+      hours.appendChild(unit);
+
+      var title = document.createElement('span');
+      title.className = 'gori-thanks-title';
+      title.textContent = s.title;
+
+      var sub = document.createElement('span');
+      sub.className = 'gori-thanks-sub';
+      sub.textContent = s.sub;
+
+      li.appendChild(dot); li.appendChild(hours); li.appendChild(title); li.appendChild(sub);
+      track.appendChild(li);
+    });
+  }
 
   var SEEN_PREFIX = 'ms_seen_v1_';
 
@@ -3167,6 +3303,9 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
   window.milestoneApply = function(totalMins){
     var mins = Number(totalMins) || 0;
 
+    // 「ここまでの道のり」の到達状況を更新
+    renderThanks(mins);
+
     // 到達済みを抽出（MILESTONESは時間の小さい順に並べる）
     var reached = MILESTONES.filter(function(ms){ return mins >= ms.hours * 60; });
 
@@ -3195,6 +3334,9 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
       setTimeout(function(){ openModal(toOpen); }, 2200);
     }
   };
+
+  // 統計が届く前に一度描いておく（到達判定は milestoneApply で入る）
+  renderThanks(null);
 })();
 </script>
 <!-- ══ ヒーロー動画 ══ -->
@@ -3503,7 +3645,6 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
 
   // ── イースターエッグ：「55555」入力／ゴリラボタン5連打 ──
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var CONFETTI = ['🍌','🦍','🥁','🌴','💪','🥥'];
   var firing = false;
 
   function fire(){
@@ -3511,30 +3652,8 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
     firing = true;
     setTimeout(function(){ firing = false; }, 6000);
 
-    if (!reduceMotion) {
-      var n = 46;
-      for (var i = 0; i < n; i++) {
-        (function(i){
-          setTimeout(function(){
-            var el = document.createElement('div');
-            el.className = 'gori-confetti';
-            el.setAttribute('aria-hidden','true');
-            el.textContent = CONFETTI[Math.floor(Math.random()*CONFETTI.length)];
-            var dur   = 2.6 + Math.random()*2.0;
-            var drift = (Math.random()-0.5)*260;
-            var spin  = (Math.random()>0.5?1:-1)*(180+Math.random()*540);
-            el.style.left     = (Math.random()*100) + 'vw';
-            el.style.fontSize = (16 + Math.random()*30) + 'px';
-            el.animate([
-              { transform:'translate(0,0) rotate(0deg)',                              opacity:1 },
-              { transform:'translate('+drift+'px,110vh) rotate('+spin+'deg)',          opacity:0 }
-            ], { duration: dur*1000, easing:'cubic-bezier(.25,.6,.5,1)', fill:'forwards' });
-            document.body.appendChild(el);
-            setTimeout(function(){ el.remove(); }, dur*1000 + 200);
-          }, i*45);
-        })(i);
-      }
-    }
+    // コンフェッティは gorifest.js の共通実装（スタンプラリーと同じもの）
+    if (window.goriBurst) window.goriBurst(46);
 
     // 既存のゴリラ演出エンジンをそのまま使う
     if (window.gorillaRandomTrigger) {

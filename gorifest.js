@@ -241,6 +241,185 @@ var GORIFEST = { on: true, until: '2026-10-31' };
 
 
   /* ==========================================================================
+     バナナカウンター
+     「10分＝🌸1個」と同じ数を🍌に換算して並べて出す。
+     ゴリラは1日およそ30本のバナナを食べるので、その頭数も添える。
+     ========================================================================== */
+  window.goriBanana = function (sakuraCount) {
+    var el = document.getElementById('gori-banana');
+    if (!el) return;
+    var n = Math.max(0, Number(sakuraCount) || 0);
+    var heads = Math.floor(n / 30);
+    el.innerHTML = '🍌 <b>' + n.toLocaleString() + '</b> 本' +
+                   '<span>　＝ ゴリラ ' + heads.toLocaleString() + ' 頭の1日分ゴリ</span>';
+  };
+
+
+  /* ==========================================================================
+     コンフェッティ（バナナと金テープ）
+     index.html のイースターエッグと記念スタンプラリーの両方から使う
+     ========================================================================== */
+  var BURST_ICONS = ['🍌', '🦍', '🥁', '🌴', '💪', '🥥'];
+
+  window.goriBurst = function (count) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var n = count || 46;
+    for (var i = 0; i < n; i++) {
+      (function (i) {
+        setTimeout(function () {
+          var el = document.createElement('div');
+          el.className = 'gori-confetti';
+          el.setAttribute('aria-hidden', 'true');
+          el.textContent = BURST_ICONS[Math.floor(Math.random() * BURST_ICONS.length)];
+          var dur   = 2.6 + Math.random() * 2.0;
+          var drift = (Math.random() - 0.5) * 260;
+          var spin  = (Math.random() > 0.5 ? 1 : -1) * (180 + Math.random() * 540);
+          el.style.left     = (Math.random() * 100) + 'vw';
+          el.style.fontSize = (16 + Math.random() * 30) + 'px';
+          document.body.appendChild(el);
+          el.animate([
+            { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+            { transform: 'translate(' + drift + 'px,110vh) rotate(' + spin + 'deg)', opacity: 0 }
+          ], { duration: dur * 1000, easing: 'cubic-bezier(.25,.6,.5,1)', fill: 'forwards' });
+          setTimeout(function () { el.remove(); }, dur * 1000 + 200);
+        }, i * 45);
+      })(i);
+    }
+  };
+
+
+  /* ==========================================================================
+     記念スタンプラリー
+     4ページすべてを訪れると隠しゴリラが出る。進捗は localStorage に保存。
+     ========================================================================== */
+  var STAMP_KEY   = 'gori_stamp_v1';
+  var STAMP_PAGES = [
+    { id: 'index',       file: 'index.html',       label: 'トップ' },
+    { id: 'manual',      file: 'manual.html',      label: '使い方' },
+    { id: 'kotsu-habit', file: 'kotsu-habit.html', label: 'コツ習慣' },
+    { id: 'install',     file: 'install.html',     label: '追加方法' }
+  ];
+
+  function stampLoad() {
+    try {
+      var raw = localStorage.getItem(STAMP_KEY);
+      var o = raw ? JSON.parse(raw) : {};
+      return (o && typeof o === 'object') ? o : {};
+    } catch (e) { return {}; }
+  }
+  function stampSave(o) {
+    try { localStorage.setItem(STAMP_KEY, JSON.stringify(o)); } catch (e) {}
+  }
+  function currentPageId() {
+    var f = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    if (f === '' || f === '/') f = 'index.html';
+    for (var i = 0; i < STAMP_PAGES.length; i++) {
+      if (STAMP_PAGES[i].file === f) return STAMP_PAGES[i].id;
+    }
+    return null;
+  }
+
+  function initStampRally() {
+    var here = currentPageId();
+    if (!here) return;                     // 対象外のページでは何も出さない
+
+    var state = stampLoad();
+    state[here] = 1;
+    stampSave(state);
+
+    var got = STAMP_PAGES.filter(function (p) { return state[p.id]; }).length;
+    var all = got === STAMP_PAGES.length;
+
+    // ── パネル本体 ──
+    var box = document.createElement('div');
+    box.className = 'gori-stamp' + (all ? ' is-complete' : '');
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'gori-stamp-toggle';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<span aria-hidden="true">🦍</span> スタンプ <b>' +
+                    got + '/' + STAMP_PAGES.length + '</b>';
+
+    var list = document.createElement('div');
+    list.className = 'gori-stamp-list';
+    list.hidden = true;
+    var html = '<div class="gori-stamp-head">記念スタンプラリー</div>';
+    STAMP_PAGES.forEach(function (p) {
+      var done = !!state[p.id];
+      html += '<div class="gori-stamp-row' + (done ? ' done' : '') + '">' +
+              '<span class="gori-stamp-mark" aria-hidden="true">' + (done ? '🦍' : '・') + '</span>' +
+              (done || p.id === here
+                ? '<span>' + p.label + '</span>'
+                : '<a href="./' + p.file + '">' + p.label + '</a>') +
+              '</div>';
+    });
+    html += '<div class="gori-stamp-foot">' +
+            (all ? '全部そろったゴリ！ありがとうゴリ 🍌'
+                 : '4ページぜんぶ回ると、なにか起きるゴリ') + '</div>';
+    list.innerHTML = html;
+
+    btn.addEventListener('click', function () {
+      var open = list.hidden;
+      list.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+
+    box.appendChild(btn);
+    box.appendChild(list);
+    document.body.appendChild(box);
+
+    // ── 4枚そろった瞬間の演出（1回だけ）──
+    if (all && !state._done) {
+      state._done = 1;
+      stampSave(state);
+      setTimeout(function () {
+        list.hidden = false;
+        btn.setAttribute('aria-expanded', 'true');
+        box.classList.add('is-celebrating');
+        window.goriBurst(60);
+        // index.html には全画面ゴリラ演出があるのでそちらを使う
+        if (window.goriFireEasterEgg) setTimeout(window.goriFireEasterEgg, 500);
+      }, 900);
+    }
+  }
+
+  // スタンプラリーのCSS（4ページ共通なのでJSから注入する）
+  function injectStampCss() {
+    var css = [
+      // コンフェッティは index.html 以外にもスタンプラリーから飛ぶので共通で定義する
+      '.gori-confetti{position:fixed;top:-40px;z-index:9998;pointer-events:none;user-select:none;will-change:transform;}',
+      '.gori-stamp{position:fixed;right:14px;bottom:14px;z-index:9997;font-family:inherit;',
+        'display:flex;flex-direction:column;align-items:flex-end;gap:6px;}',
+      '.gori-stamp-toggle{display:inline-flex;align-items:center;gap:6px;cursor:pointer;',
+        'background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1.5px solid #fcd34d;',
+        'color:#92400e;font-size:12px;font-weight:900;font-family:inherit;padding:8px 14px;',
+        'border-radius:999px;box-shadow:0 6px 18px rgba(146,64,14,.18);transition:transform .12s;}',
+      '.gori-stamp-toggle:hover{transform:translateY(-2px);}',
+      '.gori-stamp-list{background:rgba(255,255,255,.96);border:1.5px solid #fcd34d;border-radius:16px;',
+        'padding:12px 14px;min-width:172px;box-shadow:0 10px 28px rgba(146,64,14,.18);',
+        'backdrop-filter:blur(8px);}',
+      '.gori-stamp-head{font-size:11px;font-weight:900;color:#b45309;letter-spacing:.06em;margin-bottom:8px;}',
+      '.gori-stamp-row{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;',
+        'color:#9ca3af;padding:2px 0;}',
+      '.gori-stamp-row.done{color:#1e1b4b;}',
+      '.gori-stamp-row a{color:#b45309;text-decoration:underline;font-weight:800;}',
+      '.gori-stamp-mark{width:16px;text-align:center;}',
+      '.gori-stamp-foot{margin-top:9px;font-size:10.5px;font-weight:800;color:#6b7280;line-height:1.6;}',
+      '.gori-stamp.is-complete .gori-stamp-toggle{background:linear-gradient(135deg,#fde68a,#fbcfe8);}',
+      '.gori-stamp.is-celebrating .gori-stamp-toggle{animation:goriStampPop .5s cubic-bezier(.34,1.56,.64,1) 3;}',
+      '@keyframes goriStampPop{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}',
+      '@media(max-width:599px){.gori-stamp{right:10px;bottom:10px;}',
+        '.gori-stamp-toggle{font-size:11px;padding:7px 12px;}}',
+      '@media(prefers-reduced-motion:reduce){.gori-stamp.is-celebrating .gori-stamp-toggle{animation:none;}}'
+    ].join('');
+    var st = document.createElement('style');
+    st.textContent = css;
+    document.head.appendChild(st);
+  }
+
+
+  /* ==========================================================================
      favicon をゴリラに差し替える
      （バイナリ不要の data-URI SVG。このサイトは元々 favicon 未設定）
      ========================================================================== */
@@ -265,6 +444,8 @@ var GORIFEST = { on: true, until: '2026-10-31' };
   function boot() {
     setFavicon();
     applyAll(document);
+    injectStampCss();
+    initStampRally();
 
     // あとから描画される領域（統計・ティッカー・マイルストーン）にも追従する。
     // body 全体を監視するとカーソル足跡の生成で毎回発火してしまうため、
