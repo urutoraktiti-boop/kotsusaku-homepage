@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>使い方ガイド | コツコツサクサク</title>
 <meta name="description" content="コツコツサクサクの使い方ガイド。10分ブロック・ストーリー・バッジ・レベルシステムをやさしく解説。">
+<!-- favicon（バイナリ不要のSVG。ゴリラ・フェス開催中は gorifest.js が🦍に差し替える） -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='32' y='48' font-size='52' text-anchor='middle'%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="./uhogori-boy.png">
+<meta name="theme-color" content="#059669">
+<!-- OGP -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="コツコツサクサク">
+<meta property="og:title" content="使い方ガイド | コツコツサクサク">
+<meta property="og:description" content="コツコツサクサクの使い方ガイド。10分ブロック・ストーリー・バッジ・レベルシステムをやさしく解説。">
+<meta property="og:url" content="https://urutoraktiti-boop.github.io/kotsusaku-homepage/manual.html">
+<meta property="og:image" content="https://urutoraktiti-boop.github.io/kotsusaku-homepage/uhogori-boy.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- ゴリラ・フェス（記念モード）。ON/OFF は gorifest.js 冒頭の GORIFEST で切り替え -->
+<script src="./gorifest.js"></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NXV6WLDRFX"></script>
 <script>
@@ -380,6 +394,18 @@ body{color:var(--ink);font-family:'Noto Sans JP',sans-serif;background:linear-gr
   .story-grid{grid-template-columns:1fr;}
   .theme-grid{grid-template-columns:repeat(2,1fr);}
 }
+
+/* ═══ 55,555時間記念で仲間入りしたキャラ（ゴリゴゴ・ゴリウー）═══ */
+/* 画像 gorigogo.png / goriwoo.png が未配置のうちは gorifest.js が要素ごと消す */
+.gori-peek{position:relative;height:0;pointer-events:none;z-index:2;}
+.gori-peek img{position:absolute;bottom:-6px;height:clamp(56px,11vw,116px);object-fit:contain;object-position:bottom;filter:drop-shadow(0 6px 14px rgba(30,27,75,.16));animation:goriFloat 4.2s ease-in-out infinite;}
+.gori-peek.from-left img{left:clamp(4px,4vw,64px);}
+/* 反転は animation の transform に含める（別々に指定すると打ち消し合うため） */
+.gori-peek.from-right img{right:clamp(4px,4vw,64px);animation-name:goriFloatFlip;}
+@keyframes goriFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes goriFloatFlip{0%,100%{transform:scaleX(-1) translateY(0);}50%{transform:scaleX(-1) translateY(-8px);}}
+/* 見出しに添えるゴリラ（gorifest.js が挿入。お祭りOFFなら挿入されない） */
+.gori-pre{margin-right:.15em;}
 </style>
 </head>
 <body>
@@ -1152,6 +1178,10 @@ body{color:var(--ink);font-family:'Noto Sans JP',sans-serif;background:linear-gr
 </section>
 
 <!-- CTA -->
+<!-- 55,555時間記念で仲間入りしたキャラ（画像未配置なら自動で消える） -->
+<div class="gori-peek from-right" aria-hidden="true">
+  <img src="./goriwoo.png" alt="" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)">
+</div>
 <section class="cta">
   <h2>今日の冒険を、<br>1マスずつ。</h2>
   <p>むずかしいことは何もない。<br>ブロックをタップして、🌸を咲かせて、コツコツ続けるだけ。</p>

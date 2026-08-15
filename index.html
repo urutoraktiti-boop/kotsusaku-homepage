@@ -13,6 +13,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>コツコツサクサク | 10分コツコツ。気づけばサクサク。</title>
 <meta name="description" content="10分単位で学習を記録し、ストーリー・星・バッジで楽しく続ける学習記録アプリ。">
+<!-- favicon（バイナリ不要のSVG。ゴリラ・フェス開催中は gorifest.js が🦍に差し替える） -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='32' y='48' font-size='52' text-anchor='middle'%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="./uhogori-boy.png">
+<meta name="theme-color" content="#059669">
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="コツコツサクサク">
+<meta property="og:title" content="コツコツサクサク | 10分コツコツ。気づけばサクサク。">
+<meta property="og:description" content="10分単位で学習を記録し、ストーリー・星・バッジで楽しく続ける学習記録アプリ。">
+<meta property="og:url" content="https://urutoraktiti-boop.github.io/kotsusaku-homepage/">
+<meta property="og:image" content="https://urutoraktiti-boop.github.io/kotsusaku-homepage/uhogori-boy.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- ゴリラ・フェス（記念モード）。ON/OFF は gorifest.js 冒頭の GORIFEST で切り替え -->
+<script src="./gorifest.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
@@ -825,6 +839,65 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 /* ===== 絵文字足跡エフェクト ===== */
 .paw-trail{position:fixed;z-index:9999;width:28px;height:28px;pointer-events:none;background:var(--paw-icon) center/contain no-repeat;opacity:0.28;transform:translate(-50%,-50%) rotate(var(--paw-rotation)) scale(0.72);animation:900ms ease-out forwards paw-fade;}
 @keyframes paw-fade{from{opacity:0.28;transform:translate(-50%,-50%) rotate(var(--paw-rotation)) scale(0.72);}to{opacity:0;transform:translate(-50%,-50%) rotate(var(--paw-rotation)) scale(1);}}
+
+/* ═══════════════════════════════════════════════════════════
+   ゴリラ・フェス（55,555時間達成 記念モード）
+   html[data-gorifest="on"] は gorifest.js が付与する。
+   お祭りOFFのときは以下のパーツはすべて非表示になる。
+   ═══════════════════════════════════════════════════════════ */
+.gori-only{display:none;}
+[data-gorifest="on"] .gori-only{display:block;}
+[data-gorifest="on"] .gori-only.is-flex{display:flex;}
+
+/* ── 記念ヒーローバナー ── */
+.gori-banner{width:100%;margin:0 auto 26px;max-width:760px;animation:msIn .6s cubic-bezier(.34,1.56,.64,1) both;}
+.gori-banner-inner{display:flex;align-items:flex-end;justify-content:center;gap:0;}
+.gori-banner-core{flex:1 1 auto;min-width:0;text-align:center;padding:18px 22px 16px;border-radius:24px;
+  background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 45%,#fce7f3 100%);
+  border:2px solid #fcd34d;box-shadow:0 14px 38px rgba(180,83,9,.18);position:relative;overflow:hidden;}
+.gori-banner-core::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.6) 50%,transparent 60%);
+  animation:goriShine 3.6s ease-in-out infinite;}
+@keyframes goriShine{0%{transform:translateX(-120%);}55%,100%{transform:translateX(120%);}}
+.gori-banner-kicker{font-size:11px;font-weight:900;letter-spacing:.18em;color:#b45309;margin-bottom:6px;}
+.gori-banner-num{font-family:'Noto Serif JP',serif;font-weight:900;line-height:1.05;color:#92400e;
+  font-size:clamp(28px,7vw,54px);letter-spacing:-.02em;}
+.gori-banner-unit{font-size:clamp(13px,2.4vw,20px);margin-left:8px;letter-spacing:.04em;}
+.gori-banner-sub{margin-top:8px;font-size:clamp(11px,2vw,13px);font-weight:800;color:var(--soft);}
+.gori-banner-char{flex-shrink:0;align-self:flex-end;pointer-events:none;object-fit:contain;object-position:bottom;
+  height:clamp(66px,15vw,170px);filter:drop-shadow(0 8px 16px rgba(146,64,14,.22));}
+.gori-banner-char.left{transform:scaleX(-1);margin-right:-26px;}
+.gori-banner-char.right{margin-left:-26px;}
+.gori-banner-telop{margin-top:12px;overflow:hidden;border-radius:99px;height:34px;position:relative;
+  background:linear-gradient(135deg,#fef3c7,#fdf2f8);border:1.5px solid #fcd34d;}
+.gori-banner-telop-inner{display:flex;white-space:nowrap;position:absolute;top:50%;transform:translateY(-50%);
+  animation:teaser-scroll 15s linear infinite;}
+.gori-banner-telop-inner span{font-size:12.5px;font-weight:900;color:#b45309;padding-right:44px;}
+@media(max-width:599px){
+  .gori-banner{margin-bottom:20px;}
+  .gori-banner-char{height:clamp(48px,13vw,66px);}
+  .gori-banner-char.left{margin-right:-14px;}
+  .gori-banner-char.right{margin-left:-14px;}
+  .gori-banner-core{padding:14px 14px 12px;border-radius:18px;}
+}
+
+/* ── セクション境目の「のぞき見」キャラ ── */
+.gori-peek{position:relative;height:0;pointer-events:none;z-index:2;}
+.gori-peek img{position:absolute;bottom:-6px;height:clamp(56px,11vw,116px);object-fit:contain;object-position:bottom;
+  filter:drop-shadow(0 6px 14px rgba(30,27,75,.16));animation:goriFloat 4.2s ease-in-out infinite;}
+.gori-peek.from-left  img{left:clamp(4px,4vw,64px);}
+/* 反転は animation の transform に含める（別々に指定すると打ち消し合うため）*/
+.gori-peek.from-right img{right:clamp(4px,4vw,64px);animation-name:goriFloatFlip;}
+@keyframes goriFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes goriFloatFlip{0%,100%{transform:scaleX(-1) translateY(0);}50%{transform:scaleX(-1) translateY(-8px);}}
+
+/* ── カルーセルの新キャラ枠（画像が無いときは JS が丸ごと削除する）── */
+.char-card.gori-new .buddy-name{color:#b45309;}
+
+/* ── 55555 イースターエッグのコンフェッティ ── */
+.gori-confetti{position:fixed;top:-40px;z-index:9998;pointer-events:none;user-select:none;will-change:transform;}
+/* 見出しに添えるゴリラ（gorifest.js が挿入。お祭りOFFなら挿入されない） */
+.gori-pre{margin-right:.15em;}
 </style>
 </head>
 <body>
@@ -871,6 +944,25 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
     <div class="hero-blob hero-blob3" aria-hidden="true"></div>
     <div class="wrap">
       <div class="hero-inner">
+        <!-- ══ 55,555時間達成 記念バナー（ゴリラ・フェス開催中のみ表示）══ -->
+        <div class="gori-banner gori-only" aria-label="55,555時間達成記念">
+          <div class="gori-banner-inner">
+            <img class="gori-banner-char left" src="./gorigogo.png" alt="" onerror="this.remove()">
+            <div class="gori-banner-core">
+              <div class="gori-banner-kicker">🦍 GORILLA FEST 🦍</div>
+              <div class="gori-banner-num"><span id="gori-banner-hours">55,555</span><span class="gori-banner-unit">時間 達成</span></div>
+              <div class="gori-banner-sub">みんなのコツコツが、ここまで積み上がりました</div>
+            </div>
+            <img class="gori-banner-char right" src="./goriwoo.png" alt="" onerror="this.remove()">
+          </div>
+          <div class="gori-banner-telop">
+            <div class="gori-banner-telop-inner">
+              <span>🦍 55,555時間ありがとうゴリ 🍌 記念ムービー公開中ゴリ 🦍</span>
+              <span>🦍 55,555時間ありがとうゴリ 🍌 記念ムービー公開中ゴリ 🦍</span>
+              <span>🦍 55,555時間ありがとうゴリ 🍌 記念ムービー公開中ゴリ 🦍</span>
+            </div>
+          </div>
+        </div>
         <div class="eyebrow">コツコツ・軌跡から、サクサク・開花へ</div>
         <h1><span class="g">コツコツ軌跡。</span><br>今日の冒険を、<br>1マスずつ。</h1>
         <div class="actions">
@@ -1233,9 +1325,28 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
           <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb3" style="background:linear-gradient(90deg,#ffd94f,#ffe9a0);"></div></div>
         </div>
       </div>
+      <!-- 55,555時間記念で仲間入りした2人。画像未配置の間はカードごと自動で消える -->
+      <div class="char-card gori-new">
+        <div class="char-img-wrap"><img src="./gorigogo.png" alt="ゴリゴゴ" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)"></div>
+        <div class="buddy-name">ゴリゴゴ</div>
+        <div class="buddy-lv-wrap">
+          <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv4" style="color:#b45309;">-</span></div>
+          <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb4" style="background:linear-gradient(90deg,#b45309,#fcd34d);"></div></div>
+        </div>
+      </div>
+      <div class="char-card gori-new">
+        <div class="char-img-wrap"><img src="./goriwoo.png" alt="ゴリウー" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)"></div>
+        <div class="buddy-name">ゴリウー</div>
+        <div class="buddy-lv-wrap">
+          <div class="buddy-lv-label">Lv <span class="buddy-lv-num" id="lv5" style="color:#0d9488;">-</span></div>
+          <div class="buddy-lv-bar"><div class="buddy-lv-fill" id="lb5" style="background:linear-gradient(90deg,#0d9488,#5eead4);"></div></div>
+        </div>
+      </div>
     </div>
     <div class="carousel-dots" id="carousel-dots">
       <div class="carousel-dot active"></div>
+      <div class="carousel-dot"></div>
+      <div class="carousel-dot"></div>
       <div class="carousel-dot"></div>
       <div class="carousel-dot"></div>
       <div class="carousel-dot"></div>
@@ -1245,6 +1356,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   </div>
 
   <!-- ランナー帯① -->
+  <div class="gori-peek from-left" aria-hidden="true">
+    <img src="./gorigogo.png" alt="" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)">
+  </div>
   <div class="runner-band" data-runner="🥦 🌸 🦍 🥸" data-speed="2.2"></div>
 
   <!-- ══ STORYBOARD ══ -->
@@ -1299,6 +1413,9 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   </section>
 
   <!-- ランナー帯③ -->
+  <div class="gori-peek from-right" aria-hidden="true">
+    <img src="./goriwoo.png" alt="" onerror="window.goriDropChar &amp;&amp; window.goriDropChar(this)">
+  </div>
   <div class="runner-band" data-runner="🦍 🥦 🌸 🥸" data-speed="2.4"></div>
 
   <!-- ══ FEATURES ══ -->
@@ -1554,7 +1671,8 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   function setCharLevels(docs) {
     const avgLv = docs.length > 0
       ? Math.round(docs.reduce((s,d)=>s+(d.level||1),0)/docs.length) : 1;
-    [3,-2,5,-4].forEach((off, i) => {
+    // ニヤブロ2人・ウホゴリ2人・ゴリゴゴ・ゴリウーの6人分
+    [3,-2,5,-4,6,-3].forEach((off, i) => {
       const lv  = Math.max(1, avgLv + off);
       const pct = Math.min(Math.max(Math.round((lv % 10) / 10 * 100), 20), 95);
       const numEl = document.getElementById('lv' + i);
@@ -1940,9 +2058,11 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   // カルーセルドット
   function initCarousel() {
     const carousel = document.getElementById('char-carousel');
-    const dots = document.querySelectorAll('.carousel-dot');
-    if(!carousel || !dots.length) return;
+    if(!carousel || !document.querySelectorAll('.carousel-dot').length) return;
     carousel.addEventListener('scroll', ()=>{
+      // ドットは画像未配置のキャラが消えると減るため、毎回引き直す
+      const dots = document.querySelectorAll('.carousel-dot');
+      if(!dots.length) return;
       const idx = Math.round(carousel.scrollLeft/(carousel.scrollWidth/dots.length));
       dots.forEach((d,i)=>d.classList.toggle('active', i===idx));
     },{ passive:true });
@@ -2095,7 +2215,10 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
   // ランナー走行（コミカル強化版）
   function initRunners() {
     document.querySelectorAll('.runner-band').forEach(band=>{
-      const chars = (band.dataset.runner||'🥦 🌸 🦍 🥸').split(' ').filter(Boolean);
+      // ゴリラ・フェス開催中はゴリラが増員される（元の顔ぶれはそのまま残る）
+      let runnerSrc = band.dataset.runner || '🥦 🌸 🦍 🥸';
+      if (window.goriRunner) runnerSrc = window.goriRunner(runnerSrc);
+      const chars = runnerSrc.split(' ').filter(Boolean);
       const baseSpeed = parseFloat(band.dataset.speed||'2') * 100;
       const withNiya = band.dataset.niya === '1';
 
@@ -2773,6 +2896,8 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
     '🌟 みんなで成し遂げる！',
     '🥸 ツンツンだっぺ🥸',
   ];
+  // ゴリラ・フェス開催中は応援メッセージの頭のアイコンもゴリラ族になる
+  if (window.gori) UEMAK_BUBBLES = UEMAK_BUBBLES.map(function(s){ return window.gori(s); });
   var UEMAK_SPEEDS = [0.5, 1.0, 2.0]; // ゆっくり / 通常 / 爆速
   var UEMAK_BUBBLE_OFFSET_X = 120;  // 右にずらすpx（斜め右上）
 
@@ -2868,7 +2993,8 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
 (() => {
   if (window.matchMedia("(pointer: coarse)").matches) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const EMOJIS = ["🥦", "🥸", "🦍"];
+  // ゴリラ・フェス開催中はゴリラ族の足跡に変わる（OFFなら元のまま）
+  const EMOJIS = window.goriIcons ? window.goriIcons(["🥦", "🥸", "🦍"]) : ["🥦", "🥸", "🦍"];
   function makeIcon(emoji) {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><text x="16" y="26" font-size="26" text-anchor="middle">${emoji}</text></svg>`;
     return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
@@ -3353,5 +3479,92 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
 </script>
 
 <canvas id="gorilla-overlay"></canvas>
+
+<!-- ══ ゴリラ・フェス：記念バナーの数値連動 ＋ 「55555」イースターエッグ ══ -->
+<script>
+(function(){
+  if (!window.GORIFEST_ON) return;   // お祭りOFFなら何もしない
+
+  // ── 記念バナーの数値を実際の総学習時間に合わせる ──
+  // 統計が読めるまでは静的な「55,555」を出しておき、読めたら差し替える。
+  var numEl = document.getElementById('gori-banner-hours');
+  var srcEl = document.getElementById('t-hours');
+  if (numEl && srcEl) {
+    var sync = function(){
+      var txt = (srcEl.textContent || '').replace('時間','').trim();
+      if (txt && txt !== '…') { numEl.textContent = txt; return true; }
+      return false;
+    };
+    if (!sync() && window.MutationObserver) {
+      var o = new MutationObserver(function(){ if (sync()) o.disconnect(); });
+      o.observe(srcEl, { childList:true, characterData:true, subtree:true });
+    }
+  }
+
+  // ── イースターエッグ：「55555」入力／ゴリラボタン5連打 ──
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CONFETTI = ['🍌','🦍','🥁','🌴','💪','🥥'];
+  var firing = false;
+
+  function fire(){
+    if (firing) return;
+    firing = true;
+    setTimeout(function(){ firing = false; }, 6000);
+
+    if (!reduceMotion) {
+      var n = 46;
+      for (var i = 0; i < n; i++) {
+        (function(i){
+          setTimeout(function(){
+            var el = document.createElement('div');
+            el.className = 'gori-confetti';
+            el.setAttribute('aria-hidden','true');
+            el.textContent = CONFETTI[Math.floor(Math.random()*CONFETTI.length)];
+            var dur   = 2.6 + Math.random()*2.0;
+            var drift = (Math.random()-0.5)*260;
+            var spin  = (Math.random()>0.5?1:-1)*(180+Math.random()*540);
+            el.style.left     = (Math.random()*100) + 'vw';
+            el.style.fontSize = (16 + Math.random()*30) + 'px';
+            el.animate([
+              { transform:'translate(0,0) rotate(0deg)',                              opacity:1 },
+              { transform:'translate('+drift+'px,110vh) rotate('+spin+'deg)',          opacity:0 }
+            ], { duration: dur*1000, easing:'cubic-bezier(.25,.6,.5,1)', fill:'forwards' });
+            document.body.appendChild(el);
+            setTimeout(function(){ el.remove(); }, dur*1000 + 200);
+          }, i*45);
+        })(i);
+      }
+    }
+
+    // 既存のゴリラ演出エンジンをそのまま使う
+    if (window.gorillaRandomTrigger) {
+      setTimeout(function(){ window.gorillaRandomTrigger(); }, reduceMotion ? 0 : 400);
+    }
+  }
+  window.goriFireEasterEgg = fire;
+
+  // 「55555」とキー入力（入力欄にフォーカスがあるときは無視）
+  var buf = '';
+  document.addEventListener('keydown', function(e){
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (!/^[0-9]$/.test(e.key)) { buf = ''; return; }
+    buf = (buf + e.key).slice(-5);
+    if (buf === '55555') { buf = ''; fire(); }
+  });
+
+  // ゴリラボタン5連打（3秒以内）
+  var taps = [];
+  var gbtn = document.getElementById('gorilla-btn');
+  if (gbtn) {
+    gbtn.addEventListener('click', function(){
+      var now = Date.now();
+      taps.push(now);
+      taps = taps.filter(function(t){ return now - t < 3000; });
+      if (taps.length >= 5) { taps = []; fire(); }
+    });
+  }
+})();
+</script>
 </body>
 </html>
