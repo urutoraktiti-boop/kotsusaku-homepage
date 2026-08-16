@@ -773,7 +773,16 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
 .niya-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 /* ===== ゴリラ演出 ===== */
 #gorilla-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}
-.gorilla-btn-wrap{display:flex;justify-content:center;margin-top:16px;}
+.gorilla-btn-wrap{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap;}
+/* 55555の仕掛けボタン。隣のゴリラボタン（桜色）と区別するためバナナの金色にする。
+   スマホにはキーボードが無く「55555と打つ」ができないので、押せる導線が要る。 */
+.egg-btn{padding:10px 24px;background:linear-gradient(135deg,#fcd34d,#fbbf24);color:#7c2d12;border:none;
+  border-radius:99px;font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;letter-spacing:.03em;
+  box-shadow:0 4px 14px rgba(180,83,9,.3);transition:transform .1s,box-shadow .1s;
+  align-items:center;justify-content:center;}
+.egg-btn:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(180,83,9,.4);}
+.egg-btn:active{transform:scale(.96);box-shadow:none;}
+@media(prefers-reduced-motion:reduce){.egg-btn{transition:none;}.egg-btn:hover,.egg-btn:active{transform:none;}}
 .gorilla-btn{padding:10px 28px;background:linear-gradient(135deg,#f06a9d,#fb7ab5);color:#fff;border:none;border-radius:99px;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 4px 14px rgba(240,106,157,.35);transition:transform .1s,box-shadow .1s;letter-spacing:.03em;display:none;}
 /* テロップボタン（10000時間未満） */
 .gorilla-teaser{display:none;width:100%;max-width:340px;margin:16px auto 0;overflow:hidden;border-radius:99px;background:linear-gradient(135deg,#fde8f2,#fff0f7);border:1.5px solid #f9a8d4;height:36px;position:relative;}
@@ -1062,6 +1071,10 @@ h2{margin:0;font-size:clamp(30px,5vw,60px);line-height:1.05;font-weight:900;font
           </div>
           <div class="gorilla-btn-wrap">
             <button class="gorilla-btn" id="gorilla-btn" onclick="gorillaRandomTrigger()">🦍 ゴリ軌跡ゴリ 🦍</button>
+            <!-- 55555の仕掛け。お祭り期間中のみ表示（OFFのときは goriFireEasterEgg 自体が無い）。
+                 記念ページから ./index.html#egg でここに来られる -->
+            <button class="egg-btn gori-only is-inline-flex" id="egg" type="button"
+                    onclick="window.goriFireEasterEgg && window.goriFireEasterEgg()">🍌 55555 の仕掛け</button>
           </div>
           <!-- 10000時間未満テロップ -->
           <div class="gorilla-teaser" id="gorilla-teaser">
@@ -3762,6 +3775,23 @@ window.gorillaRandomTrigger = gorillaRandomTrigger;
     buf = (buf + e.key).slice(-5);
     if (buf === '55555') { buf = ''; fire(); }
   });
+
+  // 記念ページから ./index.html#egg で来たとき、ボタンまで運ぶ。
+  // 仕掛けボタンは統計カード(#stats-body)の中にあり、統計が描画されるまで
+  // 実体を持たない。ブラウザ標準のアンカー移動はその時点で失敗するため、
+  // 描画されてから自分でスクロールする。
+  if (location.hash === '#egg') {
+    var tries = 0;
+    var seek = setInterval(function(){
+      var el = document.getElementById('egg');
+      if (el && el.getBoundingClientRect().height > 0) {
+        clearInterval(seek);
+        el.scrollIntoView({ block:'center' });
+      } else if (++tries > 40) {
+        clearInterval(seek);   // 約8秒で諦める（統計が読めない環境など）
+      }
+    }, 200);
+  }
 
   // ゴリラボタン5連打（3秒以内）
   var taps = [];
