@@ -298,6 +298,20 @@ var GORIFEST = { on: true, until: '2026-08-31' };
      4ページすべてを訪れると隠しゴリラが出る。進捗は localStorage に保存。
      ========================================================================== */
   var STAMP_KEY   = 'gori_stamp_v1';
+
+  // ── 完走のごほうび（壁紙）──────────────────────────────────────────
+  // WALLPAPER にファイル名を入れると、4枚そろった人にだけ配布リンクが出ます。
+  // 空文字にすると、ごほうびの行そのものが出ません（配布を止めたいとき用）。
+  //
+  // 配るのはJPEG版。原本のPNG（3165x1781 / 14.2MB）も 55555-wallpaper.png として
+  // リポジトリに置いてありますが、そのまま配るとモバイル回線に重いため、
+  // 見た目が変わらない範囲で圧縮した1.4MBのJPEGを配布に使っています。
+  var WALLPAPER      = '55555-wallpaper.jpg';
+  // 保存されるときの名前。日本語は使わないこと。
+  // download属性に非ASCIIを入れると、名前ごと無視されて拡張子の無い
+  // 「download」というファイルが保存されるブラウザがある（実機で確認済み）。
+  var WALLPAPER_NAME = 'kotsusaku-55555-wallpaper.jpg';
+
   var STAMP_PAGES = [
     { id: 'index',       file: 'index.html',       label: 'トップ' },
     { id: 'manual',      file: 'manual.html',      label: '使い方' },
@@ -364,6 +378,36 @@ var GORIFEST = { on: true, until: '2026-08-31' };
                  : '4ページぜんぶ回ると、なにか起きるゴリ') + '</div>';
     list.innerHTML = html;
 
+    // ── 完走のごほうび：壁紙 ──
+    // 表示条件に state._done は使わない。あれは初回演出を1回に絞るためのフラグで、
+    // 完走者があとで来たときにも受け取れる必要がある。
+    if (all && WALLPAPER) {
+      var gift = document.createElement('div');
+      gift.className = 'gori-stamp-gift';
+
+      var giftHead = document.createElement('div');
+      giftHead.className = 'gori-stamp-gift-head';
+      giftHead.textContent = '🎁 完走のごほうび';
+
+      var link = document.createElement('a');
+      link.className = 'gori-stamp-gift-link';
+      link.href = './' + WALLPAPER;
+      // download だけを付ける。target="_blank" を併用すると、
+      // 「保存」と「新しいタブで開く」のどちらになるかが環境で割れるため。
+      // download を解さない古い環境では画像が開くだけなので、長押しで保存できる。
+      link.setAttribute('download', WALLPAPER_NAME);
+      link.textContent = '記念壁紙をもらう';
+
+      var note = document.createElement('div');
+      note.className = 'gori-stamp-gift-note';
+      note.textContent = '画像が開いた場合は、長押しで保存できます。';
+
+      gift.appendChild(giftHead);
+      gift.appendChild(link);
+      gift.appendChild(note);
+      list.appendChild(gift);
+    }
+
     btn.addEventListener('click', function () {
       var open = list.hidden;
       list.hidden = !open;
@@ -411,6 +455,17 @@ var GORIFEST = { on: true, until: '2026-08-31' };
       '.gori-stamp-row a{color:#b45309;text-decoration:underline;font-weight:800;}',
       '.gori-stamp-mark{width:16px;text-align:center;}',
       '.gori-stamp-foot{margin-top:9px;font-size:10.5px;font-weight:800;color:#6b7280;line-height:1.6;}',
+      // 完走のごほうび（壁紙）
+      '.gori-stamp-gift{margin-top:11px;padding-top:11px;border-top:1px dashed #fcd34d;}',
+      '.gori-stamp-gift-head{font-size:10.5px;font-weight:900;color:#b45309;letter-spacing:.06em;margin-bottom:7px;}',
+      '.gori-stamp-gift-link{display:block;text-align:center;text-decoration:none;',
+        'background:linear-gradient(135deg,#fcd34d,#fbbf24);color:#7c2d12;',
+        'font-size:12px;font-weight:900;padding:9px 12px;border-radius:999px;',
+        'box-shadow:0 4px 12px rgba(180,83,9,.28);transition:transform .12s;}',
+      '.gori-stamp-gift-link:hover{transform:translateY(-2px);}',
+      '.gori-stamp-gift-note{margin-top:7px;font-size:10px;font-weight:700;color:#6b7280;line-height:1.6;}',
+      '@media(prefers-reduced-motion:reduce){.gori-stamp-gift-link{transition:none;}',
+        '.gori-stamp-gift-link:hover{transform:none;}}',
       '.gori-stamp.is-complete .gori-stamp-toggle{background:linear-gradient(135deg,#fde68a,#fbcfe8);}',
       '.gori-stamp.is-celebrating .gori-stamp-toggle{animation:goriStampPop .5s cubic-bezier(.34,1.56,.64,1) 3;}',
       '@keyframes goriStampPop{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}',
