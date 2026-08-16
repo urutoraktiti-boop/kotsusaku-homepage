@@ -183,6 +183,14 @@ body{
 .play-key{display:inline-block;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   font-size:12px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);
   border-radius:6px;padding:1px 7px;color:var(--lavender);font-weight:700;}
+.play-link{color:var(--pink);font-weight:900;text-decoration-thickness:1px;text-underline-offset:.2em;}
+.play-link:hover{color:#9d174d;}
+
+/* お祭りが終わったら「開催中のお祭り」節ごと消す。
+   gorifest.js が開催中だけ <html data-gorifest="on"> を付けるので、それに連動させる。
+   これが無いと、期限切れ後も消えた仕掛けを案内し、隠れたボタンへのリンクが残る。 */
+.fest-only{display:none;}
+[data-gorifest="on"] .fest-only{display:block;}
 
 /* ── シェア ── */
 .share{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px;}
@@ -375,7 +383,8 @@ body{
     </div>
   </section>
 
-  <section class="anniv-sec">
+  <!-- お祭り開催中のみ表示（期限切れ後にこの案内が残らないように） -->
+  <section class="anniv-sec fest-only">
     <div class="wrap">
       <div class="center">
         <div class="anniv-kicker">開催中</div>
@@ -400,8 +409,11 @@ body{
         </div>
         <div class="play-card">
           <p class="play-mark">✨</p>
-          <p class="play-name">かくれた仕掛け</p>
-          <p class="play-desc">トップページで <span class="play-key">55555</span> と入力してみてください。何かが起こります。</p>
+          <p class="play-name">55555 の仕掛け</p>
+          <p class="play-desc">
+            トップページの <a class="play-link" href="./index.html#egg">🍌 55555 の仕掛け</a> ボタンを押すと、何かが起こります。
+            キーボードのある端末なら、トップページで <span class="play-key">55555</span> と打っても発動します。
+          </p>
         </div>
       </div>
     </div>
